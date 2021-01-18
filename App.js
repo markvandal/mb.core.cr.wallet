@@ -1,25 +1,39 @@
-import { StatusBar } from 'expo-status-bar';
+
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 
-import { theme, withGalio, GalioProvider } from 'galio-framework'
+import { Provider } from 'react-redux'
 
-function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+import { StyleSheet } from 'react-native';
+import { 
+  theme, 
+  withGalio, 
+  GalioProvider, 
+  Block, 
+  Text, 
+  Input 
+} from 'galio-framework'
+
+import { store } from './store'
+import { WalletAuth } from './components/wallet/auth'
+
+
+const App = () =>
+  <Provider store={store}>
+    <GalioProvider>
+      <Block>
+        <Text>Open up App.js to start working on your app!</Text>
+        <WalletAuth />
+      </Block>
       <StatusBar style="auto" />
-    </View>
-  );
-}
+    </GalioProvider>
+  </Provider>
 
-export default withGalio(App)
+export default withGalio(App, styles)
 
-const styles = StyleSheet.create({
+const styles = theme => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+    backgroundColor: theme.COLORS.FACEBOOK
+  }
 });

@@ -12,6 +12,7 @@
     "@cosmjs/launchpad": "^0.24.0-alpha.17",
     "@cosmjs/proto-signing": "^0.24.0-alpha.17",
     "@cosmjs/stargate": "^0.24.0-alpha.17",
+    "@reduxjs/toolkit": "^1.5.0",
     "axios": "^0.21.1",
     "bip39": "^3.0.3",
     "expo": "~40.0.0",
@@ -21,6 +22,7 @@
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-40.0.1.tar.gz",
     "react-native-web": "~0.13.12",
+    "react-redux": "^7.2.2",
     "reconnecting-websocket": "^4.4.0"
   },
   "devDependencies": {
