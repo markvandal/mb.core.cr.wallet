@@ -2,7 +2,7 @@
 
 export const createCurrentDate = () => {
   const now = new Date()
-  const date = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0,0,0)
+  const date = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 0, 0,0,0)
 
   return {
     seconds: Math.round(date / 1000),

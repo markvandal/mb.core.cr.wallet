@@ -13,17 +13,25 @@ import {
   Text, 
 } from 'galio-framework'
 
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+
 import { store } from './store'
 import { WalletAuth } from './components/wallet/auth'
+import { TestMain } from './components/tests/main'
 
+
+const { Navigator, Screen } = createStackNavigator()
 
 const App = () =>
   <Provider store={store}>
     <GalioProvider>
-      <Block>
-        <Text>Open up App.js to start working on your app!</Text>
-        <WalletAuth />
-      </Block>
+      <NavigationContainer>
+        <Navigator headerMode="none" initialRouteName="main">
+          <Screen name="main" component={WalletAuth} />
+          <Screen name="tests" component={TestMain} />
+        </Navigator>
+      </NavigationContainer>
       <StatusBar style="auto" />
     </GalioProvider>
   </Provider>

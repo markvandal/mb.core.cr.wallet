@@ -1,5 +1,6 @@
-import React, { useRef } from 'react'
+import React, { useContext } from 'react'
 import { connect } from 'react-redux'
+import { Context } from '../../context'
 
 import { 
   withGalio, 
@@ -18,7 +19,8 @@ export const WalletAuth = connect(
     createInvite: (type, level) => dispatch(inviteActions.create({level, type})),
     ...ownProps
   })
-)(withGalio(({ connect, createInvite, theme }) => {
+)(withGalio(({ navigation, connect, createInvite, theme }) => {
+  const context = useContext(Context)
   let mnemonic = null
 
   return <Block>
@@ -28,9 +30,14 @@ export const WalletAuth = connect(
           iconSize={14}
           iconColor="red" 
           style={{ borderColor: theme.COLORS.THEME }}
-          onRef={_ => mnemonic = _} 
-          value="egg glow dune pill paper child harsh craft churn blade measure access nerve upgrade large envelope warm donate awesome unaware culture surprise rally visa"/>
+          onRef={_ => mnemonic = _} />
+    {
+      context.config.DEBUG_AUTH 
+        ? <Button round uppercase onPress={() => mnemonic.value = context.config.DEBUG_AUTH}>Fill default</Button>
+        : null
+    }
     <Button round uppercase onPress={() => connect(mnemonic.value)}>Connect</Button>
-    <Button round uppercase onPress={() => createInvite('SERVICE', 'Level0')}>Invite</Button>
+    <Button round uppercase onPress={() => createInvite(3, 2)}>Invite</Button>
+    <Button round uppercase onPress={() => navigation.navigate('tests')}>Tests</Button>
   </Block>
 }))

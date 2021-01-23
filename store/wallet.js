@@ -9,26 +9,32 @@ import { SigningStargateClient } from '@cosmjs/stargate'
 const openWithMnemoic = createAsyncThunk(
   'wallet/openWithMnemoic',
   async (mnemonic, { extra: context }) => {
-    context.wallet = await DirectSecp256k1HdWallet.fromMnemonic(
-      mnemonic,
-      context.config.DEFAULT_WALLET_PATH,
-      context.config.ADDR_PREFIX
-    )
+    try {
+      context.wallet = await DirectSecp256k1HdWallet.fromMnemonic(
+        mnemonic,
+        context.config.DEFAULT_WALLET_PATH,
+        context.config.ADDR_PREFIX
+      )
 
-    const account = (await axios.get(
-      context.config.getApiUrl(`auth/accounts/${context.wallet.address}`)
-    )).data
+      const account = (await axios.get(
+        context.config.getApiUrl(`auth/accounts/${context.wallet.address}`)
+      )).data
 
-    context.client = await SigningStargateClient.connectWithSigner(
-      context.config.RPC_URL,
-      context.wallet,
-      {}
-    )
+      context.client = await SigningStargateClient.connectWithSigner(
+        context.config.RPC_URL,
+        context.wallet,
+        {}
+      )
 
-    return {
-      address: wallet.address,
-      account,
-      mnemonic
+      return {
+        address: wallet.address,
+        account,
+        mnemonic
+      }
+    } catch (e) {
+      console.log(e)
+
+      throw e
     }
   }
 )
@@ -56,6 +62,6 @@ const slice = createSlice({
 })
 
 
-export const walletActions = {...slice.actions, openWithMnemoic}
+export const walletActions = { ...slice.actions, openWithMnemoic }
 
 export const wallet = slice.reducer
