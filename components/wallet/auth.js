@@ -2,24 +2,20 @@ import React, { useContext } from 'react'
 import { connect } from 'react-redux'
 import { Context } from '../../context'
 
-import { 
-  withGalio, 
-  Block, 
-  Button,
-  Input 
-} from 'galio-framework'
-
+import { withGalio, Block, Button, Input } from 'galio-framework'
 import { walletActions, inviteActions } from '../../store'
 
 
 export const WalletAuth = connect(
   (_, ownProps) => ({ ...ownProps }),
   (dispatch, ownProps) => ({
-    connect: mnemonic => dispatch(walletActions.openWithMnemoic(mnemonic)),
-    createInvite: (type, level) => dispatch(inviteActions.create({level, type})),
+    connect: async (mnemonic, nav) => {
+      await dispatch(walletActions.openWithMnemoic(mnemonic))
+      nav.navigate('main')
+    },
     ...ownProps
   })
-)(withGalio(({ navigation, connect, createInvite, theme }) => {
+)(withGalio(({ navigation, connect, theme }) => {
   const context = useContext(Context)
   let mnemonic = null
 
@@ -27,7 +23,7 @@ export const WalletAuth = connect(
     <Input color={theme.COLORS.THEME} 
           icon="heart"
           family="antdesign"
-          iconSize={14}
+          iconSize={22}
           iconColor="red" 
           style={{ borderColor: theme.COLORS.THEME }}
           onRef={_ => mnemonic = _} />
@@ -36,8 +32,7 @@ export const WalletAuth = connect(
         ? <Button round uppercase onPress={() => mnemonic.value = context.config.DEBUG_AUTH}>Fill default</Button>
         : null
     }
-    <Button round uppercase onPress={() => connect(mnemonic.value)}>Connect</Button>
-    <Button round uppercase onPress={() => createInvite(3, 2)}>Invite</Button>
-    <Button round uppercase onPress={() => navigation.navigate('tests')}>Tests</Button>
+    <Button round uppercase onPress={() => connect(mnemonic.value, navigation)}>Sign In</Button>
+    <Button round uppercase onPress={() => navigation.navigate('main')}>Back</Button>
   </Block>
 }))

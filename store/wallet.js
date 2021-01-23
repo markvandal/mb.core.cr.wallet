@@ -49,8 +49,8 @@ const slice = createSlice({
   },
 
   reducers: {
-    update: (state, { payload }) => {
-      return state
+    signOut: (state) => {
+      return { ...state, address: '', account: '', mnemonic: '' }
     },
   },
 

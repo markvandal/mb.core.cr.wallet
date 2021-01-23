@@ -18,6 +18,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import { store } from './store'
 import { WalletAuth } from './components/wallet/auth'
+import { Main } from './components/main'
 import { TestMain } from './components/tests/main'
 
 
@@ -28,7 +29,8 @@ const App = () =>
     <GalioProvider>
       <NavigationContainer>
         <Navigator headerMode="none" initialRouteName="main">
-          <Screen name="main" component={WalletAuth} />
+          <Screen name="main" component={Main} />
+          <Screen name="auth" component={WalletAuth} />
           <Screen name="tests" component={TestMain} />
         </Navigator>
       </NavigationContainer>

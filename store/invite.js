@@ -59,7 +59,7 @@ const accept = createAsyncThunk(
           mnemonic: newMnemonic,
           address: newAccount.address,
           pubKey: newPubKey,
-          identityId: tx.getAttribute('identity_id')
+          identityId: tx.getAttribute('identity_id'),
         }
       }
     } catch (e) {
@@ -113,7 +113,7 @@ const create = createAsyncThunk(
           mnemonic,
           address: account.address,
           pubKey: bech32PubKey,
-          inviteId: tx.getAttribute('invite_id')
+          inviteId: tx.getAttribute('invite_id'),
         }
       }
     } catch (e) {
