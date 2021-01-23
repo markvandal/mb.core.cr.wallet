@@ -27,7 +27,8 @@
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",
-    "@expo/webpack-config": "^0.12.53"
+    "@expo/webpack-config": "^0.12.53",
+    "babel-plugin-inline-dotenv": "^1.6.0"
   },
   "private": true
 }

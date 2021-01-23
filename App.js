@@ -11,7 +11,6 @@ import {
   GalioProvider, 
   Block, 
   Text, 
-  Input 
 } from 'galio-framework'
 
 import { store } from './store'

@@ -1,0 +1,1735 @@
+{
+  "nested": {
+    "metabelarus": {
+      "nested": {
+        "mbcorecr": {
+          "nested": {
+            "mbcorecr": {
+              "options": {
+                "go_package": "github.com/metabelarus/mbcorecr/x/mbcorecr/types"
+              },
+              "nested": {
+                "IdentityLevel": {
+                  "values": {
+                    "LevelSuper": 0,
+                    "Level0": 1,
+                    "Level1": 2,
+                    "Level2": 3,
+                    "Level3": 4,
+                    "Level4": 5
+                  }
+                },
+                "Invite": {
+                  "fields": {
+                    "id": {
+                      "type": "string",
+                      "id": 1
+                    },
+                    "inviter": {
+                      "type": "string",
+                      "id": 2
+                    },
+                    "invitee": {
+                      "type": "string",
+                      "id": 3
+                    },
+                    "identityId": {
+                      "type": "string",
+                      "id": 4
+                    },
+                    "level": {
+                      "type": "IdentityLevel",
+                      "id": 5
+                    },
+                    "identityType": {
+                      "type": "IdentityType",
+                      "id": 6
+                    },
+                    "key": {
+                      "type": "string",
+                      "id": 7
+                    },
+                    "creationDt": {
+                      "type": "google.protobuf.Timestamp",
+                      "id": 8,
+                      "options": {
+                        "(gogoproto.stdtime)": true
+                      }
+                    },
+                    "acceptanceDt": {
+                      "type": "google.protobuf.Timestamp",
+                      "id": 9,
+                      "options": {
+                        "(gogoproto.stdtime)": true
+                      }
+                    }
+                  }
+                },
+                "MsgCreateInvite": {
+                  "fields": {
+                    "inviter": {
+                      "type": "string",
+                      "id": 1
+                    },
+                    "level": {
+                      "type": "IdentityLevel",
+                      "id": 2
+                    },
+                    "identityType": {
+                      "type": "IdentityType",
+                      "id": 3
+                    },
+                    "address": {
+                      "type": "string",
+                      "id": 4
+                    },
+                    "pubKey": {
+                      "type": "string",
+                      "id": 5
+                    },
+                    "creationDt": {
+                      "type": "google.protobuf.Timestamp",
+                      "id": 6,
+                      "options": {
+                        "(gogoproto.stdtime)": true
+                      }
+                    }
+                  }
+                },
+                "MsgAcceptInvite": {
+                  "fields": {
+                    "inviteId": {
+                      "type": "string",
+                      "id": 1
+                    },
+                    "tmpAddress": {
+                      "type": "string",
+                      "id": 2
+                    },
+                    "address": {
+                      "type": "string",
+                      "id": 3
+                    },
+                    "pubKey": {
+                      "type": "string",
+                      "id": 4
+                    },
+                    "acceptanceDt": {
+                      "type": "google.protobuf.Timestamp",
+                      "id": 5,
+                      "options": {
+                        "(gogoproto.stdtime)": true
+                      }
+                    }
+                  }
+                },
+                "IdentityType": {
+                  "values": {
+                    "CITIZEN": 0,
+                    "FOREIGNER": 1,
+                    "DIASPORA_MEMBER": 2,
+                    "SERVICE": 3
+                  }
+                },
+                "Identity": {
+                  "fields": {
+                    "id": {
+                      "type": "string",
+                      "id": 1
+                    },
+                    "address": {
+                      "type": "string",
+                      "id": 2
+                    },
+                    "identityType": {
+                      "type": "IdentityType",
+                      "id": 3
+                    },
+                    "details": {
+                      "type": "string",
+                      "id": 4
+                    },
+                    "invitationId": {
+                      "type": "string",
+                      "id": 5
+                    },
+                    "creationDt": {
+                      "type": "google.protobuf.Timestamp",
+                      "id": 6,
+                      "options": {
+                        "(gogoproto.stdtime)": true
+                      }
+                    }
+                  }
+                },
+                "MsgUpdateIdentity": {
+                  "fields": {
+                    "id": {
+                      "type": "string",
+                      "id": 1
+                    },
+                    "address": {
+                      "type": "string",
+                      "id": 2
+                    },
+                    "details": {
+                      "type": "string",
+                      "id": 3
+                    }
+                  }
+                },
+                "Query": {
+                  "methods": {
+                    "Invite": {
+                      "requestType": "QueryGetInviteRequest",
+                      "responseType": "QueryGetInviteResponse",
+                      "options": {
+                        "(google.api.http).get": "/metabelarus/mbcorecr/mbcorecr/invite/{id}"
+                      },
+                      "parsedOptions": [
+                        {
+                          "(google.api.http)": {
+                            "get": "/metabelarus/mbcorecr/mbcorecr/invite/{id}"
+                          }
+                        }
+                      ]
+                    },
+                    "InviteAll": {
+                      "requestType": "QueryAllInviteRequest",
+                      "responseType": "QueryAllInviteResponse",
+                      "options": {
+                        "(google.api.http).get": "/metabelarus/mbcorecr/mbcorecr/invite"
+                      },
+                      "parsedOptions": [
+                        {
+                          "(google.api.http)": {
+                            "get": "/metabelarus/mbcorecr/mbcorecr/invite"
+                          }
+                        }
+                      ]
+                    },
+                    "Identity": {
+                      "requestType": "QueryGetIdentityRequest",
+                      "responseType": "QueryGetIdentityResponse",
+                      "options": {
+                        "(google.api.http).get": "/metabelarus/mbcorecr/mbcorecr/identity/{id}"
+                      },
+                      "parsedOptions": [
+                        {
+                          "(google.api.http)": {
+                            "get": "/metabelarus/mbcorecr/mbcorecr/identity/{id}"
+                          }
+                        }
+                      ]
+                    },
+                    "IdentityAll": {
+                      "requestType": "QueryAllIdentityRequest",
+                      "responseType": "QueryAllIdentityResponse",
+                      "options": {
+                        "(google.api.http).get": "/metabelarus/mbcorecr/mbcorecr/identity"
+                      },
+                      "parsedOptions": [
+                        {
+                          "(google.api.http)": {
+                            "get": "/metabelarus/mbcorecr/mbcorecr/identity"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                "QueryGetInviteRequest": {
+                  "fields": {
+                    "id": {
+                      "type": "string",
+                      "id": 1
+                    }
+                  }
+                },
+                "QueryGetInviteResponse": {
+                  "fields": {
+                    "Invite": {
+                      "type": "Invite",
+                      "id": 1
+                    }
+                  }
+                },
+                "QueryAllInviteRequest": {
+                  "fields": {
+                    "pagination": {
+                      "type": "cosmos.base.query.v1beta1.PageRequest",
+                      "id": 1
+                    }
+                  }
+                },
+                "QueryAllInviteResponse": {
+                  "fields": {
+                    "Invite": {
+                      "rule": "repeated",
+                      "type": "Invite",
+                      "id": 1
+                    },
+                    "pagination": {
+                      "type": "cosmos.base.query.v1beta1.PageResponse",
+                      "id": 2
+                    }
+                  }
+                },
+                "QueryGetIdentityRequest": {
+                  "fields": {
+                    "id": {
+                      "type": "string",
+                      "id": 1
+                    }
+                  }
+                },
+                "QueryGetIdentityResponse": {
+                  "fields": {
+                    "Identity": {
+                      "type": "Identity",
+                      "id": 1
+                    }
+                  }
+                },
+                "QueryAllIdentityRequest": {
+                  "fields": {
+                    "pagination": {
+                      "type": "cosmos.base.query.v1beta1.PageRequest",
+                      "id": 1
+                    }
+                  }
+                },
+                "QueryAllIdentityResponse": {
+                  "fields": {
+                    "Identity": {
+                      "rule": "repeated",
+                      "type": "Identity",
+                      "id": 1
+                    },
+                    "pagination": {
+                      "type": "cosmos.base.query.v1beta1.PageResponse",
+                      "id": 2
+                    }
+                  }
+                }
+              }
+            },
+            "crsign": {
+              "options": {
+                "go_package": "github.com/metabelarus/mbcorecr/x/crsign/types"
+              },
+              "nested": {
+                "AuthStatus": {
+                  "values": {
+                    "AUTH_OPEN": 0,
+                    "AUTH_SIGNED": 1,
+                    "AUTH_CLOSED": 2
+                  }
+                },
+                "Auth": {
+                  "fields": {
+                    "service": {
+                      "type": "string",
+                      "id": 1
+                    },
+                    "identity": {
+                      "type": "string",
+                      "id": 2
+                    },
+                    "key": {
+                      "type": "string",
+                      "id": 3
+                    },
+                    "status": {
+                      "type": "AuthStatus",
+                      "id": 4
+                    },
+                    "creationDt": {
+                      "type": "google.protobuf.Timestamp",
+                      "id": 5,
+                      "options": {
+                        "(gogoproto.stdtime)": true
+                      }
+                    },
+                    "availabilityDt": {
+                      "type": "google.protobuf.Timestamp",
+                      "id": 6,
+                      "options": {
+                        "(gogoproto.stdtime)": true
+                      }
+                    }
+                  }
+                },
+                "MsgRequestAuth": {
+                  "fields": {
+                    "creator": {
+                      "type": "string",
+                      "id": 1
+                    },
+                    "service": {
+                      "type": "string",
+                      "id": 2
+                    },
+                    "identity": {
+                      "type": "string",
+                      "id": 3
+                    },
+                    "key": {
+                      "type": "string",
+                      "id": 4
+                    },
+                    "creationDt": {
+                      "type": "google.protobuf.Timestamp",
+                      "id": 5,
+                      "options": {
+                        "(gogoproto.stdtime)": true
+                      }
+                    }
+                  }
+                },
+                "MsgConfirmAuth": {
+                  "fields": {
+                    "creator": {
+                      "type": "string",
+                      "id": 1
+                    },
+                    "service": {
+                      "type": "string",
+                      "id": 2
+                    },
+                    "identity": {
+                      "type": "string",
+                      "id": 3
+                    }
+                  }
+                },
+                "Query": {
+                  "methods": {
+                    "Auth": {
+                      "requestType": "QueryGetAuthRequest",
+                      "responseType": "QueryGetAuthResponse",
+                      "options": {
+                        "(google.api.http).get": "/metabelarus/mbcorecr/crsign/auth/{id}"
+                      },
+                      "parsedOptions": [
+                        {
+                          "(google.api.http)": {
+                            "get": "/metabelarus/mbcorecr/crsign/auth/{id}"
+                          }
+                        }
+                      ]
+                    },
+                    "AuthAll": {
+                      "requestType": "QueryAllAuthRequest",
+                      "responseType": "QueryAllAuthResponse",
+                      "options": {
+                        "(google.api.http).get": "/metabelarus/mbcorecr/crsign/auth"
+                      },
+                      "parsedOptions": [
+                        {
+                          "(google.api.http)": {
+                            "get": "/metabelarus/mbcorecr/crsign/auth"
+                          }
+                        }
+                      ]
+                    },
+                    "Id2Sign": {
+                      "requestType": "QueryGetId2SignRequest",
+                      "responseType": "QueryGetId2SignResponse",
+                      "options": {
+                        "(google.api.http).get": "/metabelarus/mbcorecr/crsign/id2sign/{id}"
+                      },
+                      "parsedOptions": [
+                        {
+                          "(google.api.http)": {
+                            "get": "/metabelarus/mbcorecr/crsign/id2sign/{id}"
+                          }
+                        }
+                      ]
+                    },
+                    "Id2SignAll": {
+                      "requestType": "QueryAllId2SignRequest",
+                      "responseType": "QueryAllId2SignResponse",
+                      "options": {
+                        "(google.api.http).get": "/metabelarus/mbcorecr/crsign/id2sign"
+                      },
+                      "parsedOptions": [
+                        {
+                          "(google.api.http)": {
+                            "get": "/metabelarus/mbcorecr/crsign/id2sign"
+                          }
+                        }
+                      ]
+                    },
+                    "Signature": {
+                      "requestType": "QueryGetSignatureRequest",
+                      "responseType": "QueryGetSignatureResponse",
+                      "options": {
+                        "(google.api.http).get": "/metabelarus/mbcorecr/crsign/signature/{id}"
+                      },
+                      "parsedOptions": [
+                        {
+                          "(google.api.http)": {
+                            "get": "/metabelarus/mbcorecr/crsign/signature/{id}"
+                          }
+                        }
+                      ]
+                    },
+                    "SignatureAll": {
+                      "requestType": "QueryAllSignatureRequest",
+                      "responseType": "QueryAllSignatureResponse",
+                      "options": {
+                        "(google.api.http).get": "/metabelarus/mbcorecr/crsign/signature"
+                      },
+                      "parsedOptions": [
+                        {
+                          "(google.api.http)": {
+                            "get": "/metabelarus/mbcorecr/crsign/signature"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                "QueryGetAuthRequest": {
+                  "fields": {
+                    "id": {
+                      "type": "string",
+                      "id": 1
+                    }
+                  }
+                },
+                "QueryGetAuthResponse": {
+                  "fields": {
+                    "Auth": {
+                      "type": "Auth",
+                      "id": 1
+                    }
+                  }
+                },
+                "QueryAllAuthRequest": {
+                  "fields": {
+                    "pagination": {
+                      "type": "cosmos.base.query.v1beta1.PageRequest",
+                      "id": 1
+                    }
+                  }
+                },
+                "QueryAllAuthResponse": {
+                  "fields": {
+                    "Auth": {
+                      "rule": "repeated",
+                      "type": "Auth",
+                      "id": 1
+                    },
+                    "pagination": {
+                      "type": "cosmos.base.query.v1beta1.PageResponse",
+                      "id": 2
+                    }
+                  }
+                },
+                "QueryGetId2SignRequest": {
+                  "fields": {
+                    "id": {
+                      "type": "string",
+                      "id": 1
+                    }
+                  }
+                },
+                "QueryGetId2SignResponse": {
+                  "fields": {
+                    "Id2Sign": {
+                      "type": "Id2Sign",
+                      "id": 1
+                    }
+                  }
+                },
+                "QueryAllId2SignRequest": {
+                  "fields": {
+                    "pagination": {
+                      "type": "cosmos.base.query.v1beta1.PageRequest",
+                      "id": 1
+                    }
+                  }
+                },
+                "QueryAllId2SignResponse": {
+                  "fields": {
+                    "Id2Sign": {
+                      "rule": "repeated",
+                      "type": "Id2Sign",
+                      "id": 1
+                    },
+                    "pagination": {
+                      "type": "cosmos.base.query.v1beta1.PageResponse",
+                      "id": 2
+                    }
+                  }
+                },
+                "QueryGetSignatureRequest": {
+                  "fields": {
+                    "id": {
+                      "type": "string",
+                      "id": 1
+                    }
+                  }
+                },
+                "QueryGetSignatureResponse": {
+                  "fields": {
+                    "Signature": {
+                      "type": "Signature",
+                      "id": 1
+                    }
+                  }
+                },
+                "QueryAllSignatureRequest": {
+                  "fields": {
+                    "pagination": {
+                      "type": "cosmos.base.query.v1beta1.PageRequest",
+                      "id": 1
+                    }
+                  }
+                },
+                "QueryAllSignatureResponse": {
+                  "fields": {
+                    "Signature": {
+                      "rule": "repeated",
+                      "type": "Signature",
+                      "id": 1
+                    },
+                    "pagination": {
+                      "type": "cosmos.base.query.v1beta1.PageResponse",
+                      "id": 2
+                    }
+                  }
+                },
+                "Id2Sign": {
+                  "fields": {
+                    "creator": {
+                      "type": "string",
+                      "id": 1
+                    },
+                    "id": {
+                      "type": "string",
+                      "id": 2
+                    },
+                    "identity": {
+                      "type": "string",
+                      "id": 3
+                    },
+                    "signature": {
+                      "type": "string",
+                      "id": 4
+                    }
+                  }
+                },
+                "MsgCreateId2Sign": {
+                  "fields": {
+                    "creator": {
+                      "type": "string",
+                      "id": 1
+                    },
+                    "identity": {
+                      "type": "string",
+                      "id": 2
+                    },
+                    "signature": {
+                      "type": "string",
+                      "id": 3
+                    }
+                  }
+                },
+                "MsgUpdateId2Sign": {
+                  "fields": {
+                    "creator": {
+                      "type": "string",
+                      "id": 1
+                    },
+                    "id": {
+                      "type": "string",
+                      "id": 2
+                    },
+                    "identity": {
+                      "type": "string",
+                      "id": 3
+                    },
+                    "signature": {
+                      "type": "string",
+                      "id": 4
+                    }
+                  }
+                },
+                "MsgDeleteId2Sign": {
+                  "fields": {
+                    "creator": {
+                      "type": "string",
+                      "id": 1
+                    },
+                    "id": {
+                      "type": "string",
+                      "id": 2
+                    }
+                  }
+                },
+                "SignatureType": {
+                  "values": {
+                    "SIGN": 0,
+                    "PERMISSION": 1,
+                    "BADGE": 2
+                  }
+                },
+                "PublicityType": {
+                  "values": {
+                    "SECRET": 0,
+                    "PUBLIC": 1,
+                    "ANONYMOUS": 2,
+                    "HASH": 3
+                  }
+                },
+                "SignatureStatus": {
+                  "values": {
+                    "SIG_OPEN": 0,
+                    "SIG_SIGNED": 1,
+                    "SIG_WITHDRAWN": 2,
+                    "SIG_REJECTED": 3,
+                    "SIG_SEALED": 4
+                  }
+                },
+                "Signature": {
+                  "fields": {
+                    "id": {
+                      "type": "string",
+                      "id": 1
+                    },
+                    "identity": {
+                      "type": "string",
+                      "id": 2
+                    },
+                    "service": {
+                      "type": "string",
+                      "id": 3
+                    },
+                    "privateBox": {
+                      "type": "string",
+                      "id": 5
+                    },
+                    "serviceSign": {
+                      "type": "string",
+                      "id": 6
+                    },
+                    "identitySign": {
+                      "type": "string",
+                      "id": 7
+                    },
+                    "publicBox": {
+                      "type": "string",
+                      "id": 8
+                    },
+                    "identityPublicSign": {
+                      "type": "string",
+                      "id": 9
+                    },
+                    "servicePublicSign": {
+                      "type": "string",
+                      "id": 10
+                    },
+                    "purpose": {
+                      "type": "string",
+                      "id": 11
+                    },
+                    "type": {
+                      "type": "SignatureType",
+                      "id": 12
+                    },
+                    "publicity": {
+                      "type": "PublicityType",
+                      "id": 13
+                    },
+                    "status": {
+                      "type": "SignatureStatus",
+                      "id": 14
+                    },
+                    "creationDt": {
+                      "type": "google.protobuf.Timestamp",
+                      "id": 15,
+                      "options": {
+                        "(gogoproto.stdtime)": true
+                      }
+                    },
+                    "signatureDt": {
+                      "type": "google.protobuf.Timestamp",
+                      "id": 16,
+                      "options": {
+                        "(gogoproto.stdtime)": true
+                      }
+                    }
+                  }
+                },
+                "MsgCreateSignature": {
+                  "fields": {
+                    "creator": {
+                      "type": "string",
+                      "id": 1
+                    },
+                    "identity": {
+                      "type": "string",
+                      "id": 2
+                    },
+                    "service": {
+                      "type": "string",
+                      "id": 3
+                    },
+                    "key": {
+                      "type": "string",
+                      "id": 4
+                    },
+                    "secret": {
+                      "type": "string",
+                      "id": 5
+                    },
+                    "creationDt": {
+                      "type": "string",
+                      "id": 6
+                    },
+                    "availabilityDt": {
+                      "type": "string",
+                      "id": 7
+                    }
+                  }
+                },
+                "MsgUpdateSignature": {
+                  "fields": {
+                    "creator": {
+                      "type": "string",
+                      "id": 1
+                    },
+                    "id": {
+                      "type": "string",
+                      "id": 2
+                    },
+                    "identity": {
+                      "type": "string",
+                      "id": 3
+                    },
+                    "service": {
+                      "type": "string",
+                      "id": 4
+                    },
+                    "key": {
+                      "type": "string",
+                      "id": 5
+                    },
+                    "secret": {
+                      "type": "string",
+                      "id": 6
+                    },
+                    "creationDt": {
+                      "type": "string",
+                      "id": 7
+                    },
+                    "availabilityDt": {
+                      "type": "string",
+                      "id": 8
+                    }
+                  }
+                },
+                "MsgDeleteSignature": {
+                  "fields": {
+                    "creator": {
+                      "type": "string",
+                      "id": 1
+                    },
+                    "id": {
+                      "type": "string",
+                      "id": 2
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "google": {
+      "nested": {
+        "protobuf": {
+          "nested": {
+            "Timestamp": {
+              "fields": {
+                "seconds": {
+                  "type": "int64",
+                  "id": 1
+                },
+                "nanos": {
+                  "type": "int32",
+                  "id": 2
+                }
+              }
+            },
+            "FileDescriptorSet": {
+              "fields": {
+                "file": {
+                  "rule": "repeated",
+                  "type": "FileDescriptorProto",
+                  "id": 1
+                }
+              }
+            },
+            "FileDescriptorProto": {
+              "fields": {
+                "name": {
+                  "type": "string",
+                  "id": 1
+                },
+                "package": {
+                  "type": "string",
+                  "id": 2
+                },
+                "dependency": {
+                  "rule": "repeated",
+                  "type": "string",
+                  "id": 3
+                },
+                "publicDependency": {
+                  "rule": "repeated",
+                  "type": "int32",
+                  "id": 10,
+                  "options": {
+                    "packed": false
+                  }
+                },
+                "weakDependency": {
+                  "rule": "repeated",
+                  "type": "int32",
+                  "id": 11,
+                  "options": {
+                    "packed": false
+                  }
+                },
+                "messageType": {
+                  "rule": "repeated",
+                  "type": "DescriptorProto",
+                  "id": 4
+                },
+                "enumType": {
+                  "rule": "repeated",
+                  "type": "EnumDescriptorProto",
+                  "id": 5
+                },
+                "service": {
+                  "rule": "repeated",
+                  "type": "ServiceDescriptorProto",
+                  "id": 6
+                },
+                "extension": {
+                  "rule": "repeated",
+                  "type": "FieldDescriptorProto",
+                  "id": 7
+                },
+                "options": {
+                  "type": "FileOptions",
+                  "id": 8
+                },
+                "sourceCodeInfo": {
+                  "type": "SourceCodeInfo",
+                  "id": 9
+                },
+                "syntax": {
+                  "type": "string",
+                  "id": 12
+                }
+              }
+            },
+            "DescriptorProto": {
+              "fields": {
+                "name": {
+                  "type": "string",
+                  "id": 1
+                },
+                "field": {
+                  "rule": "repeated",
+                  "type": "FieldDescriptorProto",
+                  "id": 2
+                },
+                "extension": {
+                  "rule": "repeated",
+                  "type": "FieldDescriptorProto",
+                  "id": 6
+                },
+                "nestedType": {
+                  "rule": "repeated",
+                  "type": "DescriptorProto",
+                  "id": 3
+                },
+                "enumType": {
+                  "rule": "repeated",
+                  "type": "EnumDescriptorProto",
+                  "id": 4
+                },
+                "extensionRange": {
+                  "rule": "repeated",
+                  "type": "ExtensionRange",
+                  "id": 5
+                },
+                "oneofDecl": {
+                  "rule": "repeated",
+                  "type": "OneofDescriptorProto",
+                  "id": 8
+                },
+                "options": {
+                  "type": "MessageOptions",
+                  "id": 7
+                },
+                "reservedRange": {
+                  "rule": "repeated",
+                  "type": "ReservedRange",
+                  "id": 9
+                },
+                "reservedName": {
+                  "rule": "repeated",
+                  "type": "string",
+                  "id": 10
+                }
+              },
+              "nested": {
+                "ExtensionRange": {
+                  "fields": {
+                    "start": {
+                      "type": "int32",
+                      "id": 1
+                    },
+                    "end": {
+                      "type": "int32",
+                      "id": 2
+                    }
+                  }
+                },
+                "ReservedRange": {
+                  "fields": {
+                    "start": {
+                      "type": "int32",
+                      "id": 1
+                    },
+                    "end": {
+                      "type": "int32",
+                      "id": 2
+                    }
+                  }
+                }
+              }
+            },
+            "FieldDescriptorProto": {
+              "fields": {
+                "name": {
+                  "type": "string",
+                  "id": 1
+                },
+                "number": {
+                  "type": "int32",
+                  "id": 3
+                },
+                "label": {
+                  "type": "Label",
+                  "id": 4
+                },
+                "type": {
+                  "type": "Type",
+                  "id": 5
+                },
+                "typeName": {
+                  "type": "string",
+                  "id": 6
+                },
+                "extendee": {
+                  "type": "string",
+                  "id": 2
+                },
+                "defaultValue": {
+                  "type": "string",
+                  "id": 7
+                },
+                "oneofIndex": {
+                  "type": "int32",
+                  "id": 9
+                },
+                "jsonName": {
+                  "type": "string",
+                  "id": 10
+                },
+                "options": {
+                  "type": "FieldOptions",
+                  "id": 8
+                }
+              },
+              "nested": {
+                "Type": {
+                  "values": {
+                    "TYPE_DOUBLE": 1,
+                    "TYPE_FLOAT": 2,
+                    "TYPE_INT64": 3,
+                    "TYPE_UINT64": 4,
+                    "TYPE_INT32": 5,
+                    "TYPE_FIXED64": 6,
+                    "TYPE_FIXED32": 7,
+                    "TYPE_BOOL": 8,
+                    "TYPE_STRING": 9,
+                    "TYPE_GROUP": 10,
+                    "TYPE_MESSAGE": 11,
+                    "TYPE_BYTES": 12,
+                    "TYPE_UINT32": 13,
+                    "TYPE_ENUM": 14,
+                    "TYPE_SFIXED32": 15,
+                    "TYPE_SFIXED64": 16,
+                    "TYPE_SINT32": 17,
+                    "TYPE_SINT64": 18
+                  }
+                },
+                "Label": {
+                  "values": {
+                    "LABEL_OPTIONAL": 1,
+                    "LABEL_REQUIRED": 2,
+                    "LABEL_REPEATED": 3
+                  }
+                }
+              }
+            },
+            "OneofDescriptorProto": {
+              "fields": {
+                "name": {
+                  "type": "string",
+                  "id": 1
+                },
+                "options": {
+                  "type": "OneofOptions",
+                  "id": 2
+                }
+              }
+            },
+            "EnumDescriptorProto": {
+              "fields": {
+                "name": {
+                  "type": "string",
+                  "id": 1
+                },
+                "value": {
+                  "rule": "repeated",
+                  "type": "EnumValueDescriptorProto",
+                  "id": 2
+                },
+                "options": {
+                  "type": "EnumOptions",
+                  "id": 3
+                }
+              }
+            },
+            "EnumValueDescriptorProto": {
+              "fields": {
+                "name": {
+                  "type": "string",
+                  "id": 1
+                },
+                "number": {
+                  "type": "int32",
+                  "id": 2
+                },
+                "options": {
+                  "type": "EnumValueOptions",
+                  "id": 3
+                }
+              }
+            },
+            "ServiceDescriptorProto": {
+              "fields": {
+                "name": {
+                  "type": "string",
+                  "id": 1
+                },
+                "method": {
+                  "rule": "repeated",
+                  "type": "MethodDescriptorProto",
+                  "id": 2
+                },
+                "options": {
+                  "type": "ServiceOptions",
+                  "id": 3
+                }
+              }
+            },
+            "MethodDescriptorProto": {
+              "fields": {
+                "name": {
+                  "type": "string",
+                  "id": 1
+                },
+                "inputType": {
+                  "type": "string",
+                  "id": 2
+                },
+                "outputType": {
+                  "type": "string",
+                  "id": 3
+                },
+                "options": {
+                  "type": "MethodOptions",
+                  "id": 4
+                },
+                "clientStreaming": {
+                  "type": "bool",
+                  "id": 5
+                },
+                "serverStreaming": {
+                  "type": "bool",
+                  "id": 6
+                }
+              }
+            },
+            "FileOptions": {
+              "fields": {
+                "javaPackage": {
+                  "type": "string",
+                  "id": 1
+                },
+                "javaOuterClassname": {
+                  "type": "string",
+                  "id": 8
+                },
+                "javaMultipleFiles": {
+                  "type": "bool",
+                  "id": 10
+                },
+                "javaGenerateEqualsAndHash": {
+                  "type": "bool",
+                  "id": 20,
+                  "options": {
+                    "deprecated": true
+                  }
+                },
+                "javaStringCheckUtf8": {
+                  "type": "bool",
+                  "id": 27
+                },
+                "optimizeFor": {
+                  "type": "OptimizeMode",
+                  "id": 9,
+                  "options": {
+                    "default": "SPEED"
+                  }
+                },
+                "goPackage": {
+                  "type": "string",
+                  "id": 11
+                },
+                "ccGenericServices": {
+                  "type": "bool",
+                  "id": 16
+                },
+                "javaGenericServices": {
+                  "type": "bool",
+                  "id": 17
+                },
+                "pyGenericServices": {
+                  "type": "bool",
+                  "id": 18
+                },
+                "deprecated": {
+                  "type": "bool",
+                  "id": 23
+                },
+                "ccEnableArenas": {
+                  "type": "bool",
+                  "id": 31
+                },
+                "objcClassPrefix": {
+                  "type": "string",
+                  "id": 36
+                },
+                "csharpNamespace": {
+                  "type": "string",
+                  "id": 37
+                },
+                "uninterpretedOption": {
+                  "rule": "repeated",
+                  "type": "UninterpretedOption",
+                  "id": 999
+                }
+              },
+              "extensions": [
+                [
+                  1000,
+                  536870911
+                ]
+              ],
+              "reserved": [
+                [
+                  38,
+                  38
+                ]
+              ],
+              "nested": {
+                "OptimizeMode": {
+                  "values": {
+                    "SPEED": 1,
+                    "CODE_SIZE": 2,
+                    "LITE_RUNTIME": 3
+                  }
+                }
+              }
+            },
+            "MessageOptions": {
+              "fields": {
+                "messageSetWireFormat": {
+                  "type": "bool",
+                  "id": 1
+                },
+                "noStandardDescriptorAccessor": {
+                  "type": "bool",
+                  "id": 2
+                },
+                "deprecated": {
+                  "type": "bool",
+                  "id": 3
+                },
+                "mapEntry": {
+                  "type": "bool",
+                  "id": 7
+                },
+                "uninterpretedOption": {
+                  "rule": "repeated",
+                  "type": "UninterpretedOption",
+                  "id": 999
+                }
+              },
+              "extensions": [
+                [
+                  1000,
+                  536870911
+                ]
+              ],
+              "reserved": [
+                [
+                  8,
+                  8
+                ]
+              ]
+            },
+            "FieldOptions": {
+              "fields": {
+                "ctype": {
+                  "type": "CType",
+                  "id": 1,
+                  "options": {
+                    "default": "STRING"
+                  }
+                },
+                "packed": {
+                  "type": "bool",
+                  "id": 2
+                },
+                "jstype": {
+                  "type": "JSType",
+                  "id": 6,
+                  "options": {
+                    "default": "JS_NORMAL"
+                  }
+                },
+                "lazy": {
+                  "type": "bool",
+                  "id": 5
+                },
+                "deprecated": {
+                  "type": "bool",
+                  "id": 3
+                },
+                "weak": {
+                  "type": "bool",
+                  "id": 10
+                },
+                "uninterpretedOption": {
+                  "rule": "repeated",
+                  "type": "UninterpretedOption",
+                  "id": 999
+                }
+              },
+              "extensions": [
+                [
+                  1000,
+                  536870911
+                ]
+              ],
+              "reserved": [
+                [
+                  4,
+                  4
+                ]
+              ],
+              "nested": {
+                "CType": {
+                  "values": {
+                    "STRING": 0,
+                    "CORD": 1,
+                    "STRING_PIECE": 2
+                  }
+                },
+                "JSType": {
+                  "values": {
+                    "JS_NORMAL": 0,
+                    "JS_STRING": 1,
+                    "JS_NUMBER": 2
+                  }
+                }
+              }
+            },
+            "OneofOptions": {
+              "fields": {
+                "uninterpretedOption": {
+                  "rule": "repeated",
+                  "type": "UninterpretedOption",
+                  "id": 999
+                }
+              },
+              "extensions": [
+                [
+                  1000,
+                  536870911
+                ]
+              ]
+            },
+            "EnumOptions": {
+              "fields": {
+                "allowAlias": {
+                  "type": "bool",
+                  "id": 2
+                },
+                "deprecated": {
+                  "type": "bool",
+                  "id": 3
+                },
+                "uninterpretedOption": {
+                  "rule": "repeated",
+                  "type": "UninterpretedOption",
+                  "id": 999
+                }
+              },
+              "extensions": [
+                [
+                  1000,
+                  536870911
+                ]
+              ]
+            },
+            "EnumValueOptions": {
+              "fields": {
+                "deprecated": {
+                  "type": "bool",
+                  "id": 1
+                },
+                "uninterpretedOption": {
+                  "rule": "repeated",
+                  "type": "UninterpretedOption",
+                  "id": 999
+                }
+              },
+              "extensions": [
+                [
+                  1000,
+                  536870911
+                ]
+              ]
+            },
+            "ServiceOptions": {
+              "fields": {
+                "deprecated": {
+                  "type": "bool",
+                  "id": 33
+                },
+                "uninterpretedOption": {
+                  "rule": "repeated",
+                  "type": "UninterpretedOption",
+                  "id": 999
+                }
+              },
+              "extensions": [
+                [
+                  1000,
+                  536870911
+                ]
+              ]
+            },
+            "MethodOptions": {
+              "fields": {
+                "deprecated": {
+                  "type": "bool",
+                  "id": 33
+                },
+                "uninterpretedOption": {
+                  "rule": "repeated",
+                  "type": "UninterpretedOption",
+                  "id": 999
+                }
+              },
+              "extensions": [
+                [
+                  1000,
+                  536870911
+                ]
+              ]
+            },
+            "UninterpretedOption": {
+              "fields": {
+                "name": {
+                  "rule": "repeated",
+                  "type": "NamePart",
+                  "id": 2
+                },
+                "identifierValue": {
+                  "type": "string",
+                  "id": 3
+                },
+                "positiveIntValue": {
+                  "type": "uint64",
+                  "id": 4
+                },
+                "negativeIntValue": {
+                  "type": "int64",
+                  "id": 5
+                },
+                "doubleValue": {
+                  "type": "double",
+                  "id": 6
+                },
+                "stringValue": {
+                  "type": "bytes",
+                  "id": 7
+                },
+                "aggregateValue": {
+                  "type": "string",
+                  "id": 8
+                }
+              },
+              "nested": {
+                "NamePart": {
+                  "fields": {
+                    "namePart": {
+                      "rule": "required",
+                      "type": "string",
+                      "id": 1
+                    },
+                    "isExtension": {
+                      "rule": "required",
+                      "type": "bool",
+                      "id": 2
+                    }
+                  }
+                }
+              }
+            },
+            "SourceCodeInfo": {
+              "fields": {
+                "location": {
+                  "rule": "repeated",
+                  "type": "Location",
+                  "id": 1
+                }
+              },
+              "nested": {
+                "Location": {
+                  "fields": {
+                    "path": {
+                      "rule": "repeated",
+                      "type": "int32",
+                      "id": 1
+                    },
+                    "span": {
+                      "rule": "repeated",
+                      "type": "int32",
+                      "id": 2
+                    },
+                    "leadingComments": {
+                      "type": "string",
+                      "id": 3
+                    },
+                    "trailingComments": {
+                      "type": "string",
+                      "id": 4
+                    },
+                    "leadingDetachedComments": {
+                      "rule": "repeated",
+                      "type": "string",
+                      "id": 6
+                    }
+                  }
+                }
+              }
+            },
+            "GeneratedCodeInfo": {
+              "fields": {
+                "annotation": {
+                  "rule": "repeated",
+                  "type": "Annotation",
+                  "id": 1
+                }
+              },
+              "nested": {
+                "Annotation": {
+                  "fields": {
+                    "path": {
+                      "rule": "repeated",
+                      "type": "int32",
+                      "id": 1
+                    },
+                    "sourceFile": {
+                      "type": "string",
+                      "id": 2
+                    },
+                    "begin": {
+                      "type": "int32",
+                      "id": 3
+                    },
+                    "end": {
+                      "type": "int32",
+                      "id": 4
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "api": {
+          "nested": {
+            "http": {
+              "type": "HttpRule",
+              "id": 72295728,
+              "extend": "google.protobuf.MethodOptions"
+            },
+            "Http": {
+              "fields": {
+                "rules": {
+                  "rule": "repeated",
+                  "type": "HttpRule",
+                  "id": 1
+                }
+              }
+            },
+            "HttpRule": {
+              "oneofs": {
+                "pattern": {
+                  "oneof": [
+                    "get",
+                    "put",
+                    "post",
+                    "delete",
+                    "patch",
+                    "custom"
+                  ]
+                }
+              },
+              "fields": {
+                "get": {
+                  "type": "string",
+                  "id": 2
+                },
+                "put": {
+                  "type": "string",
+                  "id": 3
+                },
+                "post": {
+                  "type": "string",
+                  "id": 4
+                },
+                "delete": {
+                  "type": "string",
+                  "id": 5
+                },
+                "patch": {
+                  "type": "string",
+                  "id": 6
+                },
+                "custom": {
+                  "type": "CustomHttpPattern",
+                  "id": 8
+                },
+                "selector": {
+                  "type": "string",
+                  "id": 1
+                },
+                "body": {
+                  "type": "string",
+                  "id": 7
+                },
+                "additionalBindings": {
+                  "rule": "repeated",
+                  "type": "HttpRule",
+                  "id": 11
+                }
+              }
+            },
+            "CustomHttpPattern": {
+              "fields": {
+                "kind": {
+                  "type": "string",
+                  "id": 1
+                },
+                "path": {
+                  "type": "string",
+                  "id": 2
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "cosmos": {
+      "nested": {
+        "base": {
+          "nested": {
+            "query": {
+              "nested": {
+                "v1beta1": {
+                  "options": {
+                    "go_package": "github.com/cosmos/cosmos-sdk/types/query"
+                  },
+                  "nested": {
+                    "PageRequest": {
+                      "fields": {
+                        "key": {
+                          "type": "bytes",
+                          "id": 1
+                        },
+                        "offset": {
+                          "type": "uint64",
+                          "id": 2
+                        },
+                        "limit": {
+                          "type": "uint64",
+                          "id": 3
+                        },
+                        "countTotal": {
+                          "type": "bool",
+                          "id": 4
+                        }
+                      }
+                    },
+                    "PageResponse": {
+                      "fields": {
+                        "nextKey": {
+                          "type": "bytes",
+                          "id": 1
+                        },
+                        "total": {
+                          "type": "uint64",
+                          "id": 2
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

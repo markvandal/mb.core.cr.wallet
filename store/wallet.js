@@ -1,26 +1,35 @@
+import axios from 'axios'
+
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
-
 import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing'
-
-import { context } from '../context'
-
-import {
-  Slip10RawIndex,
-} from "@cosmjs/crypto";
+import { SigningStargateClient } from '@cosmjs/stargate'
 
 
-const ADDR_PREFIX = 'metabel'
-const DEFAULT_WALLET_PATH = 0
-
-const registerWithMnemoic = createAsyncThunk(
-  'wallet/registerWithMnemonic',
-  async (mnemonic, thunkAPI) => {
+const openWithMnemoic = createAsyncThunk(
+  'wallet/openWithMnemoic',
+  async (mnemonic, { extra: context }) => {
     context.wallet = await DirectSecp256k1HdWallet.fromMnemonic(
       mnemonic,
-      [Slip10RawIndex.hardened(DEFAULT_WALLET_PATH)],
-      ADDR_PREFIX
+      context.config.DEFAULT_WALLET_PATH,
+      context.config.ADDR_PREFIX
     )
+
+    const account = (await axios.get(
+      context.config.getApiUrl(`auth/accounts/${context.wallet.address}`)
+    )).data
+
+    context.client = await SigningStargateClient.connectWithSigner(
+      context.config.RPC_URL,
+      context.wallet,
+      {}
+    )
+
+    return {
+      address: wallet.address,
+      account,
+      mnemonic
+    }
   }
 )
 
@@ -28,7 +37,9 @@ const slice = createSlice({
   name: 'wallet',
 
   initialState: {
-    
+    address: null,
+    account: null,
+    mnemonic: null,
   },
 
   reducers: {
@@ -38,13 +49,13 @@ const slice = createSlice({
   },
 
   extraReducers: {
-    [registerWithMnemoic.fulfilled]: (state, action) => {
-      return state
+    [openWithMnemoic.fulfilled]: (state, action) => {
+      return { ...state, ...action.payload }
     }
   }
 })
 
 
-export const walletActions = {...slice.actions, registerWithMnemoic}
+export const walletActions = {...slice.actions, openWithMnemoic}
 
 export const wallet = slice.reducer
