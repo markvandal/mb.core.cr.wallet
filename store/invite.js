@@ -130,11 +130,18 @@ const slice = createSlice({
   initialState: {
     currentInvite: null,
     newAccount: null,
+    newInvite: {
+      level: 'Level4',
+      type: 'CITIZEN',
+    },
   },
 
   reducers: {
-    update: (state, { payload }) => {
-      return state
+    switchLevel: (state, { payload }) => {
+      return { ...state, newInvite: { ...state.newInvite, level: payload } }
+    },
+    switchType: (state, { payload }) => {
+      return { ...state, newInvite: { ...state.newInvite, type: payload } }
     },
   },
 

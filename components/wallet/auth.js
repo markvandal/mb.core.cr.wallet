@@ -33,6 +33,6 @@ export const WalletAuth = connect(
         : null
     }
     <Button round uppercase onPress={() => connect(mnemonic.value, navigation)}>Sign In</Button>
-    <Button round uppercase onPress={() => navigation.navigate('main')}>Back</Button>
+    <Button round uppercase onPress={() => navigation.goBack()}>Back</Button>
   </Block>
 }))

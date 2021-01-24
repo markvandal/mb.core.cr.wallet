@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { connect } from 'react-redux'
+import { Context } from '../context'
 
 import { withGalio, Block, Button, Text } from 'galio-framework'
 import { walletActions } from '../store'
@@ -13,6 +14,7 @@ export const Main = connect(
   })
 )(withGalio(({ navigation, mnemonic, signOut }) => {
   const [name] = mnemonic ? mnemonic.split(' ') : [null]
+  const context = useContext(Context)
 
   return <Block>
     {
@@ -20,9 +22,14 @@ export const Main = connect(
         ? <Block>
           <Text>{name}</Text>
           <Button onPress={signOut}>Sign Out</Button>
+          <Button onPress={() => navigation.navigate('invite.create')}>Invite</Button>
         </Block>
         : <Button round uppercase onPress={() => navigation.navigate('auth')}>Auth</Button>
     }
-    <Button round uppercase onPress={() => navigation.navigate('tests')}>Tests</Button>
+    {
+      context.config.DEBUG_AUTH
+        ? <Button round uppercase onPress={() => navigation.navigate('tests')}>Tests</Button>
+        : null
+    }
   </Block>
 }))

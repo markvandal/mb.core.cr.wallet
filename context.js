@@ -77,6 +77,10 @@ export const context = {
 
   key(type, id) {
     return this.getEnum(`mbcorecr.${type}`).valuesById[id]
+  },
+
+  selectFunction: (_, nav) => {
+    nav.navigate('main')
   }
 }
 
