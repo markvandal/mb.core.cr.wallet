@@ -17,6 +17,8 @@ export const Main = connect(
   const context = useContext(Context)
 
   return <Block>
+    <Text>....</Text>
+    <Text>....</Text>
     {
       mnemonic
         ? <Block>
