@@ -1,4 +1,3 @@
-// import './shim.js'
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 
@@ -14,6 +13,7 @@ import { WalletAuth } from './components/wallet/auth'
 import { Main } from './components/main'
 import { TestMain } from './components/tests/main'
 import { Create as InviteCreate } from './components/invite/create'
+import { Accept as InviteAccept } from './components/invite/accept'
 import { Level as InviteLevel } from './components/invite/level'
 import { Type as InviteType } from './components/invite/type'
 
@@ -29,6 +29,7 @@ const App = () =>
           <Screen name="auth" component={WalletAuth} />
           <Screen name="tests" component={TestMain} />
           <Screen name="invite.create" component={InviteCreate} />
+          <Screen name="invite.accept" component={InviteAccept} />
           <Screen name="invite.level" component={InviteLevel} />
           <Screen name="invite.type" component={InviteType} />
         </Navigator>

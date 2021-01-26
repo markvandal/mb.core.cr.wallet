@@ -10,8 +10,9 @@ import { createCurrentDate, getBech32PubKey } from '../utils'
 
 const accept = createAsyncThunk(
   'invite/accept',
-  async ({ mnemonic, inviteId }, { extra: context }) => {
+  async (sequence, { extra: context }) => {
     try {
+      const [inviteId, mnemonic] = sequence.split(' ', 2)
       const tmpWallet = await DirectSecp256k1HdWallet.fromMnemonic(
         mnemonic,
         context.config.DEFAULT_WALLET_PATH,

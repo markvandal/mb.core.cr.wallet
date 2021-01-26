@@ -26,7 +26,10 @@ export const Main = connect(
           <Button onPress={signOut}>Sign Out</Button>
           <Button onPress={() => navigation.navigate('invite.create')}>Invite</Button>
         </Block>
-        : <Button round uppercase onPress={() => navigation.navigate('auth')}>Auth</Button>
+        : <Block>
+          <Button round uppercase onPress={() => navigation.navigate('auth')}>Auth</Button>
+          <Button round uppercase onPress={() => navigation.navigate('invite.accept')}>Create ID</Button>
+        </Block>
     }
     {
       context.config.DEBUG_AUTH

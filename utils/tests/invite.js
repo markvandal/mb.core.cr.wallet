@@ -17,10 +17,7 @@ export const testInvite = async (context, redux) => {
     dispatch(testsActions.log(`Invite created ${invite.inviteId} ${type} ${level}`))
     
 
-    res = await dispatch(inviteActions.accept({
-      mnemonic: invite.mnemonic,
-      inviteId: invite.inviteId
-    }))
+    res = await dispatch(inviteActions.accept(`${invite.inviteId} ${invite.mnemonic}`))
     console.log('Invite accepted result', res)
     const newAccount = res.payload.newAccount
 
