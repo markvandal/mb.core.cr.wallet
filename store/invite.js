@@ -12,7 +12,8 @@ const accept = createAsyncThunk(
   'invite/accept',
   async (sequence, { extra: context }) => {
     try {
-      const [inviteId, mnemonic] = sequence.split(' ', 2)
+      const [inviteId, ...mnemonics] = sequence.split(' ')
+      const mnemonic = mnemonics.join(' ')
       const tmpWallet = await DirectSecp256k1HdWallet.fromMnemonic(
         mnemonic,
         context.config.DEFAULT_WALLET_PATH,

@@ -70,7 +70,7 @@ export const context = {
   },
 
   value(code) {
-    const [type, key] = code.split('.', 2)
+    const [type, key] = code.split('.')
 
     return this.getEnum(`mbcorecr.${type}`).values[key]
   },

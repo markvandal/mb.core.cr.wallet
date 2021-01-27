@@ -49,7 +49,7 @@ export const Accept = connect(
         : <Block>
           <Text>Input invite code</Text>
           <Input onRef={_ => sequence = _} />
-          <Button onPress={() => accept(sequence)}>Create ID</Button>
+          <Button onPress={() => accept(sequence.value)}>Create ID</Button>
         </Block>
     }
     <Button round uppercase onPress={() => navigation.goBack()}>Back</Button>
