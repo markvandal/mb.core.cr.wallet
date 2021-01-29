@@ -33,32 +33,28 @@
                       "type": "string",
                       "id": 3
                     },
-                    "identityId": {
-                      "type": "string",
-                      "id": 4
-                    },
                     "level": {
                       "type": "IdentityLevel",
-                      "id": 5
+                      "id": 4
                     },
                     "identityType": {
                       "type": "IdentityType",
-                      "id": 6
+                      "id": 5
                     },
                     "key": {
                       "type": "string",
-                      "id": 7
+                      "id": 6
                     },
                     "creationDt": {
                       "type": "google.protobuf.Timestamp",
-                      "id": 8,
+                      "id": 7,
                       "options": {
                         "(gogoproto.stdtime)": true
                       }
                     },
                     "acceptanceDt": {
                       "type": "google.protobuf.Timestamp",
-                      "id": 9,
+                      "id": 8,
                       "options": {
                         "(gogoproto.stdtime)": true
                       }
@@ -137,44 +133,49 @@
                       "type": "string",
                       "id": 1
                     },
-                    "address": {
-                      "type": "string",
-                      "id": 2
-                    },
                     "identityType": {
                       "type": "IdentityType",
-                      "id": 3
-                    },
-                    "details": {
-                      "type": "string",
-                      "id": 4
+                      "id": 2
                     },
                     "invitationId": {
                       "type": "string",
-                      "id": 5
+                      "id": 3
                     },
                     "creationDt": {
                       "type": "google.protobuf.Timestamp",
-                      "id": 6,
+                      "id": 4,
                       "options": {
                         "(gogoproto.stdtime)": true
                       }
                     }
                   }
                 },
-                "MsgUpdateIdentity": {
+                "Addr": {
+                  "fields": {
+                    "address": {
+                      "type": "string",
+                      "id": 1
+                    },
+                    "main": {
+                      "type": "bool",
+                      "id": 2
+                    }
+                  }
+                },
+                "Id2Addr": {
+                  "fields": {
+                    "addresses": {
+                      "keyType": "int32",
+                      "type": "Addr",
+                      "id": 1
+                    }
+                  }
+                },
+                "Addr2Id": {
                   "fields": {
                     "id": {
                       "type": "string",
                       "id": 1
-                    },
-                    "address": {
-                      "type": "string",
-                      "id": 2
-                    },
-                    "details": {
-                      "type": "string",
-                      "id": 3
                     }
                   }
                 },
@@ -232,6 +233,20 @@
                         {
                           "(google.api.http)": {
                             "get": "/metabelarus/mbcorecr/mbcorecr/identity"
+                          }
+                        }
+                      ]
+                    },
+                    "Id2AddrAll": {
+                      "requestType": "QueryAllId2AddrRequest",
+                      "responseType": "QueryAllId2AddrResponse",
+                      "options": {
+                        "(google.api.http).get": "/metabelarus/mbcorecr/mbcorecr/id2addr"
+                      },
+                      "parsedOptions": [
+                        {
+                          "(google.api.http)": {
+                            "get": "/metabelarus/mbcorecr/mbcorecr/id2addr"
                           }
                         }
                       ]
@@ -311,6 +326,27 @@
                       "id": 2
                     }
                   }
+                },
+                "QueryAllId2AddrRequest": {
+                  "fields": {
+                    "pagination": {
+                      "type": "cosmos.base.query.v1beta1.PageRequest",
+                      "id": 1
+                    }
+                  }
+                },
+                "QueryAllId2AddrResponse": {
+                  "fields": {
+                    "Id2Addrs": {
+                      "rule": "repeated",
+                      "type": "Id2Addr",
+                      "id": 1
+                    },
+                    "pagination": {
+                      "type": "cosmos.base.query.v1beta1.PageResponse",
+                      "id": 2
+                    }
+                  }
                 }
               }
             },
@@ -362,10 +398,6 @@
                 },
                 "MsgRequestAuth": {
                   "fields": {
-                    "creator": {
-                      "type": "string",
-                      "id": 1
-                    },
                     "service": {
                       "type": "string",
                       "id": 2
@@ -389,17 +421,13 @@
                 },
                 "MsgConfirmAuth": {
                   "fields": {
-                    "creator": {
+                    "identity": {
                       "type": "string",
                       "id": 1
                     },
                     "service": {
                       "type": "string",
                       "id": 2
-                    },
-                    "identity": {
-                      "type": "string",
-                      "id": 3
                     }
                   }
                 },
@@ -429,34 +457,6 @@
                         {
                           "(google.api.http)": {
                             "get": "/metabelarus/mbcorecr/crsign/auth"
-                          }
-                        }
-                      ]
-                    },
-                    "Id2Sign": {
-                      "requestType": "QueryGetId2SignRequest",
-                      "responseType": "QueryGetId2SignResponse",
-                      "options": {
-                        "(google.api.http).get": "/metabelarus/mbcorecr/crsign/id2sign/{id}"
-                      },
-                      "parsedOptions": [
-                        {
-                          "(google.api.http)": {
-                            "get": "/metabelarus/mbcorecr/crsign/id2sign/{id}"
-                          }
-                        }
-                      ]
-                    },
-                    "Id2SignAll": {
-                      "requestType": "QueryAllId2SignRequest",
-                      "responseType": "QueryAllId2SignResponse",
-                      "options": {
-                        "(google.api.http).get": "/metabelarus/mbcorecr/crsign/id2sign"
-                      },
-                      "parsedOptions": [
-                        {
-                          "(google.api.http)": {
-                            "get": "/metabelarus/mbcorecr/crsign/id2sign"
                           }
                         }
                       ]
@@ -528,43 +528,6 @@
                     }
                   }
                 },
-                "QueryGetId2SignRequest": {
-                  "fields": {
-                    "id": {
-                      "type": "string",
-                      "id": 1
-                    }
-                  }
-                },
-                "QueryGetId2SignResponse": {
-                  "fields": {
-                    "Id2Sign": {
-                      "type": "Id2Sign",
-                      "id": 1
-                    }
-                  }
-                },
-                "QueryAllId2SignRequest": {
-                  "fields": {
-                    "pagination": {
-                      "type": "cosmos.base.query.v1beta1.PageRequest",
-                      "id": 1
-                    }
-                  }
-                },
-                "QueryAllId2SignResponse": {
-                  "fields": {
-                    "Id2Sign": {
-                      "rule": "repeated",
-                      "type": "Id2Sign",
-                      "id": 1
-                    },
-                    "pagination": {
-                      "type": "cosmos.base.query.v1beta1.PageResponse",
-                      "id": 2
-                    }
-                  }
-                },
                 "QueryGetSignatureRequest": {
                   "fields": {
                     "id": {
@@ -598,74 +561,6 @@
                     },
                     "pagination": {
                       "type": "cosmos.base.query.v1beta1.PageResponse",
-                      "id": 2
-                    }
-                  }
-                },
-                "Id2Sign": {
-                  "fields": {
-                    "creator": {
-                      "type": "string",
-                      "id": 1
-                    },
-                    "id": {
-                      "type": "string",
-                      "id": 2
-                    },
-                    "identity": {
-                      "type": "string",
-                      "id": 3
-                    },
-                    "signature": {
-                      "type": "string",
-                      "id": 4
-                    }
-                  }
-                },
-                "MsgCreateId2Sign": {
-                  "fields": {
-                    "creator": {
-                      "type": "string",
-                      "id": 1
-                    },
-                    "identity": {
-                      "type": "string",
-                      "id": 2
-                    },
-                    "signature": {
-                      "type": "string",
-                      "id": 3
-                    }
-                  }
-                },
-                "MsgUpdateId2Sign": {
-                  "fields": {
-                    "creator": {
-                      "type": "string",
-                      "id": 1
-                    },
-                    "id": {
-                      "type": "string",
-                      "id": 2
-                    },
-                    "identity": {
-                      "type": "string",
-                      "id": 3
-                    },
-                    "signature": {
-                      "type": "string",
-                      "id": 4
-                    }
-                  }
-                },
-                "MsgDeleteId2Sign": {
-                  "fields": {
-                    "creator": {
-                      "type": "string",
-                      "id": 1
-                    },
-                    "id": {
-                      "type": "string",
                       "id": 2
                     }
                   }

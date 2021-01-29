@@ -37,11 +37,11 @@ export const Accept = connect(
                 await Share.share(
                   {
                     title: 'Meta-Belarus Identity',
-                    message: `${newAccount.identityId} ${newAccount.mnemonic}`,
+                    message: `${newAccount.mnemonic}`,
                   }
                 )
               } catch (_) {
-                Clipboard.setString(`${newAccount.identityId} ${newAccount.mnemonic}`)
+                Clipboard.setString(`${newAccount.mnemonic}`)
               }
             }}
           />
