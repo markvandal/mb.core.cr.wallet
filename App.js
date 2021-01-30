@@ -3,7 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 
 import { Provider } from 'react-redux'
 
-import { GalioProvider } from 'galio-framework'
+import { GalioProvider, NavBar } from 'galio-framework'
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -16,6 +16,7 @@ import { Create as InviteCreate } from './components/invite/create'
 import { Accept as InviteAccept } from './components/invite/accept'
 import { Level as InviteLevel } from './components/invite/level'
 import { Type as InviteType } from './components/invite/type'
+import { List as AuthList } from './components/auth/list'
 
 
 const { Navigator, Screen } = createStackNavigator()
@@ -24,7 +25,19 @@ const App = () =>
   <Provider store={store}>
     <GalioProvider>
       <NavigationContainer>
-        <Navigator headerMode="none" initialRouteName="main">
+        <Navigator initialRouteName="main"
+          screenOptions={_ => ({
+            title: 'Meta-Belarus',
+            header: ({ scene, navigation }) => {
+              const { options } = scene.descriptor;
+
+              return <NavBar 
+                title={options.title}
+                back={scene.route.name !== "main"}
+                onLeftPress={() => navigation.goBack()} />
+            }
+          })}
+        >
           <Screen name="main" component={Main} />
           <Screen name="auth" component={WalletAuth} />
           <Screen name="tests" component={TestMain} />
@@ -32,6 +45,7 @@ const App = () =>
           <Screen name="invite.accept" component={InviteAccept} />
           <Screen name="invite.level" component={InviteLevel} />
           <Screen name="invite.type" component={InviteType} />
+          <Screen name="auth.list" component={AuthList} />
         </Navigator>
       </NavigationContainer>
       <StatusBar style="auto" />

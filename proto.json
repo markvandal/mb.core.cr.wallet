@@ -431,18 +431,27 @@
                     }
                   }
                 },
+                "Id2Service": {
+                  "fields": {
+                    "services": {
+                      "keyType": "int32",
+                      "type": "string",
+                      "id": 1
+                    }
+                  }
+                },
                 "Query": {
                   "methods": {
                     "Auth": {
                       "requestType": "QueryGetAuthRequest",
                       "responseType": "QueryGetAuthResponse",
                       "options": {
-                        "(google.api.http).get": "/metabelarus/mbcorecr/crsign/auth/{id}"
+                        "(google.api.http).get": "/metabelarus/mbcorecr/crsign/auths/{id}"
                       },
                       "parsedOptions": [
                         {
                           "(google.api.http)": {
-                            "get": "/metabelarus/mbcorecr/crsign/auth/{id}"
+                            "get": "/metabelarus/mbcorecr/crsign/auths/{id}"
                           }
                         }
                       ]
@@ -451,12 +460,26 @@
                       "requestType": "QueryAllAuthRequest",
                       "responseType": "QueryAllAuthResponse",
                       "options": {
-                        "(google.api.http).get": "/metabelarus/mbcorecr/crsign/auth"
+                        "(google.api.http).get": "/metabelarus/mbcorecr/crsign/auths"
                       },
                       "parsedOptions": [
                         {
                           "(google.api.http)": {
-                            "get": "/metabelarus/mbcorecr/crsign/auth"
+                            "get": "/metabelarus/mbcorecr/crsign/auths"
+                          }
+                        }
+                      ]
+                    },
+                    "Id2Service": {
+                      "requestType": "QueryGetId2ServiceRequest",
+                      "responseType": "QueryGetId2ServiceResponse",
+                      "options": {
+                        "(google.api.http).get": "/metabelarus/mbcorecr/crsign/id2services/{id}"
+                      },
+                      "parsedOptions": [
+                        {
+                          "(google.api.http)": {
+                            "get": "/metabelarus/mbcorecr/crsign/id2services/{id}"
                           }
                         }
                       ]
@@ -503,6 +526,22 @@
                   "fields": {
                     "Auth": {
                       "type": "Auth",
+                      "id": 1
+                    }
+                  }
+                },
+                "QueryGetId2ServiceRequest": {
+                  "fields": {
+                    "id": {
+                      "type": "string",
+                      "id": 1
+                    }
+                  }
+                },
+                "QueryGetId2ServiceResponse": {
+                  "fields": {
+                    "Id2Service": {
+                      "type": "Id2Service",
                       "id": 1
                     }
                   }

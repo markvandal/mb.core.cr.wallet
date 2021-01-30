@@ -25,6 +25,7 @@ export const Main = connect(
           <Text>{name}</Text>
           <Button onPress={signOut}>Sign Out</Button>
           <Button onPress={() => navigation.navigate('invite.create')}>Invite</Button>
+          <Button onPress={() => navigation.navigate('auth.list')}>Services</Button>
         </Block>
         : <Block>
           <Button round uppercase onPress={() => navigation.navigate('auth')}>Auth</Button>
