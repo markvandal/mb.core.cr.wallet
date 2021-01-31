@@ -15,8 +15,7 @@ export const Accept = connect(
     accept: (sequence) => dispatch(inviteActions.accept(sequence)),
     ...ownProps,
   }),
-)(withGalio(({ navigation, newAccount, accept, theme }) => {
-  const context = useContext(Context)
+)(withGalio(({ newAccount, accept, theme }) => {
   let sequence = ''
 
   return <Block>
@@ -52,7 +51,6 @@ export const Accept = connect(
           <Button onPress={() => accept(sequence.value)}>Create ID</Button>
         </Block>
     }
-    <Button round uppercase onPress={() => navigation.goBack()}>Back</Button>
   </Block>
 }))
 

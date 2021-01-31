@@ -17,6 +17,9 @@
     "@reduxjs/toolkit": "^1.5.0",
     "axios": "^0.21.1",
     "bip39": "^3.0.3",
+    "crypto-browserify": "^3.12.0",
+    "ecdh": "^0.1.1",
+    "eciesjs": "^0.3.9",
     "expo": "~40.0.0",
     "expo-clipboard": "~1.0.1",
     "expo-crypto": "~8.4.0",
@@ -28,7 +31,8 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-40.0.1.tar.gz",
     "react-native-web": "~0.13.12",
     "react-redux": "^7.2.2",
-    "reconnecting-websocket": "^4.4.0"
+    "reconnecting-websocket": "^4.4.0",
+    "uuid": "^3.4.0"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",

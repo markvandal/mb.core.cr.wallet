@@ -10,6 +10,7 @@ import protoJson from './proto.json'
 const ADDR_PREFIX = process.env.ADDR_PREFIX || 'metabel'
 const APP_PATH = process.env.APP_PATH || 'metabelarus.mbcorecr'
 const DEBUG_AUTH = process.env.DEBUG_AUTH || ''
+const PUB_PREFIX = process.env.PUB_PREFIX || `${ADDR_PREFIX}pub`
 
 
 console.log(process.env.DEFAULT_WALLET_PATH)
@@ -55,6 +56,7 @@ export const context = {
     WS_URL,
     APP_PATH,
     DEBUG_AUTH,
+    PUB_PREFIX,
 
     getApiUrl(uri) {
       return `${this.API_URL}/${uri}`

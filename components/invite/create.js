@@ -71,7 +71,6 @@ export const Create = connect(
           <Button onPress={() => create(context, createUI.type, createUI.level)}>Create</Button>
         </Block>
     }
-    <Button round uppercase onPress={() => navigation.goBack()}>Back</Button>
   </Block>
 }))
 

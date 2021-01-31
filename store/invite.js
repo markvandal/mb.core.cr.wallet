@@ -4,8 +4,9 @@ import * as bip39 from 'bip39'
 
 import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing'
 
-import { createTx } from '../utils/ledger/client'
-import { createCurrentDate, getBech32PubKey } from '../utils'
+import { createCurrentDate, getBech32PubKey, createTx } from '../utils'
+
+import { createTmpContext } from '../utils/ledger/context'
 
 
 const accept = createAsyncThunk(
@@ -14,24 +15,12 @@ const accept = createAsyncThunk(
     try {
       const [inviteId, ...mnemonics] = sequence.split(' ')
       const mnemonic = mnemonics.join(' ')
-      const tmpWallet = await DirectSecp256k1HdWallet.fromMnemonic(
-        mnemonic,
-        context.config.DEFAULT_WALLET_PATH,
-        context.config.ADDR_PREFIX
-      )
-      const tmpAccount = (await tmpWallet.getAccounts())[0]
-      const tmpContext = { ...context, wallet: tmpWallet }
 
       const newMnemonic = bip39.generateMnemonic(256)
 
-      const newWallet = await DirectSecp256k1HdWallet.fromMnemonic(
-        newMnemonic,
-        context.config.DEFAULT_WALLET_PATH,
-        context.config.ADDR_PREFIX
-      )
-
-      const newAccount = (await newWallet.getAccounts())[0];
-      const newPubKey = getBech32PubKey(newAccount)
+      const { tmpAccount, tmpContext, tmpWallet } = await createTmpContext(context, mnemonic)
+      const { tmpAccount: newAccount } = await createTmpContext(context, newMnemonic)
+      const newPubKey = getBech32PubKey(newAccount, context)
 
       const tx = await createTx(
         tmpContext,
@@ -78,14 +67,8 @@ const create = createAsyncThunk(
     try {
       const mnemonic = bip39.generateMnemonic(128)
 
-      const tmpWallet = await DirectSecp256k1HdWallet.fromMnemonic(
-        mnemonic,
-        context.config.DEFAULT_WALLET_PATH,
-        context.config.ADDR_PREFIX
-      )
-
-      const account = (await tmpWallet.getAccounts())[0];
-      const bech32PubKey = getBech32PubKey(account)
+      const { tmpAccount: account } = await createTmpContext(context, mnemonic)
+      const bech32PubKey = getBech32PubKey(account, context)
 
       const tx = await createTx(
         context,

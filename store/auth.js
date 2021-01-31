@@ -1,18 +1,19 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
-import * as bip39 from 'bip39'
+import { decodeBech32Pubkey } from '@cosmjs/launchpad'
 
-import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing'
+import { v4 } from 'uuid'
 
+import { createTx, createCurrentDate, encrypt } from '../utils'
 import axios from 'axios'
-import { createTx } from '../utils/ledger/client'
-import { createCurrentDate, getBech32PubKey } from '../utils'
+
 
 const list = createAsyncThunk(
   'auth/list',
-  async (_, { extra: context }) => {
+  async (_, { extra: context, getState }) => {
     try {
-      const url = context.config.getApiUrl(`metabelarus/mbcorecr/crsign/id2services/6`)
+      const idenity = getState().wallet.identity?.id
+      const url = context.config.getApiUrl(`metabelarus/mbcorecr/crsign/id2services/${idenity}`)
       const body = (await axios.get(url)).data
 
       return Object.entries(body.Id2Service.services).map(([, value]) => value)
@@ -28,8 +29,12 @@ const load = createAsyncThunk(
   'auth/load',
   async (idx, { extra: context, getState }) => {
     try {
-      const service = getState().auth[idx]
-      const url = context.config.getApiUrl(`metabelarus/mbcorecr/crsign/auths/6.${service}`)
+      const service = getState().auth.list[idx]
+      if ('string' !== typeof service) {
+        throw new Error(`Already laoded for ${idx}`)
+      }
+      const idenity = getState().wallet.identity?.id
+      const url = context.config.getApiUrl(`metabelarus/mbcorecr/crsign/auths/${idenity}.${service}`)
       const body = (await axios.get(url)).data
 
       return body.Auth
@@ -41,29 +46,99 @@ const load = createAsyncThunk(
   }
 )
 
+const request = createAsyncThunk(
+  'auth/request',
+  async (identity, { extra: context, getState }) => {
+    const _produceError = error => ({ newAuth: { error } })
+
+    try {
+      const key = v4()
+
+      const url = context.config.getApiUrl(`metabelarus/mbcorecr/mbcorecr/id2addr/${identity}`)
+      const body = (await axios.get(url)).data
+      const accAddress = body.Addr?.address
+
+      if (!accAddress) {
+        return _produceError(`No address under specified id ${identity}`)
+      }
+
+      const account = (await axios.get(
+        context.config.getApiUrl(`auth/accounts/${accAddress}`)
+      )).data.result?.value
+
+      if (!account) {
+        return _produceError(`No account information under the address ${accAddress}`)
+      }
+
+      const encKey = encrypt(account.public_key?.value, key)
+      if (!encKey) {
+        return _produceError(`Can't get encrypted key with pubkey: ${account.public_key?.value}`)
+      }
+
+      const tx = await createTx(
+        context,
+        context.getType('crsign.MsgRequestAuth'),
+        {
+          identity,
+          key: encKey,
+          creationDt: createCurrentDate(),
+        },
+        context.wallet.address,
+        {
+          creatorField: 'service',
+          typeUrl: 'crsign.MsgRequestAuth'
+        }
+      )
+
+      await tx.send()
+
+      if (!tx.checkResult('mbcorecr.crsign:request.auth')) {
+        throw new Error(`Wrong request auth transction result: ${tx.getType()}`)
+      }
+
+      return {
+        newAuth: {
+          key,
+          authId: tx.getAttribute('auth_id'),
+        }
+      }
+    } catch (e) {
+      console.log(e)
+
+      return _produceError(`${e}`)
+    }
+  }
+)
+
 
 const slice = createSlice({
   name: 'auth',
 
-  initialState: [],
+  initialState: {
+    list: [],
+    newAuth: null,
+  },
 
   reducers: {
   },
 
   extraReducers: {
-    [list.fulfilled]: (_, action) => {
-      return [...action.payload]
+    [list.fulfilled]: (state, action) => {
+      return { ...state, list: action.payload }
     },
     [load.fulfilled]: (state, action) => {
-      const newState = [...state]
+      const newState = [...state.list]
       newState[action.meta.arg] = action.payload
 
-      return newState
+      return { ...state, list: newState }
     },
+    [request.fulfilled]: (state, action) => {
+      return { ...state, ...action.payload }
+    }
   }
 })
 
 
-export const authActions = { ...slice.actions, list, load }
+export const authActions = { ...slice.actions, list, load, request }
 
 export const auth = slice.reducer

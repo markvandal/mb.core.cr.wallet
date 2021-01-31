@@ -20,19 +20,18 @@ export const WalletAuth = connect(
   let mnemonic = null
 
   return <Block>
-    <Input color={theme.COLORS.THEME} 
-          icon="heart"
-          family="antdesign"
-          iconSize={22}
-          iconColor="red" 
-          style={{ borderColor: theme.COLORS.THEME }}
-          onRef={_ => mnemonic = _} />
+    <Input color={theme.COLORS.THEME}
+      icon="heart"
+      family="antdesign"
+      iconSize={22}
+      iconColor="red"
+      style={{ borderColor: theme.COLORS.THEME }}
+      onRef={_ => mnemonic = _} />
     {
-      context.config.DEBUG_AUTH 
+      context.config.DEBUG_AUTH
         ? <Button round uppercase onPress={() => mnemonic.value = context.config.DEBUG_AUTH}>Fill default</Button>
         : null
     }
     <Button round uppercase onPress={() => connect(mnemonic.value, navigation)}>Sign In</Button>
-    <Button round uppercase onPress={() => navigation.goBack()}>Back</Button>
   </Block>
 }))

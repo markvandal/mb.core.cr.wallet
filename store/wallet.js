@@ -20,6 +20,17 @@ const openWithMnemoic = createAsyncThunk(
         context.config.getApiUrl(`auth/accounts/${context.wallet.address}`)
       )).data
 
+      const addr2id = (await axios.get(
+        context.config.getApiUrl(`metabelarus/mbcorecr/mbcorecr/addr2id/${context.wallet.address}`)
+      )).data
+
+      let identity = null
+      if (addr2id.Addr2Id?.id) {
+        identity = (await axios.get(
+          context.config.getApiUrl(`metabelarus/mbcorecr/mbcorecr/identity/${addr2id.Addr2Id?.id}`)
+        )).data?.Identity
+      }
+
       context.client = await SigningStargateClient.connectWithSigner(
         context.config.RPC_URL,
         context.wallet,
@@ -27,8 +38,9 @@ const openWithMnemoic = createAsyncThunk(
       )
 
       return {
-        address: wallet.address,
-        account,
+        address: context.wallet.address,
+        account: account.result?.value,
+        identity,
         mnemonic
       }
     } catch (e) {
@@ -46,6 +58,7 @@ const slice = createSlice({
     address: null,
     account: null,
     mnemonic: null,
+    identity: null,
   },
 
   reducers: {

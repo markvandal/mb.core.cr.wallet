@@ -165,7 +165,7 @@
                 "Id2Addr": {
                   "fields": {
                     "addresses": {
-                      "keyType": "int32",
+                      "rule": "repeated",
                       "type": "Addr",
                       "id": 1
                     }
@@ -195,20 +195,6 @@
                         }
                       ]
                     },
-                    "InviteAll": {
-                      "requestType": "QueryAllInviteRequest",
-                      "responseType": "QueryAllInviteResponse",
-                      "options": {
-                        "(google.api.http).get": "/metabelarus/mbcorecr/mbcorecr/invite"
-                      },
-                      "parsedOptions": [
-                        {
-                          "(google.api.http)": {
-                            "get": "/metabelarus/mbcorecr/mbcorecr/invite"
-                          }
-                        }
-                      ]
-                    },
                     "Identity": {
                       "requestType": "QueryGetIdentityRequest",
                       "responseType": "QueryGetIdentityResponse",
@@ -223,6 +209,20 @@
                         }
                       ]
                     },
+                    "AddrToId": {
+                      "requestType": "QueryAddrToIdRequest",
+                      "responseType": "QueryAddrToIdResponse",
+                      "options": {
+                        "(google.api.http).get": "/metabelarus/mbcorecr/mbcorecr/addr2id/{address}"
+                      },
+                      "parsedOptions": [
+                        {
+                          "(google.api.http)": {
+                            "get": "/metabelarus/mbcorecr/mbcorecr/addr2id/{address}"
+                          }
+                        }
+                      ]
+                    },
                     "IdentityAll": {
                       "requestType": "QueryAllIdentityRequest",
                       "responseType": "QueryAllIdentityResponse",
@@ -233,20 +233,6 @@
                         {
                           "(google.api.http)": {
                             "get": "/metabelarus/mbcorecr/mbcorecr/identity"
-                          }
-                        }
-                      ]
-                    },
-                    "Id2AddrAll": {
-                      "requestType": "QueryAllId2AddrRequest",
-                      "responseType": "QueryAllId2AddrResponse",
-                      "options": {
-                        "(google.api.http).get": "/metabelarus/mbcorecr/mbcorecr/id2addr"
-                      },
-                      "parsedOptions": [
-                        {
-                          "(google.api.http)": {
-                            "get": "/metabelarus/mbcorecr/mbcorecr/id2addr"
                           }
                         }
                       ]
@@ -269,27 +255,6 @@
                     }
                   }
                 },
-                "QueryAllInviteRequest": {
-                  "fields": {
-                    "pagination": {
-                      "type": "cosmos.base.query.v1beta1.PageRequest",
-                      "id": 1
-                    }
-                  }
-                },
-                "QueryAllInviteResponse": {
-                  "fields": {
-                    "Invite": {
-                      "rule": "repeated",
-                      "type": "Invite",
-                      "id": 1
-                    },
-                    "pagination": {
-                      "type": "cosmos.base.query.v1beta1.PageResponse",
-                      "id": 2
-                    }
-                  }
-                },
                 "QueryGetIdentityRequest": {
                   "fields": {
                     "id": {
@@ -302,6 +267,22 @@
                   "fields": {
                     "Identity": {
                       "type": "Identity",
+                      "id": 1
+                    }
+                  }
+                },
+                "QueryAddrToIdRequest": {
+                  "fields": {
+                    "address": {
+                      "type": "string",
+                      "id": 1
+                    }
+                  }
+                },
+                "QueryAddrToIdResponse": {
+                  "fields": {
+                    "Addr2Id": {
+                      "type": "Addr2Id",
                       "id": 1
                     }
                   }
@@ -319,27 +300,6 @@
                     "Identity": {
                       "rule": "repeated",
                       "type": "Identity",
-                      "id": 1
-                    },
-                    "pagination": {
-                      "type": "cosmos.base.query.v1beta1.PageResponse",
-                      "id": 2
-                    }
-                  }
-                },
-                "QueryAllId2AddrRequest": {
-                  "fields": {
-                    "pagination": {
-                      "type": "cosmos.base.query.v1beta1.PageRequest",
-                      "id": 1
-                    }
-                  }
-                },
-                "QueryAllId2AddrResponse": {
-                  "fields": {
-                    "Id2Addrs": {
-                      "rule": "repeated",
-                      "type": "Id2Addr",
                       "id": 1
                     },
                     "pagination": {
@@ -434,7 +394,7 @@
                 "Id2Service": {
                   "fields": {
                     "services": {
-                      "keyType": "int32",
+                      "rule": "repeated",
                       "type": "string",
                       "id": 1
                     }
@@ -452,20 +412,6 @@
                         {
                           "(google.api.http)": {
                             "get": "/metabelarus/mbcorecr/crsign/auths/{id}"
-                          }
-                        }
-                      ]
-                    },
-                    "AuthAll": {
-                      "requestType": "QueryAllAuthRequest",
-                      "responseType": "QueryAllAuthResponse",
-                      "options": {
-                        "(google.api.http).get": "/metabelarus/mbcorecr/crsign/auths"
-                      },
-                      "parsedOptions": [
-                        {
-                          "(google.api.http)": {
-                            "get": "/metabelarus/mbcorecr/crsign/auths"
                           }
                         }
                       ]
@@ -494,20 +440,6 @@
                         {
                           "(google.api.http)": {
                             "get": "/metabelarus/mbcorecr/crsign/signature/{id}"
-                          }
-                        }
-                      ]
-                    },
-                    "SignatureAll": {
-                      "requestType": "QueryAllSignatureRequest",
-                      "responseType": "QueryAllSignatureResponse",
-                      "options": {
-                        "(google.api.http).get": "/metabelarus/mbcorecr/crsign/signature"
-                      },
-                      "parsedOptions": [
-                        {
-                          "(google.api.http)": {
-                            "get": "/metabelarus/mbcorecr/crsign/signature"
                           }
                         }
                       ]
@@ -546,27 +478,6 @@
                     }
                   }
                 },
-                "QueryAllAuthRequest": {
-                  "fields": {
-                    "pagination": {
-                      "type": "cosmos.base.query.v1beta1.PageRequest",
-                      "id": 1
-                    }
-                  }
-                },
-                "QueryAllAuthResponse": {
-                  "fields": {
-                    "Auth": {
-                      "rule": "repeated",
-                      "type": "Auth",
-                      "id": 1
-                    },
-                    "pagination": {
-                      "type": "cosmos.base.query.v1beta1.PageResponse",
-                      "id": 2
-                    }
-                  }
-                },
                 "QueryGetSignatureRequest": {
                   "fields": {
                     "id": {
@@ -580,27 +491,6 @@
                     "Signature": {
                       "type": "Signature",
                       "id": 1
-                    }
-                  }
-                },
-                "QueryAllSignatureRequest": {
-                  "fields": {
-                    "pagination": {
-                      "type": "cosmos.base.query.v1beta1.PageRequest",
-                      "id": 1
-                    }
-                  }
-                },
-                "QueryAllSignatureResponse": {
-                  "fields": {
-                    "Signature": {
-                      "rule": "repeated",
-                      "type": "Signature",
-                      "id": 1
-                    },
-                    "pagination": {
-                      "type": "cosmos.base.query.v1beta1.PageResponse",
-                      "id": 2
                     }
                   }
                 },
