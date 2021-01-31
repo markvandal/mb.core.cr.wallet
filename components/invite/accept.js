@@ -28,8 +28,8 @@ export const Accept = connect(
             onlyIcon
             icon="sharealt"
             iconFamily="antdesign"
-            iconSize={30}
-            color="warning"
+            iconSize={20}
+            color="primary"
             iconColor={theme.COLORS.WHITE}
             onPress={async () => {
               try {

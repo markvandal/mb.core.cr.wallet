@@ -11,8 +11,8 @@ import { decrypt } from '../../utils/ledger/crypt'
 
 
 export const List = connect(
-  ({ auth }, ownProps) =>
-    ({ ...ownProps, auth: auth.list }),
+  ({ auth: { list }, wallet: { identity } }, ownProps) =>
+    ({ ...ownProps, auth: list, identity }),
   (dispatch, ownProps) => ({
     ...ownProps,
     list: () => dispatch(authActions.list()),
@@ -24,20 +24,39 @@ export const List = connect(
       }
     )
   }),
-)(withGalio(({ navigation, auth, list, load, theme }) => {
+)(withGalio(({ navigation, auth, identity, list, load, theme }) => {
   const context = useContext(Context)
   useFocusEffect(useCallback(() => { list() }, []))
   useEffect(useCallback(_ => { load(auth) }, [auth]))
+
   return <Block>
     {
       auth.map(
         auth => 'string' === typeof auth
           ? <Card key={auth}><Text>Auth: {auth}</Text></Card>
-          : <Card key={auth.service} flex title={`Service ID: ${auth.service}`}>
-            <Text>Key: {auth.key}</Text>
-            <Text>Decrypted: {decrypt(context.wallet, auth.key)}</Text>
-          </Card>
+          : (() => {
+            const sessionToken = decrypt(context.wallet, auth.key)
+
+            return <Card key={auth.service} flex title={`Service ID: ${auth.service}`}>
+              <Text>Key: {auth.key}</Text>
+              <Text>Decrypted: {sessionToken}</Text>
+              <Button
+                onlyIcon
+                icon="sharealt"
+                iconFamily="antdesign"
+                iconSize={20}
+                color="primary"
+                iconColor={theme.COLORS.WHITE}
+                onPress={() => Clipboard.setString(`${sessionToken}`)}
+              />
+            </Card>
+          })()
       )
+    }
+    {
+      identity.identityType === 'SERVICE'
+        ? <Button round uppercase onPress={() => navigation.navigate('auth.request')}>Request Auth</Button>
+        : null
     }
   </Block>
 }))
