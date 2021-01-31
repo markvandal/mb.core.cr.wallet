@@ -39,14 +39,14 @@ export const createTx = async (context, type, msg, address = undefined, meta = {
         )
 
         return client.signAndBroadcast(_address, [this.msg], fee)
-          .then(result => { 
+          .then(result => {
             if (result.code) {
               console.log(result)
-              
+
               throw new Error(result.rawLog)
             }
 
-            return this.result = result 
+            return this.result = result
           })
           .then(result => this._result = _parseResult(result))
 
@@ -75,9 +75,10 @@ export const createTx = async (context, type, msg, address = undefined, meta = {
   }
 }
 
-const _parseResult = (result) => JSON.parse(result.rawLog)[0]
-  .events.map(event => ({
-    type: event.type,
-    attributes: event.attributes.reduce((obj, attr) => ({...obj, [attr.key]: attr.value}), {})
-  })
-)
+const _parseResult = (result) => {
+  return JSON.parse(result.rawLog)[0]
+    .events.map(event => ({
+      type: event.type,
+      attributes: event.attributes?.reduce((obj, attr) => ({ ...obj, [attr.key]: attr.value }), {}) || {}
+    }))
+}

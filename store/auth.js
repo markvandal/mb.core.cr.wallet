@@ -8,6 +8,47 @@ import { createTx, createCurrentDate, encrypt } from '../utils'
 import axios from 'axios'
 
 
+const sign = createAsyncThunk(
+  'auth/load',
+  async (idx, { extra: context, getState }) => {
+    try {
+      const auth = getState().auth.list[idx]
+
+      console.log(auth)
+      
+      const tx = await createTx(
+        context,
+        context.getType('crsign.MsgConfirmAuth'),
+        {
+          service: auth.service,
+        },
+        context.wallet.address,
+        {
+          creatorField: 'identity',
+          typeUrl: 'crsign.MsgConfirmAuth'
+        }
+      )
+
+      await tx.send()
+
+      if (!tx.checkResult('mbcorecr.crsign:confirm.auth')) {
+        throw new Error(`Wrong confirm auth transction result: ${tx.getType()}`)
+      }
+
+      const idenity = getState().wallet.identity?.id
+      const url = context.config.getApiUrl(`metabelarus/mbcorecr/crsign/auths/${idenity}.${auth.service}`)
+      const body = (await axios.get(url)).data
+
+      return body.Auth
+    } catch (e) {
+      console.log(e)
+
+      throw e
+    }
+  }
+)
+
+
 const list = createAsyncThunk(
   'auth/list',
   async (_, { extra: context, getState }) => {
@@ -134,11 +175,17 @@ const slice = createSlice({
     },
     [request.fulfilled]: (state, action) => {
       return { ...state, ...action.payload }
+    },
+    [sign.fulfilled]: (state, action) => {
+      const newState = [...state.list]
+      newState[action.meta.arg] = action.payload
+
+      return { ...state, list: newState }
     }
   }
 })
 
 
-export const authActions = { ...slice.actions, list, load, request }
+export const authActions = { ...slice.actions, list, load, request, sign }
 
 export const auth = slice.reducer
