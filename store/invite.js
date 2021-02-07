@@ -116,7 +116,7 @@ const slice = createSlice({
     currentInvite: null,
     newAccount: null,
     newInvite: {
-      level: 'Level4',
+      level: 'Level3',
       type: 'CITIZEN',
     },
   },
