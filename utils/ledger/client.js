@@ -1,5 +1,4 @@
 
-import { Type, Field } from 'protobufjs'
 import { SigningStargateClient } from '@cosmjs/stargate'
 import { Registry } from '@cosmjs/proto-signing'
 
