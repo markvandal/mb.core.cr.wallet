@@ -3,13 +3,15 @@ import { SigningStargateClient } from '@cosmjs/stargate'
 import { Registry } from '@cosmjs/proto-signing'
 
 
-export const createTx = async (context, type, msg, address = undefined, meta = {}) => {
-  const fee = meta.fee || {
+export const createTx = async (context, typeName, msg, meta = {}) => {
+  const _meta = typeof meta === 'stirng' ? { creatorField: meta } : meta
+  const fee = _meta.fee || {
     amount: [{ amount: '0', denom: 'token' }],
     gas: '200000'
   }
-
-  const _address = address || meta.address
+  const creatorField = _meta.creatorField || 'creator'
+  const type = typeof typeName === 'string' ? context.getType(typeName) : typeName
+  const _typeUrl = _meta.typeUrl || typeName
 
   return {
     sent: false,
@@ -19,9 +21,8 @@ export const createTx = async (context, type, msg, address = undefined, meta = {
     _result: null,
 
     msg: {
-      typeUrl: `/${context.config.APP_PATH}.${meta.typeUrl}`,
+      typeUrl: `/${context.config.APP_PATH}.${_typeUrl}`,
       value: {
-        [meta.creatorField || 'creator']: _address,
         ...msg,
       }
     },
@@ -37,7 +38,7 @@ export const createTx = async (context, type, msg, address = undefined, meta = {
           { registry: new Registry([[this.msg.typeUrl, type]]) }
         )
 
-        return client.signAndBroadcast(_address, [this.msg], fee)
+        return client.signAndBroadcast(msg[creatorField], [this.msg], fee)
           .then(result => {
             if (result.code) {
               console.log(result)

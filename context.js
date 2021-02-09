@@ -71,10 +71,10 @@ export const context = {
     return protoRoot.lookupEnum(`${this.config.APP_PATH}.${typePath}`)
   },
 
-  value(code) {
+  value(code, module = 'mbcorecr') {
     const [type, key] = code.split('.')
 
-    return this.getEnum(`mbcorecr.${type}`).values[key]
+    return this.getEnum(`${module}.${type}`).values[key]
   },
 
   key(type, id) {

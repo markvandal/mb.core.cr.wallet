@@ -16,16 +16,13 @@ const sign = createAsyncThunk(
       
       const tx = await createTx(
         context,
-        context.getType('crsign.MsgConfirmAuth'),
+        'crsign.MsgConfirmAuth',
         {
+          identity: context.wallet.address,
           service: auth.service,
           confirmationDt: createCurrentDate(),
         },
-        context.wallet.address,
-        {
-          creatorField: 'identity',
-          typeUrl: 'crsign.MsgConfirmAuth'
-        }
+        'identity',
       )
 
       await tx.send()
@@ -117,17 +114,14 @@ const request = createAsyncThunk(
 
       const tx = await createTx(
         context,
-        context.getType('crsign.MsgRequestAuth'),
+        'crsign.MsgRequestAuth',
         {
+          service: context.wallet.address,
           identity,
           key: encKey,
           creationDt: createCurrentDate(),
         },
-        context.wallet.address,
-        {
-          creatorField: 'service',
-          typeUrl: 'crsign.MsgRequestAuth'
-        }
+        'service'
       )
 
       await tx.send()

@@ -477,12 +477,12 @@
                       "requestType": "QueryGetRecordRequest",
                       "responseType": "QueryGetRecordResponse",
                       "options": {
-                        "(google.api.http).get": "/metabelarus/mbcorecr/crsign/record/{id}"
+                        "(google.api.http).get": "/metabelarus/mbcorecr/crsign/records/{id}"
                       },
                       "parsedOptions": [
                         {
                           "(google.api.http)": {
-                            "get": "/metabelarus/mbcorecr/crsign/record/{id}"
+                            "get": "/metabelarus/mbcorecr/crsign/records/{id}"
                           }
                         }
                       ]
@@ -701,13 +701,9 @@
                       "type": "int32",
                       "id": 8
                     },
-                    "parentId": {
-                      "type": "string",
-                      "id": 9
-                    },
                     "creationDt": {
                       "type": "google.protobuf.Timestamp",
-                      "id": 10,
+                      "id": 9,
                       "options": {
                         "(gogoproto.stdtime)": true
                       }
