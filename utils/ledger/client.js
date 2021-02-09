@@ -4,7 +4,7 @@ import { Registry } from '@cosmjs/proto-signing'
 
 
 export const createTx = async (context, typeName, msg, meta = {}) => {
-  const _meta = typeof meta === 'stirng' ? { creatorField: meta } : meta
+  const _meta = typeof meta === 'string' ? { creatorField: meta } : meta
   const fee = _meta.fee || {
     amount: [{ amount: '0', denom: 'token' }],
     gas: '200000'

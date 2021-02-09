@@ -24,13 +24,13 @@ const accept = createAsyncThunk(
         tmpContext,
         'mbcorecr.MsgAcceptInvite',
         {
-          inviteId: tmpWallet.address,
+          inviteId,
           tmpAddress: tmpAccount.address,
           address: newAccount.address,
           pubKey: newPubKey,
           acceptanceDt: createCurrentDate(),
         },
-        'inviteId',
+        'tmpAddress',
       )
 
       await tx.send()
