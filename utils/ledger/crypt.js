@@ -35,12 +35,13 @@ export const sign = async (wallet, data) => {
   return toHex(fromBase64(sign.signature))
 }
 
-export const verify = async (wallet, signature, data) => {
+export const verify = async (pubkey, signature, data) => {
+  pubkey = typeof pubkey === 'string' ? fromBase64(pubkey) : pubkey
   const _signature = fromHex(signature)
   return await Secp256k1.verifySignature(
     new Secp256k1Signature(_signature.slice(0,32), _signature.slice(32)),
     sha256(Uint8Array.from(data)),
-    wallet.pubkey,
+    pubkey,
   )
 }
 

@@ -1,27 +1,25 @@
 
-import { testsActions, walletActions, authActions } from '../../store'
-import { testInvite } from './invite'
+import { testsActions, authActions } from '../../store'
+
+import { wrapConextWithNewUser } from './helper'
 
 export const testAuth = async (context, redux) => {
   const dispatch = redux.store.dispatch
 
-  await testInvite(context, redux)
+  
   try {
-    const backupMnemonic = redux.store.getState().wallet.mnemonic
-    const currentId = redux.store.getState().wallet.identity.id
-
-    const account = redux.store.getState().invite.newAccount
-    let res = await dispatch(walletActions.openWithMnemoic(account.mnemonic))
-    console.log('Result of opening of service account', res)
-    dispatch(testsActions.log(`Opened service account session`))
-
-    res = await dispatch(authActions.request(currentId))
-    console.log('Requested auth result', res)
-    dispatch(testsActions.log(`Requested auth ${res.payload.newAuth.authId} "${res.payload.newAuth.key}"`))
-
-    res = await dispatch(walletActions.openWithMnemoic(backupMnemonic))
-    console.log('Rollback to current account result', res)
-    dispatch(testsActions.log(`Restored current sesstion`))
+    let res = null
+    let _serviceId = null
+    await wrapConextWithNewUser(context, redux, async (currentId, serviceId) => {
+      res = await dispatch(authActions.request(currentId))
+      _serviceId = serviceId
+      console.log('Requested auth result', res)
+      dispatch(testsActions.log(`Requested auth ${res.payload.newAuth.authId} "${res.payload.newAuth.key}"`))
+    })
+  
+    res = await dispatch(authActions.sign(_serviceId))
+    console.log('Confirm auth result', res)
+    dispatch(testsActions.log(`Authentication signed for service #${res.payload.service}`))
   } catch (e) {
     console.log(e)
     dispatch(testsActions.log(`Error during test ${e}`))

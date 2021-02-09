@@ -31,7 +31,7 @@ export const Main = connect(
         </Block>
     }
     {
-      context.config.DEBUG_AUTH
+      context.config.DEBUG_AUTH && mnemonic
         ? <Button round uppercase onPress={() => navigation.navigate('tests')}>Tests</Button>
         : null
     }

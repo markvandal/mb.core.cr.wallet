@@ -1,12 +1,29 @@
 import axios from 'axios'
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
-import { createCurrentDate, createTx, sign, encrypt, decrypt, verify } from '../utils'
+import { createCurrentDate, createTx, sign, encrypt, decrypt, verify, loadAccount, loadAccountById } from '../utils'
+
+const loadAll = createAsyncThunk(
+  'reocrd/loadAll',
+  async (identity, { extra: context, getState }) => {
+    if (!identity) {
+      identity = getState().wallet.identity.id
+    }
+    const url = context.config.getApiUrl(`/metabelarus/mbcorecr/crsign/id2record/${identity}`)
+    const body = (await axios.get(url)).data
+    if (!body.Id2Record) {
+      throw new Error(`Can't load records for Identity: ${identity}`)
+    }
+
+    return { records: body.Id2Record.records }
+  }
+)
 
 const load = createAsyncThunk(
   'record/load',
   async (recordId, { extra: context, getState }) => {
     try {
+      const currentIdentity = getState().wallet.identity.id
       const url = context.config.getApiUrl(`metabelarus/mbcorecr/crsign/records/${recordId}`)
       const body = (await axios.get(url)).data
 
@@ -14,17 +31,20 @@ const load = createAsyncThunk(
         throw new Error(`Can't load reacord with ID: ${recordId}`)
       }
       const record = body.Record
-      let data = record.data
-      if (record.recordType == context.value('PublicityType.PRIVATE', 'crsign')) {
-        if (getState().wallet.identity.id === record.identity) {
-          data = decrypt(context.wallet, record.data)
+      if (record.publicity === 'PRIVATE') {
+        if (currentIdentity === record.identity) {
+          record.data = decrypt(context.wallet, record.data)
         }
       }
-      let verified = null
-      if (record.signature) {
-        verified = await verify(context.wallet, record.signature, data)
+      record.verified = null
+      if (['PRIVATE', 'PUBLIC'].includes(record.publicity) && record.signature) {
+        let pubkey = context.wallet.pubkey
+        if (currentIdentity != record.provider) {
+          const account = await loadAccountById(context, record.provider)
+          pubkey = account.public_key.value
+        }
+        record.verified = await verify(pubkey, record.signature, record.data)
       }
-      record.verified = verified
 
       return { loadedRecord: record }
     } catch (e) {
@@ -38,16 +58,26 @@ const load = createAsyncThunk(
 const create = createAsyncThunk(
   'record/create',
   /**
-   * @param { data, key, publicity?, type?, liveTime? } record 
+   * @param { data, key, publicity?, type?, liveTime?, identity? } record 
    * @param { extra: context } param1 
    */
   async (record, { extra: context }) => {
     try {
       let data = record.data
+      const providerAddon = {}
       const signature = await sign(context.wallet, record.data)
-      const publicity = record.publicity || context.value('PublicityType.PRIVATE', 'crsign')
-      if (context.value('PublicityType.PRIVATE', 'crsign') === publicity) {
-        data = encrypt(context.wallet.pubkey, data)
+      const publicityPrivateVal = context.value('PublicityType.PRIVATE', 'crsign')
+      const publicity = record.publicity || publicityPrivateVal
+      let pubkey = context.wallet.pubkey
+
+      if (record.identity) {
+        providerAddon.provider = record.identity
+        const account = await loadAccountById(context, record.identity)
+        pubkey = account.public_key.value
+      }
+
+      if (publicityPrivateVal === publicity) {
+        data = encrypt(pubkey, data)
       }
 
       const tx = await createTx(
@@ -62,6 +92,7 @@ const create = createAsyncThunk(
           publicity,
           liveTime: record.liveTime || 0,
           creationDt: createCurrentDate(),
+          ...providerAddon
         },
       )
 
@@ -119,10 +150,13 @@ const slice = createSlice({
         loadedRecord: record,
       }
     },
+    [loadAll.fulfilled]: (state, { payload: { records } }) => {
+      return { ...state, records }
+    },
   }
 })
 
 
-export const recordActions = { ...slice.actions, create, load }
+export const recordActions = { ...slice.actions, create, load, loadAll }
 
 export const record = slice.reducer

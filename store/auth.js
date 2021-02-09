@@ -10,10 +10,8 @@ const sign = createAsyncThunk(
   'auth/sign',
   async (idx, { extra: context, getState }) => {
     try {
-      const auth = getState().auth.list[idx]
+      const auth = typeof idx === 'number' ? getState().auth.list[idx] : { service: idx }
 
-      console.log(auth)
-      
       const tx = await createTx(
         context,
         'crsign.MsgConfirmAuth',

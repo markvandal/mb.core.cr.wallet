@@ -1,3 +1,4 @@
+import axios from 'axios'
 
 import { SigningStargateClient } from '@cosmjs/stargate'
 import { Registry } from '@cosmjs/proto-signing'
@@ -81,4 +82,27 @@ const _parseResult = (result) => {
       type: event.type,
       attributes: event.attributes?.reduce((obj, attr) => ({ ...obj, [attr.key]: attr.value }), {}) || {}
     }))
+}
+
+export const loadAccountById = async (context, id) => {
+  const body = await axios.get(
+    context.config.getApiUrl(`metabelarus/mbcorecr/mbcorecr/id2addr/${id}`)
+  )
+  const identityAddress = body.data?.Addr?.address
+  if (!identityAddress) {
+    throw new Error(`Can't get identity address ${id}`)
+  }
+
+  return await loadAccount(context, identityAddress)
+}
+
+export const loadAccount = async (context, identityAddress) => {
+  const account = (await axios.get(
+    context.config.getApiUrl(`auth/accounts/${identityAddress}`)
+  )).data?.result?.value
+  if (!account) {
+    throw new Error(`Can't load account with address ${identityAddress}`)
+  }
+
+  return account
 }

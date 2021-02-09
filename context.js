@@ -77,8 +77,8 @@ export const context = {
     return this.getEnum(`${module}.${type}`).values[key]
   },
 
-  key(type, id) {
-    return this.getEnum(`mbcorecr.${type}`).valuesById[id]
+  key(type, id, module = 'mbcorecr') {
+    return this.getEnum(`${module}.${type}`).valuesById[id]
   },
 
   selectFunction: (_, nav) => {
