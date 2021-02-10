@@ -137,8 +137,8 @@ const slice = createSlice({
       const record = payload.loadedRecord
 
       let records = [...state.records]
-      let idx = 0
-      if (idx = records.findIndex(_record => _record.id === record.id)) {
+      const idx = records.findIndex(_record => _record.id === record.id || _record === record.id)
+      if (idx !== -1) {
         records[idx] = record
       } else {
         records.push(record)

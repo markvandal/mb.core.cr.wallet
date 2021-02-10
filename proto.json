@@ -443,130 +443,6 @@
                     }
                   }
                 },
-                "Query": {
-                  "methods": {
-                    "Auth": {
-                      "requestType": "QueryGetAuthRequest",
-                      "responseType": "QueryGetAuthResponse",
-                      "options": {
-                        "(google.api.http).get": "/metabelarus/mbcorecr/crsign/auths/{id}"
-                      },
-                      "parsedOptions": [
-                        {
-                          "(google.api.http)": {
-                            "get": "/metabelarus/mbcorecr/crsign/auths/{id}"
-                          }
-                        }
-                      ]
-                    },
-                    "Id2Service": {
-                      "requestType": "QueryGetId2ServiceRequest",
-                      "responseType": "QueryGetId2ServiceResponse",
-                      "options": {
-                        "(google.api.http).get": "/metabelarus/mbcorecr/crsign/id2services/{id}"
-                      },
-                      "parsedOptions": [
-                        {
-                          "(google.api.http)": {
-                            "get": "/metabelarus/mbcorecr/crsign/id2services/{id}"
-                          }
-                        }
-                      ]
-                    },
-                    "Record": {
-                      "requestType": "QueryGetRecordRequest",
-                      "responseType": "QueryGetRecordResponse",
-                      "options": {
-                        "(google.api.http).get": "/metabelarus/mbcorecr/crsign/records/{id}"
-                      },
-                      "parsedOptions": [
-                        {
-                          "(google.api.http)": {
-                            "get": "/metabelarus/mbcorecr/crsign/records/{id}"
-                          }
-                        }
-                      ]
-                    },
-                    "Id2Record": {
-                      "requestType": "QueryGetId2RecordRequest",
-                      "responseType": "QueryGetId2RecordResponse",
-                      "options": {
-                        "(google.api.http).get": "/metabelarus/mbcorecr/crsign/id2record/{id}"
-                      },
-                      "parsedOptions": [
-                        {
-                          "(google.api.http)": {
-                            "get": "/metabelarus/mbcorecr/crsign/id2record/{id}"
-                          }
-                        }
-                      ]
-                    }
-                  }
-                },
-                "QueryGetAuthRequest": {
-                  "fields": {
-                    "id": {
-                      "type": "string",
-                      "id": 1
-                    }
-                  }
-                },
-                "QueryGetAuthResponse": {
-                  "fields": {
-                    "Auth": {
-                      "type": "Auth",
-                      "id": 1
-                    }
-                  }
-                },
-                "QueryGetId2ServiceRequest": {
-                  "fields": {
-                    "id": {
-                      "type": "string",
-                      "id": 1
-                    }
-                  }
-                },
-                "QueryGetId2ServiceResponse": {
-                  "fields": {
-                    "Id2Service": {
-                      "type": "Id2Service",
-                      "id": 1
-                    }
-                  }
-                },
-                "QueryGetRecordRequest": {
-                  "fields": {
-                    "id": {
-                      "type": "string",
-                      "id": 1
-                    }
-                  }
-                },
-                "QueryGetRecordResponse": {
-                  "fields": {
-                    "Record": {
-                      "type": "Record",
-                      "id": 1
-                    }
-                  }
-                },
-                "QueryGetId2RecordRequest": {
-                  "fields": {
-                    "id": {
-                      "type": "string",
-                      "id": 1
-                    }
-                  }
-                },
-                "QueryGetId2RecordResponse": {
-                  "fields": {
-                    "Id2Record": {
-                      "type": "Id2Record",
-                      "id": 1
-                    }
-                  }
-                },
                 "RecordType": {
                   "values": {
                     "IDENTITY_RECORD": 0,
@@ -777,6 +653,130 @@
                   "fields": {
                     "id": {
                       "type": "string",
+                      "id": 1
+                    }
+                  }
+                },
+                "Query": {
+                  "methods": {
+                    "Auth": {
+                      "requestType": "QueryGetAuthRequest",
+                      "responseType": "QueryGetAuthResponse",
+                      "options": {
+                        "(google.api.http).get": "/metabelarus/mbcorecr/crsign/auths/{id}"
+                      },
+                      "parsedOptions": [
+                        {
+                          "(google.api.http)": {
+                            "get": "/metabelarus/mbcorecr/crsign/auths/{id}"
+                          }
+                        }
+                      ]
+                    },
+                    "Id2Service": {
+                      "requestType": "QueryGetId2ServiceRequest",
+                      "responseType": "QueryGetId2ServiceResponse",
+                      "options": {
+                        "(google.api.http).get": "/metabelarus/mbcorecr/crsign/id2services/{id}"
+                      },
+                      "parsedOptions": [
+                        {
+                          "(google.api.http)": {
+                            "get": "/metabelarus/mbcorecr/crsign/id2services/{id}"
+                          }
+                        }
+                      ]
+                    },
+                    "Record": {
+                      "requestType": "QueryGetRecordRequest",
+                      "responseType": "QueryGetRecordResponse",
+                      "options": {
+                        "(google.api.http).get": "/metabelarus/mbcorecr/crsign/records/{id}"
+                      },
+                      "parsedOptions": [
+                        {
+                          "(google.api.http)": {
+                            "get": "/metabelarus/mbcorecr/crsign/records/{id}"
+                          }
+                        }
+                      ]
+                    },
+                    "Id2Record": {
+                      "requestType": "QueryGetId2RecordRequest",
+                      "responseType": "QueryGetId2RecordResponse",
+                      "options": {
+                        "(google.api.http).get": "/metabelarus/mbcorecr/crsign/id2record/{id}"
+                      },
+                      "parsedOptions": [
+                        {
+                          "(google.api.http)": {
+                            "get": "/metabelarus/mbcorecr/crsign/id2record/{id}"
+                          }
+                        }
+                      ]
+                    }
+                  }
+                },
+                "QueryGetAuthRequest": {
+                  "fields": {
+                    "id": {
+                      "type": "string",
+                      "id": 1
+                    }
+                  }
+                },
+                "QueryGetAuthResponse": {
+                  "fields": {
+                    "Auth": {
+                      "type": "Auth",
+                      "id": 1
+                    }
+                  }
+                },
+                "QueryGetId2ServiceRequest": {
+                  "fields": {
+                    "id": {
+                      "type": "string",
+                      "id": 1
+                    }
+                  }
+                },
+                "QueryGetId2ServiceResponse": {
+                  "fields": {
+                    "Id2Service": {
+                      "type": "Id2Service",
+                      "id": 1
+                    }
+                  }
+                },
+                "QueryGetRecordRequest": {
+                  "fields": {
+                    "id": {
+                      "type": "string",
+                      "id": 1
+                    }
+                  }
+                },
+                "QueryGetRecordResponse": {
+                  "fields": {
+                    "Record": {
+                      "type": "Record",
+                      "id": 1
+                    }
+                  }
+                },
+                "QueryGetId2RecordRequest": {
+                  "fields": {
+                    "id": {
+                      "type": "string",
+                      "id": 1
+                    }
+                  }
+                },
+                "QueryGetId2RecordResponse": {
+                  "fields": {
+                    "Id2Record": {
+                      "type": "Id2Record",
                       "id": 1
                     }
                   }

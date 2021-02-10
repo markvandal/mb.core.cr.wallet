@@ -17,6 +17,7 @@ import { Accept as InviteAccept } from './components/invite/accept'
 import { Level as InviteLevel } from './components/invite/level'
 import { Type as InviteType } from './components/invite/type'
 import { List as AuthList } from './components/auth/list'
+import { PersonalList as RecordPersonalList } from './components/record/personal/list'
 import { Request as AuthRequest } from './components/auth/request'
 
 
@@ -48,6 +49,7 @@ const App = () =>
           <Screen name="invite.type" component={InviteType} />
           <Screen name="auth.list" component={AuthList} />
           <Screen name="auth.request" component={AuthRequest} />
+          <Screen name="record.personal.list" component={RecordPersonalList} />
         </Navigator>
       </NavigationContainer>
       <StatusBar style="auto" />
