@@ -14,21 +14,20 @@ export const List = connect(
   ({ auth: { list }, wallet: { identity } }, ownProps) =>
     ({ auth: list, identity, ...ownProps }),
   (dispatch, ownProps) => ({
-    list: () => dispatch(authActions.list()),
-    load: (auth) => auth.map(
-      (service, idx) => {
-        if ('string' === typeof service) {
-          dispatch(authActions.load(idx))
+    list: async () => {
+      const res = await dispatch(authActions.list())
+      for (let idx = 0 ; idx < res.payload?.length ; ++idx) {
+        if ('string' === typeof res.payload[idx]) {
+          await dispatch(authActions.load(idx))
         }
       }
-    ),
+    },
     sign: idx => dispatch(authActions.sign(idx)),
     ...ownProps,
   }),
-)(withGalio(({ navigation, auth, identity, list, load, sign, theme }) => {
+)(withGalio(({ navigation, auth, identity, list, sign, theme }) => {
   const context = useContext(Context)
   useFocusEffect(useCallback(() => { list() }, []))
-  useEffect(useCallback(_ => { load(auth) }, [auth]))
 
   return <Block>
     {

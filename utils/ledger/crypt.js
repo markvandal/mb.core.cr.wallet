@@ -15,7 +15,7 @@ export const getBech32PubKey = (account, context) =>
 export const decrypt = (wallet, data) => {
   try {
     return jsdecrypt(
-      PrivateKey.fromHex(toHex(wallet.privkey)).toHex(),
+      toHex(wallet.privkey),
       Buffer.from(fromBase64(fixBase64(data)))
     ).toString()
   } catch (e) {

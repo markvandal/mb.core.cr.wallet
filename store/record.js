@@ -23,7 +23,6 @@ const load = createAsyncThunk(
   'record/load',
   async (recordId, { extra: context, getState }) => {
     try {
-      const currentIdentity = getState().wallet.identity.id
       const url = context.config.getApiUrl(`metabelarus/mbcorecr/crsign/records/${recordId}`)
       const body = (await axios.get(url)).data
 
@@ -31,22 +30,120 @@ const load = createAsyncThunk(
         throw new Error(`Can't load reacord with ID: ${recordId}`)
       }
       const record = body.Record
-      if (record.publicity === 'PRIVATE') {
-        if (currentIdentity === record.identity) {
-          record.data = decrypt(context.wallet, record.data)
-        }
-      }
-      record.verified = null
-      if (['PRIVATE', 'PUBLIC'].includes(record.publicity) && record.signature) {
-        let pubkey = context.wallet.pubkey
-        if (currentIdentity != record.provider) {
-          const account = await loadAccountById(context, record.provider)
-          pubkey = account.public_key.value
-        }
-        record.verified = await verify(pubkey, record.signature, record.data)
-      }
+      await _patchRecord(context, getState().wallet.identity.id, record)
 
       return { loadedRecord: record }
+    } catch (e) {
+      console.log(e)
+
+      throw e
+    }
+  }
+)
+
+const validate = createAsyncThunk(
+  'record/validate',
+  async ({ record, value }, { extra: context, getState }) => {
+    try {
+      const _record = { ...record }
+      const account = await loadAccountById(
+        context,
+        record.recordType === 'IDENTITY_RECORD' ? record.identity : record.provider
+      )
+      const pubkey = account.public_key.value
+      _record.verified = await verify(pubkey, record.signature, value)
+      if (_record.verified) {
+        _record.data = value
+      }
+
+      return _record
+    } catch (e) {
+      console.log(e)
+
+      throw e
+    }
+  }
+)
+
+const _patchRecord = async (context, currentIdentity, record) => {
+  if (record.data && record.publicity === 'PRIVATE') {
+    if (currentIdentity === record.identity) {
+      record.data = decrypt(context.wallet, record.data)
+    }
+  }
+  record.verified = null
+  if (['PRIVATE', 'PUBLIC'].includes(record.publicity) && record.signature) {
+    let pubkey = context.wallet.pubkey
+    if (currentIdentity != record.provider) {
+      const account = await loadAccountById(context, record.provider)
+      pubkey = account.public_key.value
+    }
+    record.verified = await verify(pubkey, record.signature, record.data)
+  }
+}
+
+const update = createAsyncThunk(
+  'record/update',
+  /**
+   * 
+   * @param {id, action, data?, liveTime?} record 
+   */
+  async (record, { extra: context, getState }) => {
+    try {
+      const currentIdentity = getState().wallet.identity.id
+      const url = context.config.getApiUrl(`metabelarus/mbcorecr/crsign/records/${record.id}`)
+      const _record = (await axios.get(url)).data?.Record
+      if (!_record) {
+        throw new Error(`No record with id ${record.id}`)
+      }
+      const updateExtension = {}
+
+      if (record.data && currentIdentity === _record.provider) {
+        if (_record.publicity === 'PRIVATE') {
+          let pubkey = context.wallet.pubkey
+          if (_record.identity != getState().wallet.identity.id) {
+            const account = await loadAccountById(context, _record.identity)
+            pubkey = account.public_key.value
+          }
+
+          updateExtension.data = encrypt(pubkey, record.data)
+        } else {
+          updateExtension.data = recrod.data
+        }
+
+        updateExtension.signature = await sign(context.wallet, record.data)
+      } else {
+        updateExtension.data = _record.data
+        updateExtension.signature = _record.signature
+      }
+
+      if (record.liveTime !== null && record.liveTime !== undefined) {
+        updateExtension.liveTime = record.liveTime
+      }
+
+      const tx = await createTx(
+        context,
+        'crsign.MsgUpdateRecord',
+        {
+          updater: context.wallet.address,
+          id: record.id,
+          action: record.action,
+          updateDt: createCurrentDate(),
+          ...updateExtension
+        },
+        'updater'
+      )
+
+      await tx.send()
+
+      if (!tx.checkResult('mbcorecr.crsign:update.record')) {
+        throw new Error(`Wrong update record transction result: ${tx.getType()}`)
+      }
+
+      const recordReloaded = (await axios.get(url)).data?.Record
+      await _patchRecord(context, currentIdentity, recordReloaded)
+
+      return recordReloaded
     } catch (e) {
       console.log(e)
 
@@ -61,15 +158,30 @@ const create = createAsyncThunk(
    * @param { data, key, publicity?, type?, liveTime?, identity? } record 
    * @param { extra: context } param1 
    */
-  async (record, { extra: context }) => {
+  async (record, { extra: context, getState }) => {
     try {
       let data = record.data
       const providerAddon = {}
       const signature = await sign(context.wallet, record.data)
       const publicityPrivateVal = context.value('PublicityType.PRIVATE', 'crsign')
       const publicity = record.publicity || publicityPrivateVal
-      let pubkey = context.wallet.pubkey
+      const recordType = record.type || (
+        record.identity && getState().wallet?.identity?.id != record.identity
+          ? context.value('RecordType.PROVIDER_RECORD', 'crsign')
+          : context.value('RecordType.IDENTITY_RECORD', 'crsign')
+      )
 
+      if (
+        [
+          context.value('RecordType.PROVIDER_RECORD', 'crsign'),
+          context.value('RecordType.PROVIDER_SIGNABLE_RECORD', 'crsign'),
+          context.value('RecordType.PROVIDER_PERMISSION', 'crsign'),
+        ].includes(recordType)
+        && getState().wallet.identity.identityType !== 'SERVICE') {
+        throw new Error(`Only service can create provided records`)
+      }
+
+      let pubkey = context.wallet.pubkey
       if (record.identity) {
         providerAddon.provider = record.identity
         const account = await loadAccountById(context, record.identity)
@@ -88,7 +200,7 @@ const create = createAsyncThunk(
           key: record.key,
           data,
           signature,
-          recordType: record.type || context.value('RecordType.IDENTITY_RECORD', 'crsign'),
+          recordType,
           publicity,
           liveTime: record.liveTime || 0,
           creationDt: createCurrentDate(),
@@ -124,9 +236,19 @@ const slice = createSlice({
     records: [],
     createdRecord: null,
     loadedRecord: null,
+    newRecord: {
+      publicity: 'PRIVATE',
+      type: null,
+    },
   },
 
   reducers: {
+    switchPublicity: (state, { payload }) => {
+      return { ...state, newRecord: { ...state.newRecord, publicity: payload } }
+    },
+    switchType: (state, { payload }) => {
+      return { ...state, newRecord: { ...state.newRecord, type: payload } }
+    },
   },
 
   extraReducers: {
@@ -136,19 +258,13 @@ const slice = createSlice({
     [load.fulfilled]: (state, { payload }) => {
       const record = payload.loadedRecord
 
-      let records = [...state.records]
-      const idx = records.findIndex(_record => _record.id === record.id || _record === record.id)
-      if (idx !== -1) {
-        records[idx] = record
-      } else {
-        records.push(record)
-      }
-
-      return {
-        ...state,
-        records,
-        loadedRecord: record,
-      }
+      return _addRecord(state, record)
+    },
+    [update.fulfilled]: (state, { payload: record }) => {
+      return _addRecord(state, record)
+    },
+    [validate.fulfilled]: (state, { payload: record }) => {
+      return _addRecord(state, record)
     },
     [loadAll.fulfilled]: (state, { payload: { records } }) => {
       return { ...state, records }
@@ -156,7 +272,23 @@ const slice = createSlice({
   }
 })
 
+const _addRecord = (state, record) => {
+  let records = [...state.records]
+  const idx = records.findIndex(_record => _record.id === record.id || _record === record.id)
+  if (idx !== -1) {
+    records[idx] = record
+  } else {
+    records.push(record)
+  }
 
-export const recordActions = { ...slice.actions, create, load, loadAll }
+  return {
+    ...state,
+    records,
+    loadedRecord: record,
+  }
+}
+
+
+export const recordActions = { ...slice.actions, create, load, loadAll, update, validate }
 
 export const record = slice.reducer

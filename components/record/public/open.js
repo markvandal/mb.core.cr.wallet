@@ -1,29 +1,26 @@
-import React, { useContext, useCallback, useEffect } from 'react'
-import { useFocusEffect } from '@react-navigation/native';
+import React from 'react'
 import { connect } from 'react-redux'
-import Clipboard from 'expo-clipboard'
 
-import { withGalio, Block, Button, Text, Card } from 'galio-framework'
-
-import { Context } from '../../context'
-import { authActions } from '../../store'
-import { decrypt } from '../../utils/ledger/crypt'
+import { withGalio, Block, Button, Input } from 'galio-framework'
 
 
 export const PublicOpen = connect(
-  (state, ownProps) => ({
+  (_, ownProps) => ({
     ...ownProps
   }),
-  (dispatch, ownProps) => ({
+  (_, ownProps) => ({
+    open: (navigation, identityId) => {
+      navigation.navigate('record.public.list', { identityId })
+    },
     ...ownProps
   })
-)(withGalio(({ navigation, theme }) => {
-  const identity = null
+)(withGalio(({ navigation, open, theme }) => {
+  let identity = null
 
   return <Block>
     <Input color={theme.COLORS.THEME}
       style={{ borderColor: theme.COLORS.THEME }}
       onRef={_ => identity = _} />
-    <Button round uppercase onPress={_ => _}>Open</Button>
+    <Button round uppercase onPress={_ => open(navigation, identity.value)}>Open</Button>
   </Block>
 }))
