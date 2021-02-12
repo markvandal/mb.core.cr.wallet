@@ -34,11 +34,14 @@ const App = () =>
       <NavigationContainer>
         <Navigator initialRouteName="main"
           screenOptions={_ => ({
-            title: 'Meta-Belarus',
+            title: `Meta-Belarus ID${store.getState().wallet?.identity?.id
+                ? `#${store.getState().wallet.identity.id}`
+                : ''
+              }`,
             header: ({ scene, navigation }) => {
               const { options } = scene.descriptor;
 
-              return <NavBar 
+              return <NavBar
                 title={options.title}
                 back={scene.route.name !== "main"}
                 onLeftPress={() => navigation.goBack()} />

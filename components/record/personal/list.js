@@ -10,6 +10,7 @@ import { alertError } from '../../error'
 
 import { Context } from '../../../context'
 import { recordActions } from '../../../store'
+import { list } from '../helper'
 
 
 export const PersonalList = connect(
@@ -19,16 +20,7 @@ export const PersonalList = connect(
     ...ownProps
   }),
   (dispatch, ownProps) => ({
-    list: async () => {
-      const res = await dispatch(recordActions.loadAll())
-      res.payload?.records?.forEach(
-        record => {
-          if ('string' === typeof record) {
-            dispatch(recordActions.load(record))
-          }
-        }
-      )
-    },
+    list: list(dispatch),
     update: async (context, id, action, data = undefined) => {
       const update = { id, action: context.value(`RecordUpdate.${action}`, 'crsign') }
       if (data !== undefined) {
@@ -39,11 +31,68 @@ export const PersonalList = connect(
         alertError(res.error.message)
       }
     },
+    createPassport: async (context, inputs, records) => {
+      const keys = context.config.listDefaultRecords()
+      for (const key of keys) {
+        const record = records[key]
+        if (record && record.id) {
+          if (record.status === 'RECORD_OPEN') {
+            await dispatch(recordActions.update({
+              id: record.id, data: inputs[key],
+              action: context.value(`RecordUpdate.RECORD_UPDATE_STORE`, 'crsign'),
+            }))
+          }
+        } else if (inputs[key]) {
+          await dispatch(recordActions.create({ key, data: inputs[key] }))
+        }
+      }
+      await list(dispatch)()
+    },
+    signPassport: async (context, records) => {
+      const keys = context.config.listDefaultRecords()
+      for (const key of keys) {
+        const record = records[key]
+        if (record && record.id && record.status === 'RECORD_OPEN') {
+          const setting = context.config.getRecordSettingByKey(key)
+          const action = context.value(`RecordUpdate.${setting.restrictions?.includes('REOCRD_UPDATE_SEAL')
+            ? 'REOCRD_UPDATE_SIGN'
+            : 'REOCRD_UPDATE_SEAL'
+            }`, 'crsign')
+          await dispatch(recordActions.update({ id: record.id, action }))
+        }
+      }
+      await list(dispatch)()
+    },
     ...ownProps
   }),
-)(withGalio(({ navigation, list, update, records, identity, theme }) => {
+)(withGalio(({ navigation, list, update, createPassport, signPassport, records, identity, theme }) => {
   const context = useContext(Context)
   useFocusEffect(useCallback(() => { list() }, []))
+
+  const defaultRecordKeys = context.config.listDefaultRecords().filter(
+    (_, idx) => context.config.defaultRecords[idx].types.includes(identity.identityType)
+  )
+  const defaultRecords = records.reduce((records, record) => {
+    if (context.config.isDefaultRecord(record.key)) {
+      return { ...records, [record.key]: { ...record } }
+    }
+
+    return records
+  }, {})
+
+  const notSetRecordInputs = defaultRecordKeys.reduce((inputs, key) => {
+    const setting = context.config.getRecordSettingByKey(key)
+    const value = setting.defaults ? setting.defaults[identity.identityType] : null
+    if (value) {
+      return { ...inputs, [key]: value }
+    }
+    if (defaultRecords[key]) {
+      return { ...inputs, [key]: defaultRecords[key].data }
+    }
+
+    return inputs
+  }, {})
+
   const recordInputs = records.map(record => ({
     data: typeof record === 'object' ? record.data : null
   }))
@@ -52,6 +101,58 @@ export const PersonalList = connect(
     <Button round uppercase onPress={() => navigation.navigate('record.create')}>Create record</Button>
     <Button round uppercase onPress={() => navigation.navigate('record.public.open')}>Read passport</Button>
     <Block>
+      <Text h3>Passport records</Text>
+      {
+        defaultRecordKeys.map(key => {
+          const record = defaultRecords[key] || { notSet: true }
+          const setting = context.config.getRecordSettingByKey(key)
+
+          const props = setting.defaults && setting.defaults[identity.identityType]
+            ? { value: setting.defaults[identity.identityType] }
+            : { defaultValue: notSetRecordInputs[key] }
+
+          return <Card key={key}
+            title={setting.label}
+            caption={`${record.id ? `#${record.id} ` : ''}${setting.key}`}
+          >
+            {
+              record.notSet || record.status === 'RECORD_OPEN'
+                ? <Block>
+                  <Input placeholder={setting.label}
+                    onChange={({ nativeEvent }) => notSetRecordInputs[key] = nativeEvent.text}
+                    {...props}
+                  />
+                  {
+                    record.status
+                      ? <Text>Status: {record.status}</Text>
+                      : null
+                  }
+                  <Text>Publicity: PRIVATE</Text>
+                </Block>
+                : <Block>
+                  <Text>Value: {record.data}</Text>
+                  <Text>Status: {record.status}</Text>
+                  <Text>Publicity: {record.publicity}</Text>
+                </Block>
+            }
+          </Card>
+        })
+      }
+      {
+        !defaultRecordKeys.find(key => defaultRecords[key])
+          || defaultRecordKeys.find(key => defaultRecords[key]?.status === 'RECORD_OPEN')
+          ? <Button round uppercase onPress={() => createPassport(context, notSetRecordInputs, defaultRecords)}>Save</Button>
+          : null
+      }
+      {
+        defaultRecordKeys.find(key => defaultRecords[key])
+          && defaultRecordKeys.find(key => defaultRecords[key]?.status === 'RECORD_OPEN')
+          ? <Button round uppercase onPress={() => signPassport(context, defaultRecords)}>Sign</Button>
+          : null
+      }
+    </Block>
+    <Block>
+      <Text h3>Unstructured records</Text>
       {
         records.map(
           (record, idx) => typeof record === 'string'

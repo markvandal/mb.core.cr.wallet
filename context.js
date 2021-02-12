@@ -58,6 +58,94 @@ export const context = {
     DEBUG_AUTH,
     PUB_PREFIX,
 
+    defaultRecords: [
+      {
+        key: 'mb.citizen.self.firstname',
+        label: 'Firstname',
+        types: ['CITIZEN', 'FOREIGNER', 'DIASPORA_MEMBER'],
+      },
+      {
+        key: 'mb.citizen.self.secondname',
+        label: 'Second name / Patronimic',
+        types: ['CITIZEN', 'FOREIGNER', 'DIASPORA_MEMBER'],
+      },
+      {
+        key: 'mb.citizen.self.lastname',
+        label: 'Last name / Family name',
+        types: ['CITIZEN', 'FOREIGNER', 'DIASPORA_MEMBER'],
+      },
+      {
+        key: 'mb.citizen.self.personalnumber',
+        label: 'Passport Personal Number',
+        types: ['CITIZEN', 'FOREIGNER', 'DIASPORA_MEMBER'],
+      },
+      {
+        key: 'mb.citizen.self.citizenship',
+        label: 'Citizenship',
+        types: ['CITIZEN', 'FOREIGNER', 'DIASPORA_MEMBER'],
+        defaults: {
+          CITIZEN: 'Republic of Belarus',
+        }
+      },
+      {
+        key: 'mb.citizen.self.nationality',
+        label: 'Nationality',
+        types: ['CITIZEN', 'FOREIGNER', 'DIASPORA_MEMBER'],
+      },
+      {
+        key: 'mb.citizen.self.birthplace',
+        label: 'Place of birth',
+        types: ['CITIZEN', 'FOREIGNER', 'DIASPORA_MEMBER'],
+      },
+      {
+        key: 'mb.citizen.self.birthdate',
+        label: 'Birth date',
+        types: ['CITIZEN', 'FOREIGNER', 'DIASPORA_MEMBER'],
+      },
+      {
+        key: 'mb.citizen.self.phonenumber',
+        label: 'Phone number',
+        types: ['CITIZEN', 'FOREIGNER', 'DIASPORA_MEMBER'],
+        restrictions: ['REOCRD_UPDATE_SEAL'],
+      },
+      {
+        key: 'mb.citizen.self.email',
+        label: 'Email',
+        types: ['CITIZEN', 'FOREIGNER', 'DIASPORA_MEMBER'],
+        restrictions: ['REOCRD_UPDATE_SEAL'],
+      },
+      {
+        key: 'mb.citizen.self.telegram',
+        label: 'Telegram',
+        types: ['CITIZEN', 'FOREIGNER', 'DIASPORA_MEMBER'],
+        restrictions: ['REOCRD_UPDATE_SEAL'],
+      },
+      {
+        key: 'mb.citizen.self.facebook',
+        label: 'Facebook Profile',
+        types: ['CITIZEN', 'FOREIGNER', 'DIASPORA_MEMBER'],
+        restrictions: ['REOCRD_UPDATE_SEAL'],
+      },
+    ],
+
+    _defaultRecordKeys: null,
+
+    listDefaultRecords() {
+      if (!this._defaultRecordKeys) {
+        this._defaultRecordKeys = this.defaultRecords.map(record => record.key)
+      }
+
+      return this._defaultRecordKeys
+    },
+
+    getRecordSettingByKey(key) {
+      return this.defaultRecords.find((setting) => setting.key === key)
+    },
+
+    isDefaultRecord(key) {
+      return this.listDefaultRecords().includes(key)
+    },
+
     getApiUrl(uri) {
       return `${this.API_URL}/${uri}`
     }

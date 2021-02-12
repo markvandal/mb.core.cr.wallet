@@ -56,7 +56,7 @@ export const PublicList = connect(
   const context = useContext(Context)
   useFocusEffect(useCallback(() => { open(identityId) }, []))
 
-  const recordInputs = records.map(record => ({
+  const recordInputs = records.map(_ => ({
     data: ''
   }))
 

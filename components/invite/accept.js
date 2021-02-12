@@ -4,18 +4,30 @@ import { Share } from 'react-native'
 import Clipboard from 'expo-clipboard'
 
 import { withGalio, Block, Button, Text, Input } from 'galio-framework'
-import { inviteActions } from '../../store'
+import { inviteActions, walletActions } from '../../store'
 import { Context } from '../../context'
+import { alertError } from '../error'
 
 
 export const Accept = connect(
   ({ invite: { newAccount } }, ownProps) =>
     ({ ...ownProps, newAccount }),
   (dispatch, ownProps) => ({
-    accept: (sequence) => dispatch(inviteActions.accept(sequence)),
+    accept: async (navigation, sequence) => {
+      const res = await dispatch(inviteActions.accept(sequence))
+      if (res.error) {
+        alertError(res.error.message)
+      } else {        
+        const mnemonic = res.payload?.newAccount?.mnemonic
+        if (mnemonic) {
+          await dispatch(walletActions.openWithMnemoic(mnemonic))
+          navigation.setParams({})
+        }
+      }
+    },
     ...ownProps,
   }),
-)(withGalio(({ newAccount, accept, theme }) => {
+)(withGalio(({ navigation, newAccount, accept, theme }) => {
   let sequence = ''
 
   return <Block>
@@ -44,11 +56,12 @@ export const Accept = connect(
               }
             }}
           />
+          <Button onPress={() => navigation.navigate('record.personal.list')}>Proceed to passport</Button>
         </Block>
         : <Block>
           <Text>Input invite code</Text>
           <Input onRef={_ => sequence = _} />
-          <Button onPress={() => accept(sequence.value)}>Create ID</Button>
+          <Button onPress={() => accept(navigation, sequence.value)}>Create ID</Button>
         </Block>
     }
   </Block>

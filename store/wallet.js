@@ -86,7 +86,7 @@ const slice = createSlice({
 
   reducers: {
     signOut: (state) => {
-      return { ...state, address: '', account: '', mnemonic: '' }
+      return { ...state, address: '', account: '', mnemonic: '', identity: null, targetIdentity: null, }
     },
   },
 
@@ -96,7 +96,7 @@ const slice = createSlice({
     },
     [open.fulfilled]: (state, { payload }) => {
       return { ...state, ...payload }
-    } 
+    }
   }
 })
 
