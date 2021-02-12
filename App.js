@@ -17,7 +17,13 @@ import { Accept as InviteAccept } from './components/invite/accept'
 import { Level as InviteLevel } from './components/invite/level'
 import { Type as InviteType } from './components/invite/type'
 import { List as AuthList } from './components/auth/list'
+import { PersonalList as RecordPersonalList } from './components/record/personal/list'
+import { PublicList as RecordPublicList } from './components/record/public/list'
+import { PublicOpen as RecordPublicOpen } from './components/record/public/open'
+import { Create as RecordCreate } from './components/record/create'
 import { Request as AuthRequest } from './components/auth/request'
+import { Publicity as RecordPublicity } from './components/record/publicity'
+import { Type as RecordType } from './components/record/type'
 
 
 const { Navigator, Screen } = createStackNavigator()
@@ -28,11 +34,14 @@ const App = () =>
       <NavigationContainer>
         <Navigator initialRouteName="main"
           screenOptions={_ => ({
-            title: 'Meta-Belarus',
+            title: `Meta-Belarus ID${store.getState().wallet?.identity?.id
+                ? `#${store.getState().wallet.identity.id}`
+                : ''
+              }`,
             header: ({ scene, navigation }) => {
               const { options } = scene.descriptor;
 
-              return <NavBar 
+              return <NavBar
                 title={options.title}
                 back={scene.route.name !== "main"}
                 onLeftPress={() => navigation.goBack()} />
@@ -48,6 +57,12 @@ const App = () =>
           <Screen name="invite.type" component={InviteType} />
           <Screen name="auth.list" component={AuthList} />
           <Screen name="auth.request" component={AuthRequest} />
+          <Screen name="record.personal.list" component={RecordPersonalList} />
+          <Screen name="record.public.list" component={RecordPublicList} />
+          <Screen name="record.public.open" component={RecordPublicOpen} />
+          <Screen name="record.create" component={RecordCreate} />
+          <Screen name="record.publicity" component={RecordPublicity} />
+          <Screen name="record.type" component={RecordType} />
         </Navigator>
       </NavigationContainer>
       <StatusBar style="auto" />

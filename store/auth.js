@@ -1,7 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
-import { decodeBech32Pubkey } from '@cosmjs/launchpad'
-
 import { v4 } from 'uuid'
 
 import { createTx, createCurrentDate, encrypt } from '../utils'
@@ -9,24 +7,20 @@ import axios from 'axios'
 
 
 const sign = createAsyncThunk(
-  'auth/load',
+  'auth/sign',
   async (idx, { extra: context, getState }) => {
     try {
-      const auth = getState().auth.list[idx]
+      const auth = typeof idx === 'number' ? getState().auth.list[idx] : { service: idx }
 
-      console.log(auth)
-      
       const tx = await createTx(
         context,
-        context.getType('crsign.MsgConfirmAuth'),
+        'crsign.MsgConfirmAuth',
         {
+          identity: context.wallet.address,
           service: auth.service,
+          confirmationDt: createCurrentDate(),
         },
-        context.wallet.address,
-        {
-          creatorField: 'identity',
-          typeUrl: 'crsign.MsgConfirmAuth'
-        }
+        'identity',
       )
 
       await tx.send()
@@ -118,17 +112,14 @@ const request = createAsyncThunk(
 
       const tx = await createTx(
         context,
-        context.getType('crsign.MsgRequestAuth'),
+        'crsign.MsgRequestAuth',
         {
+          service: context.wallet.address,
           identity,
           key: encKey,
           creationDt: createCurrentDate(),
         },
-        context.wallet.address,
-        {
-          creatorField: 'service',
-          typeUrl: 'crsign.MsgRequestAuth'
-        }
+        'service'
       )
 
       await tx.send()

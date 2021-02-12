@@ -2,8 +2,6 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 import * as bip39 from 'bip39'
 
-import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing'
-
 import { createCurrentDate, getBech32PubKey, createTx } from '../utils'
 
 import { createTmpContext } from '../utils/ledger/context'
@@ -24,7 +22,7 @@ const accept = createAsyncThunk(
 
       const tx = await createTx(
         tmpContext,
-        context.getType('mbcorecr.MsgAcceptInvite'),
+        'mbcorecr.MsgAcceptInvite',
         {
           inviteId,
           tmpAddress: tmpAccount.address,
@@ -32,11 +30,7 @@ const accept = createAsyncThunk(
           pubKey: newPubKey,
           acceptanceDt: createCurrentDate(),
         },
-        tmpWallet.address,
-        {
-          creatorField: 'inviteId',
-          typeUrl: 'mbcorecr.MsgAcceptInvite'
-        }
+        'tmpAddress',
       )
 
       await tx.send()
@@ -72,19 +66,16 @@ const create = createAsyncThunk(
 
       const tx = await createTx(
         context,
-        context.getType('mbcorecr.MsgCreateInvite'),
+        'mbcorecr.MsgCreateInvite',
         {
+          inviter: context.wallet.address,
           identityType: type,
           level,
           address: account.address,
           pubKey: bech32PubKey,
           creationDt: createCurrentDate(),
         },
-        context.wallet.address,
-        {
-          creatorField: 'inviter',
-          typeUrl: 'mbcorecr.MsgCreateInvite'
-        }
+        'inviter',
       )
 
       await tx.send()
@@ -116,7 +107,7 @@ const slice = createSlice({
     currentInvite: null,
     newAccount: null,
     newInvite: {
-      level: 'Level4',
+      level: 'Level3',
       type: 'CITIZEN',
     },
   },

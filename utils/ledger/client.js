@@ -1,16 +1,18 @@
+import axios from 'axios'
 
-import { Type, Field } from 'protobufjs'
 import { SigningStargateClient } from '@cosmjs/stargate'
 import { Registry } from '@cosmjs/proto-signing'
 
 
-export const createTx = async (context, type, msg, address = undefined, meta = {}) => {
-  const fee = meta.fee || {
+export const createTx = async (context, typeName, msg, meta = {}) => {
+  const _meta = typeof meta === 'string' ? { creatorField: meta } : meta
+  const fee = _meta.fee || {
     amount: [{ amount: '0', denom: 'token' }],
     gas: '200000'
   }
-
-  const _address = address || meta.address
+  const creatorField = _meta.creatorField || 'creator'
+  const type = typeof typeName === 'string' ? context.getType(typeName) : typeName
+  const _typeUrl = _meta.typeUrl || typeName
 
   return {
     sent: false,
@@ -20,9 +22,8 @@ export const createTx = async (context, type, msg, address = undefined, meta = {
     _result: null,
 
     msg: {
-      typeUrl: `/${context.config.APP_PATH}.${meta.typeUrl}`,
+      typeUrl: `/${context.config.APP_PATH}.${_typeUrl}`,
       value: {
-        [meta.creatorField || 'creator']: _address,
         ...msg,
       }
     },
@@ -38,7 +39,7 @@ export const createTx = async (context, type, msg, address = undefined, meta = {
           { registry: new Registry([[this.msg.typeUrl, type]]) }
         )
 
-        return client.signAndBroadcast(_address, [this.msg], fee)
+        return client.signAndBroadcast(msg[creatorField], [this.msg], fee)
           .then(result => {
             if (result.code) {
               console.log(result)
@@ -81,4 +82,27 @@ const _parseResult = (result) => {
       type: event.type,
       attributes: event.attributes?.reduce((obj, attr) => ({ ...obj, [attr.key]: attr.value }), {}) || {}
     }))
+}
+
+export const loadAccountById = async (context, id) => {
+  const body = await axios.get(
+    context.config.getApiUrl(`metabelarus/mbcorecr/mbcorecr/id2addr/${id}`)
+  )
+  const identityAddress = body.data?.Addr?.address
+  if (!identityAddress) {
+    throw new Error(`Can't get identity address ${id}`)
+  }
+
+  return await loadAccount(context, identityAddress)
+}
+
+export const loadAccount = async (context, identityAddress) => {
+  const account = (await axios.get(
+    context.config.getApiUrl(`auth/accounts/${identityAddress}`)
+  )).data?.result?.value
+  if (!account) {
+    throw new Error(`Can't load account with address ${identityAddress}`)
+  }
+
+  return account
 }

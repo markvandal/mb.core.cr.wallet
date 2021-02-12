@@ -15,8 +15,7 @@
                     "Level0": 1,
                     "Level1": 2,
                     "Level2": 3,
-                    "Level3": 4,
-                    "Level4": 5
+                    "Level3": 4
                   }
                 },
                 "Invite": {
@@ -147,6 +146,13 @@
                       "options": {
                         "(gogoproto.stdtime)": true
                       }
+                    },
+                    "updatedDt": {
+                      "type": "google.protobuf.Timestamp",
+                      "id": 5,
+                      "options": {
+                        "(gogoproto.stdtime)": true
+                      }
                     }
                   }
                 },
@@ -223,6 +229,20 @@
                         }
                       ]
                     },
+                    "IdToAddr": {
+                      "requestType": "QueryIdToAddrRequest",
+                      "responseType": "QueryIdToAddrResponse",
+                      "options": {
+                        "(google.api.http).get": "/metabelarus/mbcorecr/mbcorecr/id2addr/{id}"
+                      },
+                      "parsedOptions": [
+                        {
+                          "(google.api.http)": {
+                            "get": "/metabelarus/mbcorecr/mbcorecr/id2addr/{id}"
+                          }
+                        }
+                      ]
+                    },
                     "IdentityAll": {
                       "requestType": "QueryAllIdentityRequest",
                       "responseType": "QueryAllIdentityResponse",
@@ -283,6 +303,22 @@
                   "fields": {
                     "Addr2Id": {
                       "type": "Addr2Id",
+                      "id": 1
+                    }
+                  }
+                },
+                "QueryIdToAddrRequest": {
+                  "fields": {
+                    "id": {
+                      "type": "string",
+                      "id": 1
+                    }
+                  }
+                },
+                "QueryIdToAddrResponse": {
+                  "fields": {
+                    "Addr": {
+                      "type": "Addr",
                       "id": 1
                     }
                   }
@@ -360,19 +396,19 @@
                   "fields": {
                     "service": {
                       "type": "string",
-                      "id": 2
+                      "id": 1
                     },
                     "identity": {
                       "type": "string",
-                      "id": 3
+                      "id": 2
                     },
                     "key": {
                       "type": "string",
-                      "id": 4
+                      "id": 3
                     },
                     "creationDt": {
                       "type": "google.protobuf.Timestamp",
-                      "id": 5,
+                      "id": 4,
                       "options": {
                         "(gogoproto.stdtime)": true
                       }
@@ -388,6 +424,13 @@
                     "service": {
                       "type": "string",
                       "id": 2
+                    },
+                    "confirmationDt": {
+                      "type": "google.protobuf.Timestamp",
+                      "id": 3,
+                      "options": {
+                        "(gogoproto.stdtime)": true
+                      }
                     }
                   }
                 },
@@ -395,6 +438,220 @@
                   "fields": {
                     "services": {
                       "rule": "repeated",
+                      "type": "string",
+                      "id": 1
+                    }
+                  }
+                },
+                "RecordType": {
+                  "values": {
+                    "IDENTITY_RECORD": 0,
+                    "PROVIDER_RECORD": 1,
+                    "PROVIDER_SIGNABLE_RECORD": 2,
+                    "PROVIDER_PERMISSION": 3
+                  }
+                },
+                "RecordUpdate": {
+                  "values": {
+                    "RECORD_UPDATE_SIGN": 0,
+                    "RECORD_UPDATE_STORE": 1,
+                    "REOCRD_UPDATE_EXTEND": 2,
+                    "REOCRD_UPDATE_REJECT": 3,
+                    "REOCRD_UPDATE_WITHDRAW": 4,
+                    "REOCRD_UPDATE_SEAL": 5,
+                    "REOCRD_UPDATE_REOPEN": 6
+                  }
+                },
+                "PublicityType": {
+                  "values": {
+                    "PRIVATE": 0,
+                    "PUBLIC": 1,
+                    "ANONYMOUS": 2
+                  }
+                },
+                "RecordStatus": {
+                  "values": {
+                    "RECORD_OPEN": 0,
+                    "RECORD_SIGNED": 1,
+                    "RECORD_WITHDRAWN": 2,
+                    "RECORD_REJECTED": 3,
+                    "RECORD_SEALED": 4
+                  }
+                },
+                "Record": {
+                  "fields": {
+                    "id": {
+                      "type": "string",
+                      "id": 1
+                    },
+                    "identity": {
+                      "type": "string",
+                      "id": 2
+                    },
+                    "provider": {
+                      "type": "string",
+                      "id": 3
+                    },
+                    "key": {
+                      "type": "string",
+                      "id": 4
+                    },
+                    "data": {
+                      "type": "string",
+                      "id": 5
+                    },
+                    "signature": {
+                      "type": "string",
+                      "id": 6
+                    },
+                    "recordType": {
+                      "type": "RecordType",
+                      "id": 7
+                    },
+                    "publicity": {
+                      "type": "PublicityType",
+                      "id": 8
+                    },
+                    "status": {
+                      "type": "RecordStatus",
+                      "id": 9
+                    },
+                    "liveTime": {
+                      "type": "int32",
+                      "id": 10
+                    },
+                    "creationDt": {
+                      "type": "google.protobuf.Timestamp",
+                      "id": 11,
+                      "options": {
+                        "(gogoproto.stdtime)": true
+                      }
+                    },
+                    "signatureDt": {
+                      "type": "google.protobuf.Timestamp",
+                      "id": 12,
+                      "options": {
+                        "(gogoproto.stdtime)": true
+                      }
+                    },
+                    "updateDt": {
+                      "type": "google.protobuf.Timestamp",
+                      "id": 13,
+                      "options": {
+                        "(gogoproto.stdtime)": true
+                      }
+                    }
+                  }
+                },
+                "MsgCreateRecord": {
+                  "fields": {
+                    "creator": {
+                      "type": "string",
+                      "id": 1
+                    },
+                    "provider": {
+                      "type": "string",
+                      "id": 2
+                    },
+                    "key": {
+                      "type": "string",
+                      "id": 3
+                    },
+                    "data": {
+                      "type": "string",
+                      "id": 4
+                    },
+                    "signature": {
+                      "type": "string",
+                      "id": 5
+                    },
+                    "recordType": {
+                      "type": "RecordType",
+                      "id": 6
+                    },
+                    "publicity": {
+                      "type": "PublicityType",
+                      "id": 7
+                    },
+                    "liveTime": {
+                      "type": "int32",
+                      "id": 8
+                    },
+                    "creationDt": {
+                      "type": "google.protobuf.Timestamp",
+                      "id": 9,
+                      "options": {
+                        "(gogoproto.stdtime)": true
+                      }
+                    }
+                  }
+                },
+                "MsgUpdateRecord": {
+                  "fields": {
+                    "updater": {
+                      "type": "string",
+                      "id": 1
+                    },
+                    "id": {
+                      "type": "string",
+                      "id": 2
+                    },
+                    "data": {
+                      "type": "string",
+                      "id": 3
+                    },
+                    "signature": {
+                      "type": "string",
+                      "id": 4
+                    },
+                    "liveTime": {
+                      "type": "int32",
+                      "id": 5
+                    },
+                    "action": {
+                      "type": "RecordUpdate",
+                      "id": 6
+                    },
+                    "updateDt": {
+                      "type": "google.protobuf.Timestamp",
+                      "id": 7,
+                      "options": {
+                        "(gogoproto.stdtime)": true
+                      }
+                    }
+                  }
+                },
+                "MsgDeleteRecord": {
+                  "fields": {
+                    "deleter": {
+                      "type": "string",
+                      "id": 1
+                    },
+                    "id": {
+                      "type": "string",
+                      "id": 2
+                    },
+                    "deletionDt": {
+                      "type": "google.protobuf.Timestamp",
+                      "id": 3,
+                      "options": {
+                        "(gogoproto.stdtime)": true
+                      }
+                    }
+                  }
+                },
+                "Id2Record": {
+                  "fields": {
+                    "records": {
+                      "rule": "repeated",
+                      "type": "string",
+                      "id": 1
+                    }
+                  }
+                },
+                "Id2KeyRecord": {
+                  "fields": {
+                    "id": {
                       "type": "string",
                       "id": 1
                     }
@@ -430,16 +687,30 @@
                         }
                       ]
                     },
-                    "Signature": {
-                      "requestType": "QueryGetSignatureRequest",
-                      "responseType": "QueryGetSignatureResponse",
+                    "Record": {
+                      "requestType": "QueryGetRecordRequest",
+                      "responseType": "QueryGetRecordResponse",
                       "options": {
-                        "(google.api.http).get": "/metabelarus/mbcorecr/crsign/signature/{id}"
+                        "(google.api.http).get": "/metabelarus/mbcorecr/crsign/records/{id}"
                       },
                       "parsedOptions": [
                         {
                           "(google.api.http)": {
-                            "get": "/metabelarus/mbcorecr/crsign/signature/{id}"
+                            "get": "/metabelarus/mbcorecr/crsign/records/{id}"
+                          }
+                        }
+                      ]
+                    },
+                    "Id2Record": {
+                      "requestType": "QueryGetId2RecordRequest",
+                      "responseType": "QueryGetId2RecordResponse",
+                      "options": {
+                        "(google.api.http).get": "/metabelarus/mbcorecr/crsign/id2record/{id}"
+                      },
+                      "parsedOptions": [
+                        {
+                          "(google.api.http)": {
+                            "get": "/metabelarus/mbcorecr/crsign/id2record/{id}"
                           }
                         }
                       ]
@@ -478,7 +749,7 @@
                     }
                   }
                 },
-                "QueryGetSignatureRequest": {
+                "QueryGetRecordRequest": {
                   "fields": {
                     "id": {
                       "type": "string",
@@ -486,185 +757,27 @@
                     }
                   }
                 },
-                "QueryGetSignatureResponse": {
+                "QueryGetRecordResponse": {
                   "fields": {
-                    "Signature": {
-                      "type": "Signature",
+                    "Record": {
+                      "type": "Record",
                       "id": 1
                     }
                   }
                 },
-                "SignatureType": {
-                  "values": {
-                    "SIGN": 0,
-                    "PERMISSION": 1,
-                    "BADGE": 2
-                  }
-                },
-                "PublicityType": {
-                  "values": {
-                    "SECRET": 0,
-                    "PUBLIC": 1,
-                    "ANONYMOUS": 2,
-                    "HASH": 3
-                  }
-                },
-                "SignatureStatus": {
-                  "values": {
-                    "SIG_OPEN": 0,
-                    "SIG_SIGNED": 1,
-                    "SIG_WITHDRAWN": 2,
-                    "SIG_REJECTED": 3,
-                    "SIG_SEALED": 4
-                  }
-                },
-                "Signature": {
+                "QueryGetId2RecordRequest": {
                   "fields": {
                     "id": {
                       "type": "string",
                       "id": 1
-                    },
-                    "identity": {
-                      "type": "string",
-                      "id": 2
-                    },
-                    "service": {
-                      "type": "string",
-                      "id": 3
-                    },
-                    "privateBox": {
-                      "type": "string",
-                      "id": 5
-                    },
-                    "serviceSign": {
-                      "type": "string",
-                      "id": 6
-                    },
-                    "identitySign": {
-                      "type": "string",
-                      "id": 7
-                    },
-                    "publicBox": {
-                      "type": "string",
-                      "id": 8
-                    },
-                    "identityPublicSign": {
-                      "type": "string",
-                      "id": 9
-                    },
-                    "servicePublicSign": {
-                      "type": "string",
-                      "id": 10
-                    },
-                    "purpose": {
-                      "type": "string",
-                      "id": 11
-                    },
-                    "type": {
-                      "type": "SignatureType",
-                      "id": 12
-                    },
-                    "publicity": {
-                      "type": "PublicityType",
-                      "id": 13
-                    },
-                    "status": {
-                      "type": "SignatureStatus",
-                      "id": 14
-                    },
-                    "creationDt": {
-                      "type": "google.protobuf.Timestamp",
-                      "id": 15,
-                      "options": {
-                        "(gogoproto.stdtime)": true
-                      }
-                    },
-                    "signatureDt": {
-                      "type": "google.protobuf.Timestamp",
-                      "id": 16,
-                      "options": {
-                        "(gogoproto.stdtime)": true
-                      }
                     }
                   }
                 },
-                "MsgCreateSignature": {
+                "QueryGetId2RecordResponse": {
                   "fields": {
-                    "creator": {
-                      "type": "string",
+                    "Id2Record": {
+                      "type": "Id2Record",
                       "id": 1
-                    },
-                    "identity": {
-                      "type": "string",
-                      "id": 2
-                    },
-                    "service": {
-                      "type": "string",
-                      "id": 3
-                    },
-                    "key": {
-                      "type": "string",
-                      "id": 4
-                    },
-                    "secret": {
-                      "type": "string",
-                      "id": 5
-                    },
-                    "creationDt": {
-                      "type": "string",
-                      "id": 6
-                    },
-                    "availabilityDt": {
-                      "type": "string",
-                      "id": 7
-                    }
-                  }
-                },
-                "MsgUpdateSignature": {
-                  "fields": {
-                    "creator": {
-                      "type": "string",
-                      "id": 1
-                    },
-                    "id": {
-                      "type": "string",
-                      "id": 2
-                    },
-                    "identity": {
-                      "type": "string",
-                      "id": 3
-                    },
-                    "service": {
-                      "type": "string",
-                      "id": 4
-                    },
-                    "key": {
-                      "type": "string",
-                      "id": 5
-                    },
-                    "secret": {
-                      "type": "string",
-                      "id": 6
-                    },
-                    "creationDt": {
-                      "type": "string",
-                      "id": 7
-                    },
-                    "availabilityDt": {
-                      "type": "string",
-                      "id": 8
-                    }
-                  }
-                },
-                "MsgDeleteSignature": {
-                  "fields": {
-                    "creator": {
-                      "type": "string",
-                      "id": 1
-                    },
-                    "id": {
-                      "type": "string",
-                      "id": 2
                     }
                   }
                 }

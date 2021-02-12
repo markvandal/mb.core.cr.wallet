@@ -6,6 +6,28 @@ import { DirectSecp256k1HdWallet } from '@cosmjs/proto-signing'
 import { SigningStargateClient } from '@cosmjs/stargate'
 
 
+const open = createAsyncThunk(
+  'wallet/open',
+  async (identityId, { extra: context }) => {
+    try {
+      const identity = (await axios.get(
+        context.config.getApiUrl(`metabelarus/mbcorecr/mbcorecr/identity/${identityId}`)
+      )).data?.Identity
+
+      if (!identity) {
+        throw new Error(`There is no identity with ID ${identityId}`)
+      }
+
+      return { targetIdentity: identity }
+    } catch (e) {
+      console.log(e)
+
+      throw e
+    }
+  }
+)
+
+
 const openWithMnemoic = createAsyncThunk(
   'wallet/openWithMnemoic',
   async (mnemonic, { extra: context }) => {
@@ -59,22 +81,26 @@ const slice = createSlice({
     account: null,
     mnemonic: null,
     identity: null,
+    targetIdentity: null,
   },
 
   reducers: {
     signOut: (state) => {
-      return { ...state, address: '', account: '', mnemonic: '' }
+      return { ...state, address: '', account: '', mnemonic: '', identity: null, targetIdentity: null, }
     },
   },
 
   extraReducers: {
     [openWithMnemoic.fulfilled]: (state, action) => {
       return { ...state, ...action.payload }
+    },
+    [open.fulfilled]: (state, { payload }) => {
+      return { ...state, ...payload }
     }
   }
 })
 
 
-export const walletActions = { ...slice.actions, openWithMnemoic }
+export const walletActions = { ...slice.actions, openWithMnemoic, open }
 
 export const wallet = slice.reducer

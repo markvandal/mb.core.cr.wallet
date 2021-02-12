@@ -1,7 +1,9 @@
-import { encodeBech32Pubkey } from '@cosmjs/launchpad'
-import { toBase64, fromBase64, toHex } from '@cosmjs/encoding'
+import { encodeBech32Pubkey, encodeSecp256k1Signature } from '@cosmjs/launchpad'
+import { toBase64, fromBase64, toHex, fromHex } from '@cosmjs/encoding'
+import { Secp256k1, sha256, Secp256k1Signature } from '@cosmjs/crypto'
 
 import { decrypt as jsdecrypt, encrypt as jsencrypt, PrivateKey, PublicKey } from 'eciesjs'
+
 
 export const getBech32PubKey = (account, context) =>
   encodeBech32Pubkey({
@@ -13,7 +15,7 @@ export const getBech32PubKey = (account, context) =>
 export const decrypt = (wallet, data) => {
   try {
     return jsdecrypt(
-      PrivateKey.fromHex(toHex(wallet.privkey)).toHex(),
+      toHex(wallet.privkey),
       Buffer.from(fromBase64(fixBase64(data)))
     ).toString()
   } catch (e) {
@@ -21,6 +23,26 @@ export const decrypt = (wallet, data) => {
   }
 
   return null
+}
+
+export const sign = async (wallet, data) => {
+  const signature = await Secp256k1.createSignature(sha256(Uint8Array.from(data)), wallet.privkey)
+  const sign = encodeSecp256k1Signature(
+    wallet.pubkey, 
+    new Uint8Array([...signature.r(32), ...signature.s(32)])
+  )
+
+  return toHex(fromBase64(sign.signature))
+}
+
+export const verify = async (pubkey, signature, data) => {
+  pubkey = typeof pubkey === 'string' ? fromBase64(pubkey) : pubkey
+  const _signature = fromHex(signature)
+  return await Secp256k1.verifySignature(
+    new Secp256k1Signature(_signature.slice(0,32), _signature.slice(32)),
+    sha256(Uint8Array.from(data)),
+    pubkey,
+  )
 }
 
 
