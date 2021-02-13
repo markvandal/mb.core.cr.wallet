@@ -7,7 +7,7 @@ export const wrapConextWithNewUser = async (context, redux, callback, mnemonic =
   const currentId = redux.store.getState().wallet.identity.id
 
   if (!mnemonic) {
-    await testInvite(context, redux)
+    await testInvite(context, redux, false)
     const account = redux.store.getState().invite.newAccount
     mnemonic = account.mnemonic
   }

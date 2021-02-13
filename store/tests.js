@@ -16,6 +16,10 @@ const slice = createSlice({
 
     log: (state, { payload }) => ({
       ...state, logs: [payload, ...state.logs]
+    }),
+
+    startTest: (state, { payload }) => ({
+      ...state, logs: [`------------ ${payload} -------------`, ...state.logs]
     })
   },
 })
