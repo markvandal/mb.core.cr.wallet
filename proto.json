@@ -122,8 +122,7 @@
                   "values": {
                     "CITIZEN": 0,
                     "FOREIGNER": 1,
-                    "DIASPORA_MEMBER": 2,
-                    "SERVICE": 3
+                    "SERVICE": 2
                   }
                 },
                 "Identity": {

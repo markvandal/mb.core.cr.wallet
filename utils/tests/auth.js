@@ -8,6 +8,7 @@ export const testAuth = async (context, redux) => {
 
   
   try {
+    dispatch(testsActions.startTest('Auth test'))
     let res = null
     let _serviceId = null
     await wrapConextWithNewUser(context, redux, async (currentId, serviceId) => {

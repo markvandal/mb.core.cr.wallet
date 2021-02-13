@@ -10,6 +10,7 @@ export const testRecord = async (context, redux) => {
     dispatch(testsActions.log(`Record info #${record.id}: ${record.key}: ${record.data} signed[${record.verified}]`))
   }
   try {
+    dispatch(testsActions.startTest('Recrod test'))
     // Create sealed record
     let res = await dispatch(recordActions.create({
       key: `web_record${Math.random()}`,
@@ -33,7 +34,7 @@ export const testRecord = async (context, redux) => {
     res = await dispatch(authActions.sign(_serviceId))
     console.log('Sign authentication', res)
     dispatch(testsActions.log(`Authenticated service ${res.payload.service}`))
-    
+
     await wrapConextWithNewUser(context, redux, async (currentId) => {
       // Create record from a service
       let res = await dispatch(recordActions.create({
@@ -50,7 +51,7 @@ export const testRecord = async (context, redux) => {
     // Get list of records for current identity
     res = await dispatch(recordActions.loadAll())
     console.log('Records loaded', res)
-    for (let i = 0 ; i < res.payload?.records?.length ; ++i) {
+    for (let i = 0; i < res.payload?.records?.length; ++i) {
       const itemRes = await dispatch(recordActions.load(res.payload.records[i]))
       console.log('Subrecord loading result', itemRes)
       _printRecord(itemRes)
@@ -60,10 +61,22 @@ export const testRecord = async (context, redux) => {
     await wrapConextWithNewUser(context, redux, async (currentId) => {
       const res = await dispatch(recordActions.loadAll(currentId))
       dispatch(testsActions.log(`Load target ${currentId} records ${res.payload?.records?.length}`))
-      for (let i = 0 ; i < res.payload?.records?.length ; ++i) {
+      for (let i = 0; i < res.payload?.records?.length; ++i) {
         const itemRes = await dispatch(recordActions.load(res.payload.records[i]))
         console.log(`${currentId} Subrecord loading result`, itemRes)
         _printRecord(itemRes)
+
+        // Seal reacord
+        if ('RECORD_SEALED' !== itemRes.payload?.loadedRecord?.status) {
+          console.log('try to seal')
+          const sealRes = await dispatch(recordActions.update({
+            id: itemRes.payload?.loadedRecord?.id,
+            action: context.value(`RecordUpdate.REOCRD_UPDATE_SEAL`, 'crsign'),
+          }))
+          console.log('Record sealing result', sealRes)
+          dispatch(testsActions.log(`(!) Record sealing result: ${sealRes.payload.status}`))
+          _printRecord({ payload: { loadedRecord: sealRes.payload } })
+        }
       }
     }, serviceMnemonic)
   } catch (e) {

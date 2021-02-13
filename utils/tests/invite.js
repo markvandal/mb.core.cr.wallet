@@ -1,10 +1,13 @@
 
 import { inviteActions, testsActions } from '../../store'
 
-export const testInvite = async (context, redux) => {
+export const testInvite = async (context, redux, mainTest = true) => {
   const dispatch = redux.store.dispatch
   
   try {
+    if (mainTest) {
+      dispatch(testsActions.startTest('Invite test'))
+    }
     let res = await dispatch(inviteActions.create({
       type: context.value('IdentityType.SERVICE'), 
       level: context.value('IdentityLevel.Level0')
