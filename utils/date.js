@@ -3,12 +3,12 @@
 export const createCurrentDate = () => {
   const now = new Date()
   const date = Date.UTC(
-    now.getFullYear(), 
-    now.getMonth(), 
-    now.getDate(), 
-    now.getHours(), 
-    now.getMinutes(),
-    now.getSeconds(),
+    now.getUTCFullYear(), 
+    now.getUTCMonth(), 
+    now.getUTCDate(), 
+    now.getUTCHours(), 
+    now.getUTCMinutes(),
+    now.getUTCSeconds(),
     0,
   )
 
