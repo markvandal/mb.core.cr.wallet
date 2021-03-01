@@ -3,12 +3,18 @@ import { StatusBar } from 'expo-status-bar';
 
 import { Provider } from 'react-redux'
 
-import { GalioProvider, NavBar } from 'galio-framework'
+import { GalioProvider } from 'galio-framework'
 
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
+import AppLoading from 'expo-app-loading';
+import { useFonts, Roboto_400Regular, Roboto_700Bold } from '@expo-google-fonts/roboto';
+import { customTheme } from './components/styles/theme'
+
 import { store } from './store'
+
+import { Header } from './components/header'
 import { WalletAuth } from './components/wallet/auth'
 import { Main } from './components/main'
 import { TestMain } from './components/tests/main'
@@ -28,24 +34,29 @@ import { Type as RecordType } from './components/record/type'
 
 const { Navigator, Screen } = createStackNavigator()
 
-const App = () =>
-  <Provider store={store}>
-    <GalioProvider>
-      <NavigationContainer>
+const App = () => {
+  const [fontsLoaded] = useFonts({regular: Roboto_400Regular, bold: Roboto_700Bold})
+
+  if (!fontsLoaded) {
+    return <AppLoading />
+  }
+
+  return <Provider store={store}>
+    <GalioProvider theme={customTheme}>
+      <NavigationContainer theme={{
+        ...DefaultTheme,
+        colors: {
+          ...DefaultTheme.colors,
+          background: customTheme.COLORS.WHITE,
+        }
+      }}>
         <Navigator initialRouteName="main"
           screenOptions={_ => ({
             title: `Meta-Belarus ID${store.getState().wallet?.identity?.id
                 ? `#${store.getState().wallet.identity.id}`
                 : ''
               }`,
-            header: ({ scene, navigation }) => {
-              const { options } = scene.descriptor;
-
-              return <NavBar
-                title={options.title}
-                back={scene.route.name !== "main"}
-                onLeftPress={() => navigation.goBack()} />
-            }
+            header: props => <Header {...props}/>
           })}
         >
           <Screen name="main" component={Main} />
@@ -68,5 +79,6 @@ const App = () =>
       <StatusBar style="auto" />
     </GalioProvider>
   </Provider>
+}
 
 export default App
