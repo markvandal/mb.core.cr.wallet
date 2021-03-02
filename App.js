@@ -24,6 +24,7 @@ import { Level as InviteLevel } from './components/invite/level'
 import { Type as InviteType } from './components/invite/type'
 import { List as AuthList } from './components/auth/list'
 import { PersonalList as RecordPersonalList } from './components/record/personal/list'
+import { StandardList as RecordStandardList } from './components/record/personal/standard'
 import { PublicList as RecordPublicList } from './components/record/public/list'
 import { PublicOpen as RecordPublicOpen } from './components/record/public/open'
 import { Create as RecordCreate } from './components/record/create'
@@ -69,6 +70,7 @@ const App = () => {
           <Screen name="auth.list" component={AuthList} />
           <Screen name="auth.request" component={AuthRequest} />
           <Screen name="record.personal.list" component={RecordPersonalList} />
+          <Screen name="record.personal.standard" component={RecordStandardList} />
           <Screen name="record.public.list" component={RecordPublicList} />
           <Screen name="record.public.open" component={RecordPublicOpen} />
           <Screen name="record.create" component={RecordCreate} />

@@ -4,6 +4,8 @@ import { connect } from 'react-redux'
 import { withGalio, Block, Button, Text, Card, Input } from 'galio-framework'
 import { authActions } from '../../store'
 
+import { styles } from '../styles/main';
+
 
 export const Request = connect(
   ({ auth: { newAuth } }, ownProps) => ({ auth: newAuth, ...ownProps }),
@@ -11,7 +13,7 @@ export const Request = connect(
     request: (identity) => dispatch(authActions.request(identity)),
     ...ownProps
   })
-)(withGalio(({ auth, request, theme }) => {
+)(withGalio(({ auth, request, theme, styles }) => {
   let identity = null
 
   return <Block>
@@ -26,6 +28,7 @@ export const Request = connect(
         </Card>
         : null
     }
-    <Button round uppercase onPress={() => request(identity.value)}>Request</Button>
+    <Button round size="large" style={styles.content_button} 
+      onPress={() => request(identity.value)}>Request</Button>
   </Block>
-}))
+}, styles))

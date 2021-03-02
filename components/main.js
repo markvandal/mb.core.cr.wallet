@@ -29,7 +29,7 @@ export const Main = connect(
     listRecords: listRecords(dispatch),
     ...ownProps,
   })
-)(withGalio(({ navigation, mnemonic, signOut, listRecords, identity, records, theme }) => {
+)(withGalio(({ navigation, mnemonic, signOut, listRecords, identity, records, theme, styles }) => {
   const [name] = mnemonic ? mnemonic.split(' ') : [null]
   const context = useContext(Context)
   useFocusEffect(useCallback(() => {
@@ -50,13 +50,20 @@ export const Main = connect(
               ? <Text>{identity?.identityType}: {firstName?.data} {lastName?.data}</Text>
               : null
           }
-          <Button round size="large" onPress={() => signOut(navigation)}>Выйти</Button>
-          <Button round size="large" onPress={() => navigation.navigate('invite.create')}>Создать приглашение</Button>
-          <Button round size="large" onPress={() => navigation.navigate('auth.list')}>Службы</Button>
-          <Button round size="large" onPress={() => navigation.navigate('record.personal.list')}>Паспорт</Button>
+          <Button round size="large" style={styles.content_button}
+            onPress={() => signOut(navigation)}>Закрыть паспорт</Button>
+          <Button round size="large" style={styles.content_button}
+            onPress={() => navigation.navigate('record.personal.standard')}>Посмотреть свой паспорт</Button>
+          <Button round size="large" style={styles.content_button}
+            onPress={() => navigation.navigate('auth.list')}>Просмотреть службы</Button>
+          <Button ound size="large" style={styles.content_button} 
+            onPress={() => navigation.navigate('record.public.open')}>Посмотреть чей-то паспорт</Button>
+          <Button round size="large" style={styles.content_button}
+            onPress={() => navigation.navigate('invite.create')}>Создать приглашение</Button>
           {
             context.config.DEBUG_AUTH && mnemonic
-              ? <Button round size="large" onPress={() => navigation.navigate('tests')}>Tests</Button>
+              ? <Button round size="large" style={styles.content_button}
+                onPress={() => navigation.navigate('tests')}>Tests</Button>
               : null
           }
           <Block row middle>
@@ -84,9 +91,11 @@ export const Main = connect(
           </Block>
         </Block>
         : <Block center>
-          <Button round size="large" style={styles.app_text} onPress={() => navigation.navigate('auth')}>Войти</Button>
-          <Button round size="large" style={styles.app_text} onPress={() => navigation.navigate('invite.accept')}>Принять приглашение</Button>
+          <Button round size="large" style={styles.content_button} 
+            onPress={() => navigation.navigate('auth')}>Представиться</Button>
+          <Button round size="large" style={styles.content_button} 
+            onPress={() => navigation.navigate('invite.accept')}>Принять приглашение</Button>
         </Block>
     }
   </Block>
-}))
+}, styles))

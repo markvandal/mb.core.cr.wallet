@@ -3,7 +3,8 @@ import { connect } from 'react-redux'
 import { Context } from '../../context'
 
 import { withGalio, Block, Button, Input } from 'galio-framework'
-import { walletActions, inviteActions } from '../../store'
+import { walletActions } from '../../store'
+import { styles } from '../styles/main'
 
 
 export const WalletAuth = connect(
@@ -15,23 +16,29 @@ export const WalletAuth = connect(
     },
     ...ownProps
   })
-)(withGalio(({ navigation, connect, theme }) => {
+)(withGalio(({ navigation, connect, theme, styles }) => {
   const context = useContext(Context)
   let mnemonic = null
 
-  return <Block>
+  return <Block middle flex>
     <Input color={theme.COLORS.THEME}
-      icon="heart"
+      icon="profile"
+      password
+      viewPass
       family="antdesign"
-      iconSize={22}
-      iconColor="red"
-      style={{ borderColor: theme.COLORS.THEME }}
+      iconSize={theme.SIZES.ICON}
+      iconColor={theme.COLORS.THEME}
+      style={styles.content_input}
+      multiline
+      numberOfLines={5}
       onRef={_ => mnemonic = _} />
     {
       context.config.DEBUG_AUTH
-        ? <Button round uppercase onPress={() => mnemonic.value = context.config.DEBUG_AUTH}>Fill default</Button>
+        ? <Button round size="large" style={styles.content_button}
+          onPress={() => mnemonic.value = context.config.DEBUG_AUTH}>Fill default</Button>
         : null
     }
-    <Button round uppercase onPress={() => connect(mnemonic.value, navigation)}>Sign In</Button>
+    <Button round size="large" style={styles.content_button}
+      onPress={() => connect(mnemonic.value, navigation)}>Представиться</Button>
   </Block>
-}))
+}, styles))

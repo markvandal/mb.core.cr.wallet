@@ -61,27 +61,27 @@ export const context = {
     defaultRecords: [
       {
         key: 'mb.citizen.self.firstname',
-        label: 'Firstname',
+        label: 'Имя',
         types: ['CITIZEN', 'FOREIGNER', 'DIASPORA_MEMBER'],
       },
       {
         key: 'mb.citizen.self.secondname',
-        label: 'Second name / Patronimic',
+        label: 'Отчество',
         types: ['CITIZEN', 'FOREIGNER', 'DIASPORA_MEMBER'],
       },
       {
         key: 'mb.citizen.self.lastname',
-        label: 'Last name / Family name',
+        label: 'Фамилия',
         types: ['CITIZEN', 'FOREIGNER', 'DIASPORA_MEMBER'],
       },
       {
         key: 'mb.citizen.self.personalnumber',
-        label: 'Passport Personal Number',
+        label: 'Личный номер',
         types: ['CITIZEN', 'FOREIGNER', 'DIASPORA_MEMBER'],
       },
       {
         key: 'mb.citizen.self.citizenship',
-        label: 'Citizenship',
+        label: 'Гражданство',
         types: ['CITIZEN', 'FOREIGNER', 'DIASPORA_MEMBER'],
         defaults: {
           CITIZEN: 'Republic of Belarus',
@@ -89,40 +89,40 @@ export const context = {
       },
       {
         key: 'mb.citizen.self.nationality',
-        label: 'Nationality',
+        label: 'Национальность',
         types: ['CITIZEN', 'FOREIGNER', 'DIASPORA_MEMBER'],
       },
       {
         key: 'mb.citizen.self.birthplace',
-        label: 'Place of birth',
+        label: 'Место рождения',
         types: ['CITIZEN', 'FOREIGNER', 'DIASPORA_MEMBER'],
       },
       {
         key: 'mb.citizen.self.birthdate',
-        label: 'Birth date',
+        label: 'Дата рождения',
         types: ['CITIZEN', 'FOREIGNER', 'DIASPORA_MEMBER'],
       },
       {
         key: 'mb.citizen.self.phonenumber',
-        label: 'Phone number',
+        label: 'Мобильный номер',
         types: ['CITIZEN', 'FOREIGNER', 'DIASPORA_MEMBER'],
         restrictions: ['REOCRD_UPDATE_SEAL'],
       },
       {
         key: 'mb.citizen.self.email',
-        label: 'Email',
+        label: 'Электронная почта',
         types: ['CITIZEN', 'FOREIGNER', 'DIASPORA_MEMBER'],
         restrictions: ['REOCRD_UPDATE_SEAL'],
       },
       {
         key: 'mb.citizen.self.telegram',
-        label: 'Telegram',
+        label: 'Телеграм',
         types: ['CITIZEN', 'FOREIGNER', 'DIASPORA_MEMBER'],
         restrictions: ['REOCRD_UPDATE_SEAL'],
       },
       {
-        key: 'mb.citizen.self.facebook',
-        label: 'Facebook Profile',
+        key: 'mb.citizen.self.social',
+        label: 'Профиль в соц. сети',
         types: ['CITIZEN', 'FOREIGNER', 'DIASPORA_MEMBER'],
         restrictions: ['REOCRD_UPDATE_SEAL'],
       },
