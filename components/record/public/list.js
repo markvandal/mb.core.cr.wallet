@@ -66,7 +66,7 @@ export const PublicList = connect(
     <Block flex style={styles.list_block_main}>
       <Block card shadow flex style={styles.list_block_card}>
         <Block card borderless row middle style={styles.list_block_item_header}>
-          <Text style={styles.list_block_item_label_value}>Паспорт ID:</Text>
+          <Text style={styles.list_block_item_label_value}>ID Паспорта:</Text>
           <Text style={styles.list_block_item_label_value}>{targetIdentity?.id}</Text>
         </Block>
         <Block row middle style={styles.list_block_item_header_odd}>
@@ -75,7 +75,7 @@ export const PublicList = connect(
         </Block>
         <Block card borderless row middle style={styles.list_block_item_header}>
           <Text style={styles.list_block_item_label_value}>Дата регистрации:</Text>
-          <Text style={styles.list_block_item_info}>{targetIdentity?.creationDt}</Text>
+          <Text style={styles.list_block_item_label_info}>{targetIdentity?.creationDt}</Text>
         </Block>
       </Block>
       <Button round size="large" style={styles.list_block_item_button}
@@ -91,8 +91,8 @@ export const PublicList = connect(
                 <Text style={styles.list_block_item_caption}>{`#${record.id} ${record.key}`}</Text>
                 <Text style={styles.list_block_item_info}>{record.recordType}</Text>
               </Block>
-              <Block row middle style={styles.list_block_item_content}>
-                <Text style={styles.app_text}>{record.data}</Text>
+              <Block style={styles.list_block_item_content}>
+                <Text style={styles.app_info}>{record.data}</Text>
               </Block>
               <Block row middle style={styles.list_block_item_content}>
                 <Input onChangeText={_ => recordInputs[idx].data = _}
