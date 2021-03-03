@@ -29,10 +29,15 @@ export const styles = theme => StyleSheet.create({
     height: 96,
     alignSelf: 'flex-end',
   },
-  content_input: {
+  auth_input: {
     ...fragment_font_default,
     width: theme.SIZES.INPUT_WIDTH,
     height: 100,
+    alignContent: 'space-between',
+  },
+  conent_input: {
+    ...fragment_font_default,
+    width: theme.SIZES.INPUT_WIDTH,
     alignContent: 'space-between',
   },
   content_button: {
@@ -98,6 +103,7 @@ export const styles = theme => StyleSheet.create({
     fontSize: 20,
     fontFamily: 'bold',
     alignSelf: 'center',
+    textAlign: 'center',
   },
   list_block_item_actions: {
   },

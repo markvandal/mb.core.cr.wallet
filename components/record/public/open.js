@@ -22,7 +22,8 @@ export const PublicOpen = connect(
     <Block style={styles.list_block_main}>
       <Text style={styles.list_block_title}>Открыть чужой паспорт</Text>
       <Block style={styles.list_block_item}>
-        <Input placeholder="Введите номер паспорта" onRef={_ => identity = _} />
+        <Input placeholder="Введите номер паспорта" 
+          style={styles.content_input} onRef={_ => identity = _} />
       </Block>
       <Button round size="large" style={styles.list_block_item_button}
         onPress={_ => open(navigation, identity.value)}>Открыть</Button>

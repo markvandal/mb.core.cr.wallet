@@ -16,19 +16,25 @@ export const Request = connect(
 )(withGalio(({ auth, request, theme, styles }) => {
   let identity = null
 
-  return <Block>
-    <Input color={theme.COLORS.THEME}
-      style={{ borderColor: theme.COLORS.THEME }}
-      onRef={_ => identity = _} />
-    {
-      auth
-        ? <Card>
-          <Text>Id: {auth.authId}</Text>
-          <Text>Key: {auth.key}</Text>
-        </Card>
-        : null
-    }
-    <Button round size="large" style={styles.content_button} 
-      onPress={() => request(identity.value)}>Request</Button>
+  return <Block flex center space="around">
+    <Block style={styles.list_block_main}>
+      <Text style={styles.list_block_title}>Предложить аутентификацию</Text>
+      <Block style={styles.list_block_item}>
+        <Input placeholder="Введите номер паспорта"
+          style={styles.content_input}
+          onRef={_ => identity = _} />
+      </Block>
+      <Button round size="large" style={styles.list_block_item_button}
+        onPress={() => request(identity.value)}>Выслать</Button>
+      {
+          auth
+            ?
+            <Block card row middle style={styles.list_block_item_header}>
+              <Text style={styles.list_block_item_caption}>{auth.authId}</Text>
+              <Text style={styles.list_block_item_info}>{auth.key}</Text>
+            </Block>
+            : null
+        }
+    </Block>
   </Block>
 }, styles))
