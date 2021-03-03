@@ -28,7 +28,7 @@ export const WalletAuth = connect(
       family="antdesign"
       iconSize={theme.SIZES.ICON}
       iconColor={theme.COLORS.THEME}
-      style={styles.content_input}
+      style={styles.auth_input}
       multiline
       numberOfLines={5}
       onRef={_ => mnemonic = _} />
