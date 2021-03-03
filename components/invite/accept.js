@@ -8,8 +8,6 @@ import { inviteActions, walletActions } from '../../store'
 import { Context } from '../../context'
 import { alertError } from '../error'
 import { styles } from '../styles/main'
-import css from "react-native-web/dist/exports/StyleSheet/css";
-
 
 export const Accept = connect(
   ({ invite: { newAccount } }, ownProps) =>
