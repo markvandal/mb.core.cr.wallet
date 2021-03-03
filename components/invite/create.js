@@ -29,11 +29,11 @@ export const Create = connect(
     {
       invite
         ? <Block>
-          <Text h4 color="primary">Приглашение создано</Text>
+          <Text style={styles.list_block_title} h4 color="primary">Приглашение создано</Text>
           <Block>
             <Text>{`${invite.inviteId} ${invite.mnemonic}`}</Text>
             <Button
-              onlyIcon 
+                onlyIcon
               icon="sharealt"
               iconFamily="antdesign" 
               iconSize={20} 
@@ -55,7 +55,7 @@ export const Create = connect(
               }}
               />
           </Block>
-        </Block >
+        </Block>
         : <Block>
           <Button
               round size="large"
