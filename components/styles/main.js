@@ -44,6 +44,12 @@ export const styles = theme => StyleSheet.create({
     ...fragment_font_default,
     width: theme.SIZES.INPUT_WIDTH,
   },
+  content_button_alone: {
+    ...fragment_font_default,
+    width: theme.SIZES.INPUT_WIDTH,
+    margin: 0,
+    marginTop: 8,
+  },
   list_block_main: {
     width: theme.SIZES.INPUT_WIDTH,
     alignItems: 'stretch',

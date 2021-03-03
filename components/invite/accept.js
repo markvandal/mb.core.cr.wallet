@@ -7,6 +7,8 @@ import { withGalio, Block, Button, Text, Input } from 'galio-framework'
 import { inviteActions, walletActions } from '../../store'
 import { Context } from '../../context'
 import { alertError } from '../error'
+import { styles } from '../styles/main'
+import css from "react-native-web/dist/exports/StyleSheet/css";
 
 
 export const Accept = connect(
@@ -27,20 +29,21 @@ export const Accept = connect(
     },
     ...ownProps,
   }),
-)(withGalio(({ navigation, newAccount, accept, theme }) => {
+)(withGalio(({ navigation, newAccount, accept, theme, styles }) => {
   let sequence = ''
 
-  return <Block>
+  return <Block middle flex>
     {
       newAccount
         ? <Block>
-          <Text>IdentityId: {newAccount.identityId}</Text>
-          <Text>Mnemonic (password): {newAccount.mnemonic}</Text>
+          <Text style={styles.list_block_title} >IdentityId: {newAccount.identityId}</Text>
+          <Text style={styles.list_block_item_label} >Mnemonic (password): {newAccount.mnemonic}</Text>
           <Button
             onlyIcon
             icon="sharealt"
             iconFamily="antdesign"
-            iconSize={20}
+            iconSize={theme.SIZES.SMALL_ICON}
+            size="large"
             color="primary"
             iconColor={theme.COLORS.WHITE}
             onPress={async () => {
@@ -56,15 +59,16 @@ export const Accept = connect(
               }
             }}
           />
-          <Button onPress={() => navigation.navigate('record.personal.standard')}>Proceed to passport</Button>
+          <Button round size="large" style={styles.content_button_alone} onPress={() => navigation.navigate('record.personal.standard')}>Перейти к пасспорту</Button>
         </Block>
         : <Block>
-          <Text>Input invite code</Text>
-          <Input onRef={_ => sequence = _} />
-          <Button onPress={() => accept(navigation, sequence.value)}>Create ID</Button>
+          <Text style={styles.list_block_item_label_value} >Введите код приглашения</Text>
+          <Input styles={styles.conent_input}
+                 onRef={_ => sequence = _} />
+          <Button round size="large" style={styles.content_button_alone} onPress={() => accept(navigation, sequence.value)}>Создать пасспорт</Button>
         </Block>
     }
   </Block>
-}))
+}, styles))
 
 

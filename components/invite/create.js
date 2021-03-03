@@ -38,8 +38,6 @@ export const Create = connect(
               iconFamily="antdesign" 
               iconSize={theme.SIZES.SMALL_ICON}
               color="primary"
-              style={styles.content_button}
-              round size="large"
               iconColor={theme.COLORS.WHITE} 
               onPress={async () => {
                 try {
