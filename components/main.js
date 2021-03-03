@@ -14,9 +14,10 @@ import { styles } from './styles/main';
 
 
 export const Main = connect(
-  ({ wallet: { mnemonic, identity }, record: { records } }, ownProps) => (
+  ({ wallet: { mnemonic, identity, address }, record: { records } }, ownProps) => (
     {
       identity,
+      address,
       records,
       mnemonic,
       ...ownProps,
@@ -29,7 +30,7 @@ export const Main = connect(
     listRecords: listRecords(dispatch),
     ...ownProps,
   })
-)(withGalio(({ navigation, mnemonic, signOut, listRecords, identity, records, theme, styles }) => {
+)(withGalio(({ navigation, mnemonic, signOut, listRecords, identity, address, records, theme, styles }) => {
   const [name] = mnemonic ? mnemonic.split(' ') : [null]
   const context = useContext(Context)
   useFocusEffect(useCallback(() => {
@@ -50,13 +51,36 @@ export const Main = connect(
               ? <Text>{identity?.identityType}: {firstName?.data} {lastName?.data}</Text>
               : null
           }
+          <Block row middle>
+            <Text style={styles.app_info}>Адресс: {address}</Text>
+            <Button
+              onlyIcon
+              icon="sharealt"
+              iconFamily="antdesign"
+              iconSize={theme.SIZES.SMALL_ICON}
+              color="primary"
+              iconColor={theme.COLORS.WHITE}
+              onPress={async () => {
+                try {
+                  await Share.share(
+                    {
+                      title: 'Meta-Belarus ID Address',
+                      message: address,
+                    }
+                  )
+                } catch (_) {
+                  Clipboard.setString(address)
+                }
+              }}
+            />
+          </Block>
           <Button round size="large" style={styles.content_button}
             onPress={() => signOut(navigation)}>Закрыть паспорт</Button>
           <Button round size="large" style={styles.content_button}
             onPress={() => navigation.navigate('record.personal.standard')}>Посмотреть свой паспорт</Button>
           <Button round size="large" style={styles.content_button}
             onPress={() => navigation.navigate('auth.list')}>Просмотреть службы</Button>
-          <Button ound size="large" style={styles.content_button} 
+          <Button ound size="large" style={styles.content_button}
             onPress={() => navigation.navigate('record.public.open')}>Посмотреть чей-то паспорт</Button>
           <Button round size="large" style={styles.content_button}
             onPress={() => navigation.navigate('invite.create')}>Создать приглашение</Button>
@@ -91,9 +115,9 @@ export const Main = connect(
           </Block>
         </Block>
         : <Block center>
-          <Button round size="large" style={styles.content_button} 
+          <Button round size="large" style={styles.content_button}
             onPress={() => navigation.navigate('auth')}>Представиться</Button>
-          <Button round size="large" style={styles.content_button} 
+          <Button round size="large" style={styles.content_button}
             onPress={() => navigation.navigate('invite.accept')}>Принять приглашение</Button>
         </Block>
     }

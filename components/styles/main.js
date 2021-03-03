@@ -103,6 +103,7 @@ export const styles = theme => StyleSheet.create({
     fontSize: 20,
     fontFamily: 'bold',
     alignSelf: 'center',
+    textAlign: 'center',
   },
   list_block_item_actions: {
   },

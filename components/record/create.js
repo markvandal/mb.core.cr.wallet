@@ -39,7 +39,7 @@ export const Create = connect(
       {
         identity
           ? <Text style={styles.list_block_title}>Создать запись для паспорта ID ${identity}</Text>
-          : null
+          : <Text style={styles.list_block_title}>Создать запись в своём паспорте</Text>
       }
       <Block style={styles.list_block_item}>
         <Input placeholder="Код записи" style={styles.content_input} onRef={_ => key = _} />
