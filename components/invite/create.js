@@ -36,7 +36,7 @@ export const Create = connect(
                 onlyIcon
               icon="sharealt"
               iconFamily="antdesign" 
-              iconSize={20} 
+              iconSize={theme.SIZES.SMALL_ICON}
               color="primary"
               style={styles.content_button}
               round size="large"
