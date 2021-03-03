@@ -37,6 +37,7 @@ export const styles = theme => StyleSheet.create({
   },
   content_button: {
     ...fragment_font_default,
+    width: theme.SIZES.INPUT_WIDTH,
   },
   list_block_main: {
     width: theme.SIZES.INPUT_WIDTH,
@@ -63,6 +64,7 @@ export const styles = theme => StyleSheet.create({
     alignContent: 'space-between',
     backgroundColor: theme.COLORS.TINTED,
     padding: theme.SIZES.BASE * 2,
+    borderWidth: 0,
   },
   list_block_item_header_odd: {
     alignContent: 'space-between',
@@ -98,6 +100,8 @@ export const styles = theme => StyleSheet.create({
     alignSelf: 'center',
   },
   list_block_item_actions: {
-    justifyContent: 'flex-end',
+  },
+  list_block_item_button: {
+    width: 'auto'
   },
 })

@@ -54,7 +54,7 @@ export const PersonalList = connect(
           (record, idx) => typeof record === 'string'
             ? <Block key={record} card flex style={styles.list_block_card}><Text>Record ID: {record}</Text></Block>
             : <Block key={record.id} card flex style={styles.list_block_card}>
-              <Block row middle style={styles.list_block_item_header}>
+              <Block card borderless row middle style={styles.list_block_item_header}>
                 <Text style={styles.list_block_item_caption}>{`#${record.id} ${record.key}`}</Text>
                 <Text style={styles.list_block_item_info}>{record.recordType}</Text>
               </Block>
@@ -100,84 +100,76 @@ export const PersonalList = connect(
                 />
               </Block>
               <Block row middle style={styles.list_block_item_header}>
+                <Text style={styles.list_block_item_label_value}>Статус верификации:</Text>
+                <Text style={styles.list_block_item_label_value}>{record.verified ? 'TRUE' : 'FALSE'}</Text>
+              </Block>
+              <Block row middle style={styles.list_block_item_header}>
                 <Text style={styles.list_block_item_label_value}>Подпись:</Text>
               </Block>
               <Block style={styles.list_block_item_content}>
                 <Text style={styles.app_info}>{record.signature}</Text>
               </Block>
               <Block row middle style={styles.list_block_item_header}>
-                <Text style={styles.list_block_item_label_value}>Type:</Text>
+                <Text style={styles.list_block_item_label_value}>Тип:</Text>
                 <Text style={styles.list_block_item_label_value}>{record.recordType}</Text>
               </Block>
               <Block row middle style={styles.list_block_item_header_odd}>
-                <Text style={styles.list_block_item_label_value}>Publicity:</Text>
+                <Text style={styles.list_block_item_label_value}>Публичность:</Text>
                 <Text style={styles.list_block_item_label_value}>{record.publicity}</Text>
               </Block>
               <Block row middle style={styles.list_block_item_header}>
-                <Text style={styles.list_block_item_label_value}>Status:</Text>
+                <Text style={styles.list_block_item_label_value}>Статус:</Text>
                 <Text style={styles.list_block_item_label_value}>{record.status}</Text>
               </Block>
               <Block row middle style={styles.list_block_item_header_odd}>
-                <Text style={styles.list_block_item_label_value}>Provierd:</Text>
+                <Text style={styles.list_block_item_label_value}>Провайдер:</Text>
                 <Text style={styles.list_block_item_label_value}>{record.provider}</Text>
               </Block>
-              <Block row middle style={styles.list_block_item_header}>
-                <Text style={styles.list_block_item_label_value}>Verified:</Text>
-                <Text style={styles.list_block_item_label_value}>{record.verified ? 'TRUE' : 'FALSE'}</Text>
-              </Block>
-              <Block flex row style={styles.list_block_item_actions}>
+              <Block flex style={styles.list_block_item_actions}>
                 {
                   ['RECORD_OPEN'].includes(record.status)
-                    ? <Button
-                      onlyIcon
+                    ? <Button round size="large" style={styles.list_block_item_button}
                       icon="pencil"
                       iconFamily="entypo"
                       iconSize={theme.SIZES.ICON}
                       color="primary"
                       iconColor={theme.COLORS.WHITE}
-                      onPress={() => update(context, record.id, 'RECORD_UPDATE_SIGN')}
-                    />
+                      onPress={() => update(context, record.id, 'RECORD_UPDATE_SIGN')}>Подписать</Button>
                     : null
                 }
                 {
                   ['RECORD_OPEN', 'RECORD_SIGNED'].includes(record.status)
                     && identity.id === record.provider
-                    ? <Button
-                      onlyIcon
+                    ? <Button round size="large" style={styles.list_block_item_button}
                       icon="seal-variant"
                       iconFamily="material-community"
                       iconSize={theme.SIZES.ICON}
                       color="primary"
                       iconColor={theme.COLORS.WHITE}
-                      onPress={() => update(context, record.id, 'REOCRD_UPDATE_SEAL')}
-                    />
+                      onPress={() => update(context, record.id, 'REOCRD_UPDATE_SEAL')}>Запечатать</Button>
                     : null
                 }
                 {
                   ['RECORD_OPEN', 'RECORD_SIGNED'].includes(record.status)
-                    ? <Button
-                      onlyIcon
+                    ? <Button round size="large" style={styles.list_block_item_button}
                       icon="dislike2"
                       iconFamily="antdesign"
                       iconSize={theme.SIZES.ICON}
                       color="primary"
                       iconColor={theme.COLORS.WHITE}
-                      onPress={() => update(context, record.id, 'REOCRD_UPDATE_REJECT')}
-                    />
+                      onPress={() => update(context, record.id, 'REOCRD_UPDATE_REJECT')}>Отклонить</Button>
                     : null
                 }
                 {
                   ['RECORD_SIGNED', 'RECORD_SEALED', 'RECORD_WITHDRAWN', 'RECORD_REJECTED'].includes(record.status)
                     && identity.id === record.provider
-                    ? <Button
-                      onlyIcon
+                    ? <Button round size="large" style={styles.list_block_item_button}
                       icon="reload"
                       iconFamily="ionicon"
                       iconSize={theme.SIZES.ICON}
                       color="primary"
                       iconColor={theme.COLORS.WHITE}
-                      onPress={() => update(context, record.id, 'REOCRD_UPDATE_REOPEN')}
-                    />
+                      onPress={() => update(context, record.id, 'REOCRD_UPDATE_REOPEN')}>Переоткрыть</Button>
                     : null
                 }
               </Block>

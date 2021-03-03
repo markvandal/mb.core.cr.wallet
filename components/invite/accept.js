@@ -56,7 +56,7 @@ export const Accept = connect(
               }
             }}
           />
-          <Button onPress={() => navigation.navigate('record.personal.list')}>Proceed to passport</Button>
+          <Button onPress={() => navigation.navigate('record.personal.standard')}>Proceed to passport</Button>
         </Block>
         : <Block>
           <Text>Input invite code</Text>
