@@ -102,6 +102,7 @@ export const styles = theme => StyleSheet.create({
   list_block_item_actions: {
   },
   list_block_item_button: {
-    width: 'auto'
+    ...fragment_font_default,
+    width: 'auto',
   },
 })

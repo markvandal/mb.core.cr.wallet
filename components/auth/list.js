@@ -8,6 +8,7 @@ import { withGalio, Block, Button, Text, Card } from 'galio-framework'
 import { Context } from '../../context'
 import { authActions } from '../../store'
 import { decrypt } from '../../utils/ledger/crypt'
+import { styles } from '../styles/main';
 
 
 export const List = connect(
@@ -16,7 +17,7 @@ export const List = connect(
   (dispatch, ownProps) => ({
     list: async () => {
       const res = await dispatch(authActions.list())
-      for (let idx = 0 ; idx < res.payload?.length ; ++idx) {
+      for (let idx = 0; idx < res.payload?.length; ++idx) {
         if ('string' === typeof res.payload[idx]) {
           await dispatch(authActions.load(idx))
         }
@@ -25,58 +26,78 @@ export const List = connect(
     sign: idx => dispatch(authActions.sign(idx)),
     ...ownProps,
   }),
-)(withGalio(({ navigation, auth, identity, list, sign, theme }) => {
+)(withGalio(({ navigation, auth, identity, list, sign, theme, styles }) => {
   const context = useContext(Context)
   useFocusEffect(useCallback(() => { list() }, []))
 
-  return <Block>
-    {
-      auth.map(
-        (auth, idx) => 'string' === typeof auth
-          ? <Card key={auth}><Text>Auth: {auth}</Text></Card>
-          : (() => {
-            const sessionToken = decrypt(context.wallet, auth.key)
-
-            return <Card flex
-              key={auth.service}
-              title={`Service ID: ${auth.service}`}
-              caption={`Status: ${auth.status}`}>
-              <Text>Key: {auth.key}</Text>
-              <Text>Decrypted: {sessionToken}</Text>
-              {
-                (() => {
-                  switch (auth.status) {
-                    case 'AUTH_OPEN':
-                      return <Button
-                        onlyIcon
-                        icon="pencil"
-                        iconFamily="entypo"
-                        iconSize={20}
-                        color="primary"
-                        iconColor={theme.COLORS.WHITE}
-                        onPress={() => sign(idx)}
-                      />
-                      case 'AUTH_SIGNED':
-                        return <Button
-                        onlyIcon
-                        icon="sharealt"
-                        iconFamily="antdesign"
-                        iconSize={20}
-                        color="primary"
-                        iconColor={theme.COLORS.WHITE}
-                        onPress={() => Clipboard.setString(`${sessionToken}`)}
-                      />
-                  }
-                })()
-              }
-            </Card>
-          })()
-      )
-    }
+  return <Block middle center>
     {
       identity.identityType === 'SERVICE'
-        ? <Button round uppercase onPress={() => navigation.navigate('auth.request')}>Request Auth</Button>
+        ? <Button round size="large" style={styles.content_button}
+          onPress={() => navigation.navigate('auth.request')}
+        >Запросить аутентификацию</Button>
         : null
     }
+    <Block flex style={styles.list_block_main}>
+      {
+        auth.map(
+          (auth, idx) => 'string' === typeof auth
+            ? <Block key={auth} card flex style={styles.list_block_card}><Text>Auth: {auth}</Text></Block>
+            : (() => {
+              const sessionToken = decrypt(context.wallet, auth.key)
+
+              return <Block key={`${auth.service}:${auth.identity}`} card flex style={styles.list_block_card}>
+                <Block card borderless row middle style={styles.list_block_item_header}>
+                  <Text style={styles.list_block_item_caption}>ID Службы</Text>
+                  <Text style={styles.list_block_item_value}>{auth.service}</Text>
+                </Block>
+                <Block row middle style={styles.list_block_item_header_odd}>
+                  <Text style={styles.list_block_item_label_value}>Статус:</Text>
+                  <Text style={styles.list_block_item_label_value}>{auth.status}</Text>
+                </Block>
+
+                <Block row middle style={styles.list_block_item_header}>
+                  <Text style={styles.list_block_item_label_value}>Зашифрованный ключ:</Text>
+                </Block>
+                <Block style={styles.list_block_item_content}>
+                  <Text style={styles.app_info}>{auth.key}</Text>
+                </Block>
+
+                <Block row middle style={styles.list_block_item_header}>
+                  <Text style={styles.list_block_item_label_value}>Ключ сессии:</Text>
+                </Block>
+                <Block style={styles.list_block_item_content}>
+                  <Text style={styles.app_info}>{sessionToken}</Text>
+                </Block>
+
+                <Block flex style={styles.list_block_item_actions}>
+                {
+                  (() => {
+                    switch (auth.status) {
+                      case 'AUTH_OPEN':
+                        return <Button round size="large" style={styles.list_block_item_button}
+                          icon="pencil"
+                          iconFamily="entypo"
+                          iconSize={20}
+                          color="primary"
+                          iconColor={theme.COLORS.WHITE}
+                          onPress={() => sign(idx)}>Подписать</Button>
+                      case 'AUTH_SIGNED':
+                        return <Button round size="large" style={styles.list_block_item_button}
+                          icon="sharealt"
+                          iconFamily="antdesign"
+                          iconSize={20}
+                          color="primary"
+                          iconColor={theme.COLORS.WHITE}
+                          onPress={() => Clipboard.setString(`${sessionToken}`)}>Скопировать ключ</Button>
+                    }
+                  })()
+                }
+                </Block>
+              </Block>
+            })()
+        )
+      }
+    </Block>
   </Block>
-}))
+}, styles))
