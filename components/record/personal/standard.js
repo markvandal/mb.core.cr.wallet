@@ -3,7 +3,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { connect } from 'react-redux'
 
 import { withGalio, Block, Button, Text, Input } from 'galio-framework'
-import { alertError } from '../../error'
+import { Error } from '../../error'
 
 import { Context } from '../../../context'
 import { recordActions } from '../../../store'
@@ -12,7 +12,8 @@ import { styles } from '../../styles/main'
 
 
 export const StandardList = connect(
-  ({ record: { records }, wallet: { identity } }, ownProps) => ({
+  ({ record: { records }, wallet: { identity }, errors }, ownProps) => ({
+    errors,
     identity,
     records,
     ...ownProps
@@ -25,13 +26,19 @@ export const StandardList = connect(
         const record = records[key]
         if (record && record.id) {
           if (record.status === 'RECORD_OPEN') {
-            await dispatch(recordActions.update({
+            const res = await dispatch(recordActions.update({
               id: record.id, data: inputs[key],
               action: context.value(`RecordUpdate.RECORD_UPDATE_STORE`, 'crsign'),
             }))
+            if (res.error) {
+              break
+            }
           }
         } else if (inputs[key]) {
-          await dispatch(recordActions.create({ key, data: inputs[key] }))
+          const res = await dispatch(recordActions.create({ key, data: inputs[key] }))
+          if (res.error) {
+            break
+          }
         }
       }
       await list(dispatch)()
@@ -46,14 +53,17 @@ export const StandardList = connect(
             ? 'REOCRD_UPDATE_SIGN'
             : 'REOCRD_UPDATE_SEAL'
             }`, 'crsign')
-          await dispatch(recordActions.update({ id: record.id, action }))
+          const res = await dispatch(recordActions.update({ id: record.id, action }))
+          if (res.error) {
+            break
+          }
         }
       }
       await list(dispatch)()
     },
     ...ownProps
   }),
-)(withGalio(({ navigation, list, createPassport, signPassport, records, identity, styles }) => {
+)(withGalio(({ navigation, list, createPassport, signPassport, records, identity, errors, styles }) => {
   const context = useContext(Context)
   useFocusEffect(useCallback(() => { list() }, []))
 
@@ -116,6 +126,10 @@ export const StandardList = connect(
                   <Text style={styles.list_block_item_label_value}>{record.data}</Text>
                 </Block>
             }
+            <Error hideBlock={
+              (errors.error?.meta?.arg?.id !== record.id && errors.error?.meta?.arg?.key !== key)
+              || !errors.error
+            } />
           </Block>
         })
       }

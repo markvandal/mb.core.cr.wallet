@@ -36,7 +36,7 @@ import { Type as RecordType } from './components/record/type'
 const { Navigator, Screen } = createStackNavigator()
 
 const App = () => {
-  const [fontsLoaded] = useFonts({regular: Roboto_400Regular, bold: Roboto_700Bold})
+  const [fontsLoaded] = useFonts({ regular: Roboto_400Regular, bold: Roboto_700Bold })
 
   if (!fontsLoaded) {
     return <AppLoading />
@@ -54,10 +54,10 @@ const App = () => {
         <Navigator initialRouteName="main"
           screenOptions={_ => ({
             title: `Meta-Belarus ID${store.getState().wallet?.identity?.id
-                ? `#${store.getState().wallet.identity.id}`
-                : ''
+              ? `#${store.getState().wallet.identity.id}`
+              : ''
               }`,
-            header: props => <Header {...props}/>
+            header: props => <Header {...props} />
           })}
         >
           <Screen name="main" component={Main} />

@@ -11,6 +11,7 @@ export const customTheme = {
     THEME: '#9EA8BD',
     GRAY: '#9EA8BD',
     TINTED: '#F7F7FA',
+    ERROR: '#FE2472',
   },
   SIZES: {
     BUTTON_WIDTH: window.width - 30,

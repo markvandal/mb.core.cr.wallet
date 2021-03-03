@@ -7,6 +7,7 @@ export { inviteActions } from './invite'
 export { authActions } from './auth' 
 export { recordActions } from './record' 
 export { testsActions } from './tests' 
+export { errorsActions } from './error' 
 
 import { context } from '../context'
 
@@ -15,11 +16,23 @@ import { invite } from './invite'
 import { auth } from './auth'
 import { record } from './record'
 import { tests } from './tests'
+import { errors, errorsActions } from './error'
 
 
 export const store = configureStore({ 
   reducer: combineReducers({
-    wallet, invite, auth, tests, record
+    wallet, invite, auth, tests, record, errors
   }),
-  middleware: [ thunk.withExtraArgument(context) ]
+  middleware: [ 
+    thunk.withExtraArgument(context),
+    store => next => action => {
+      if (action.error) {
+        console.log('Error intercepted:', action.error.message)
+        console.log(action)
+        store.dispatch(errorsActions.set(action))
+      }
+      
+      return next(action)
+    }
+  ]
 })

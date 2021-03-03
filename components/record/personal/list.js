@@ -1,12 +1,12 @@
-import React, { useContext, useCallback, useEffect } from 'react'
+import React, { useContext, useCallback } from 'react'
 import { useFocusEffect } from '@react-navigation/native';
 import { connect } from 'react-redux'
 
 import { Share } from 'react-native'
 import Clipboard from 'expo-clipboard'
 
-import { withGalio, Block, Button, Text, Card, Input } from 'galio-framework'
-import { alertError } from '../../error'
+import { withGalio, Block, Button, Text, Input } from 'galio-framework'
+import { Error } from '../../error'
 
 import { Context } from '../../../context'
 import { recordActions } from '../../../store'
@@ -15,9 +15,10 @@ import { styles } from '../../styles/main'
 
 
 export const PersonalList = connect(
-  ({ record: { records }, wallet: { identity } }, ownProps) => ({
+  ({ record: { records }, wallet: { identity }, errors }, ownProps) => ({
     identity,
     records,
+    errors,
     ...ownProps
   }),
   (dispatch, ownProps) => ({
@@ -27,14 +28,11 @@ export const PersonalList = connect(
       if (data !== undefined) {
         update.data = data
       }
-      const res = await dispatch(recordActions.update(update))
-      if (res.error) {
-        alertError(res.error.message)
-      }
+      await dispatch(recordActions.update(update))
     },
     ...ownProps
   }),
-)(withGalio(({ navigation, list, update, records, identity, theme, styles }) => {
+)(withGalio(({ navigation, list, update, records, identity, errors, theme, styles }) => {
   const context = useContext(Context)
   useFocusEffect(useCallback(() => { list() }, []))
 
@@ -99,6 +97,7 @@ export const PersonalList = connect(
                   }}
                 />
               </Block>
+              <Error hideBlock={errors.error?.meta?.arg?.id !== record.id}/>
               <Block row middle style={styles.list_block_item_header}>
                 <Text style={styles.list_block_item_label_value}>Статус верификации:</Text>
                 <Text style={styles.list_block_item_label_value}>{record.verified ? 'TRUE' : 'FALSE'}</Text>
