@@ -6,6 +6,7 @@ import Clipboard from 'expo-clipboard'
 import { withGalio, Block, Button, Text } from 'galio-framework'
 import { inviteActions } from '../../store'
 import { Context } from '../../context'
+import { styles } from '../styles/main'
 
 
 export const Create = connect(
@@ -21,22 +22,24 @@ export const Create = connect(
       })),
     ...ownProps,
   }),
-)(withGalio(({ navigation, invite, createUI, create, switchLevel, switchType, theme }) => {
+)(withGalio(({ navigation, invite, createUI, create, switchLevel, switchType, theme, styles }) => {
   const context = useContext(Context)
 
-  return <Block>
+  return <Block middle flex>
     {
       invite
         ? <Block>
-          <Text h4 color="primary">Invite created</Text>
+          <Text h4 color="primary">Приглашение создано</Text>
           <Block>
             <Text>{`${invite.inviteId} ${invite.mnemonic}`}</Text>
-            <Button 
+            <Button
               onlyIcon 
               icon="sharealt"
               iconFamily="antdesign" 
               iconSize={20} 
-              color="primary" 
+              color="primary"
+              style={styles.content_button}
+              round size="large"
               iconColor={theme.COLORS.WHITE} 
               onPress={async () => {
                 try {
@@ -52,26 +55,31 @@ export const Create = connect(
               }}
               />
           </Block>
-        </Block>
+        </Block >
         : <Block>
-          <Button onPress={() => {
+          <Button
+              round size="large"
+              style={styles.content_button}
+              onPress={() => {
             context.selectFunction = (type, nav) => {
               switchType(type)
               nav.goBack()
             }
             navigation.navigate('invite.type', { current: createUI.type })
-          }}>{`Type: ${createUI.type}`}</Button>
-          <Button onPress={() => {
+          }}>{`Тип: ${createUI.type}`}</Button>
+          <Button round size="large"style={styles.content_button}
+                  onPress={() => {
             context.selectFunction = (level, nav) => {
               switchLevel(level)
               nav.goBack()
             }
             navigation.navigate('invite.level', { current: createUI.level })
-          }}>{`Level: ${createUI.level}`}</Button>
-          <Button onPress={() => create(context, createUI.type, createUI.level)}>Create</Button>
+          }}>{`Уровень: ${createUI.level}`}</Button>
+          <Button round size="large" style={styles.content_button}
+                  onPress={() => create(context, createUI.type, createUI.level)}>Создать</Button>
         </Block>
     }
   </Block>
-}))
+}, styles))
 
 
