@@ -24,7 +24,10 @@ export const Create = connect(
       })),
     ...ownProps,
   }),
-)(withGalio(({ navigation, invite, createUI, create, switchLevel, switchType, theme, styles }) => {
+)(withGalio(({
+  navigation, invite, createUI, create, loading,
+  switchLevel, switchType, theme, styles
+}) => {
   const context = useContext(Context)
 
   return <Block middle flex>
