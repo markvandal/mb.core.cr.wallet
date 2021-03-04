@@ -25,17 +25,10 @@ export const WalletAuth = connect(
 
   return <Block middle flex>
     <Text style={styles.list_block_title}>Аутентификация</Text>
-    <Input color={theme.COLORS.THEME}
-      icon="profile"
-      password
-      viewPass
-      family="antdesign"
-      iconSize={theme.SIZES.ICON}
-      iconColor={theme.COLORS.THEME}
-      style={styles.auth_input}
-      multiline
-      numberOfLines={5}
-      onRef={_ => mnemonic = _} />
+    <Input color={theme.COLORS.THEME} icon="profile" password
+      viewPass family="antdesign" iconSize={theme.SIZES.ICON}
+      iconColor={theme.COLORS.THEME} style={styles.auth_input}
+      multiline numberOfLines={5} onRef={_ => mnemonic = _} />
     {
       context.config.DEBUG_AUTH
         ? <Button round size="large" style={styles.content_button}

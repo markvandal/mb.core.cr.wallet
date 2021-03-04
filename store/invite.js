@@ -110,6 +110,7 @@ const slice = createSlice({
       level: 'Level3',
       type: 'CITIZEN',
     },
+    loading: false,
   },
 
   reducers: {
@@ -122,17 +123,23 @@ const slice = createSlice({
   },
 
   extraReducers: {
+    [create.pending]: (state) => {
+      return { ...state, loading: true }
+    },
     [create.fulfilled]: (state, action) => {
-      return { ...state, ...action.payload }
+      return { ...state, ...action.payload, loading: false }
     },
     [create.rejected]: (state, action) => {
-      return { ...state, currentInvite: null }
+      return { ...state, currentInvite: null, loading: false }
+    },
+    [accept.pending]: (state) => {
+      return { ...state, loading: true }
     },
     [accept.fulfilled]: (state, action) => {
-      return { ...state, ...action.payload }
+      return { ...state, ...action.payload, loading: false }
     },
     [accept.rejected]: (state, action) => {
-      return { ...state, newAccount: null }
+      return { ...state, newAccount: null, loading: false }
     },
   }
 })

@@ -11,8 +11,9 @@ import { styles } from '../../styles/main'
 
 
 export const PublicList = connect(
-  ({ record: { records }, wallet: { targetIdentity, identity }, errors }, ownProps) => ({
+  ({ record: { records, loading }, wallet: { targetIdentity, identity }, errors }, ownProps) => ({
     records,
+    loading,
     errors,
     targetIdentity,
     identity,
@@ -47,7 +48,7 @@ export const PublicList = connect(
   route: { params: { identityId } }, navigation,
   open, create, validate, update,
   identity, targetIdentity, records, errors,
-  theme, styles
+  loading, theme, styles
 }) => {
   const context = useContext(Context)
   useFocusEffect(useCallback(() => { open(identityId) }, []))
@@ -139,10 +140,8 @@ export const PublicList = connect(
                 {
                   ['RECORD_OPEN'].includes(record.status) && identity.id === record.provider
                     ? <Button round size="large" style={styles.list_block_item_button}
-                      icon="check"
-                      iconFamily="antdesign"
-                      iconSize={theme.SIZES.SMALL_ICON}
-                      color="primary"
+                      icon="check" loading={loading} iconFamily="antdesign"
+                      iconSize={theme.SIZES.SMALL_ICON} color="primary"
                       iconColor={theme.COLORS.WHITE}
                       onPress={() => update(context, record.id, 'RECORD_UPDATE_STORE', recordInputs[idx].data)}
                     >Записать</Button>
@@ -152,10 +151,8 @@ export const PublicList = connect(
                   ['RECORD_OPEN', 'RECORD_SIGNED'].includes(record.status)
                     && identity.id === record.provider
                     ? <Button round size="large" style={styles.list_block_item_button}
-                      icon="seal-variant"
-                      iconFamily="material-community"
-                      iconSize={theme.SIZES.SMALL_ICON}
-                      color="primary"
+                      icon="seal-variant" loading={loading} iconFamily="material-community"
+                      iconSize={theme.SIZES.SMALL_ICON} color="primary"
                       iconColor={theme.COLORS.WHITE}
                       onPress={() => update(context, record.id, 'REOCRD_UPDATE_SEAL')}>Запечатать</Button>
                     : null
@@ -164,10 +161,8 @@ export const PublicList = connect(
                   ['RECORD_OPEN', 'RECORD_SIGNED', 'RECORD_SEALED', 'RECORD_REJECTED'].includes(record.status)
                     && identity.id === record.provider
                     ? <Button round size="large" style={styles.list_block_item_button}
-                      icon="marker-cancel"
-                      iconFamily="material-community"
-                      iconSize={theme.SIZES.SMALL_ICON}
-                      color="primary"
+                      icon="marker-cancel" loading={loading} iconFamily="material-community"
+                      iconSize={theme.SIZES.SMALL_ICON} color="primary"
                       iconColor={theme.COLORS.WHITE}
                       onPress={() => update(context, record.id, 'REOCRD_UPDATE_WITHDRAW')}>Отозвать</Button>
                     : null
@@ -176,10 +171,8 @@ export const PublicList = connect(
                   ['RECORD_SIGNED', 'RECORD_SEALED', 'RECORD_WITHDRAWN', 'RECORD_REJECTED'].includes(record.status)
                     && identity.id === record.provider
                     ? <Button round size="large" style={styles.list_block_item_button}
-                      icon="reload"
-                      iconFamily="ionicon"
-                      iconSize={theme.SIZES.SMALL_ICON}
-                      color="primary"
+                      icon="reload" loading={loading} iconFamily="ionicon"
+                      iconSize={theme.SIZES.SMALL_ICON} color="primary"
                       iconColor={theme.COLORS.WHITE}
                       onPress={() => update(context, record.id, 'REOCRD_UPDATE_REOPEN')}>Переоткрыть</Button>
                     : null

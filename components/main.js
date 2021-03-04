@@ -10,7 +10,7 @@ import Clipboard from 'expo-clipboard'
 import { withGalio, Block, Button, Text } from 'galio-framework'
 import { walletActions } from '../store'
 import { list as listRecords } from './record/helper'
-import { styles } from './styles/main';
+import { styles } from './styles/main'
 
 
 export const Main = connect(

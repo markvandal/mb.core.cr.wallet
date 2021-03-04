@@ -13,8 +13,13 @@ import { styles } from '../styles/main';
 
 
 export const List = connect(
-  ({ auth: { list }, wallet: { identity }, errors }, ownProps) =>
-    ({ auth: list, identity, errors, ...ownProps }),
+  ({ auth: { list, loading }, wallet: { identity }, errors }, ownProps) => ({
+    auth: list,
+    identity,
+    loading,
+    errors,
+    ...ownProps
+  }),
   (dispatch, ownProps) => ({
     list: async () => {
       const res = await dispatch(authActions.list())
@@ -27,7 +32,10 @@ export const List = connect(
     sign: idx => dispatch(authActions.sign(idx)),
     ...ownProps,
   }),
-)(withGalio(({ navigation, auth, identity, list, sign, errors, theme, styles }) => {
+)(withGalio(({
+  navigation, auth, identity, loading,
+  list, sign, errors, theme, styles
+}) => {
   const context = useContext(Context)
   useFocusEffect(useCallback(() => { list() }, []))
 
@@ -81,19 +89,13 @@ export const List = connect(
                       switch (auth.status) {
                         case 'AUTH_OPEN':
                           return <Button round size="large" style={styles.list_block_item_button}
-                            icon="pencil"
-                            iconFamily="entypo"
-                            iconSize={theme.SIZES.ICON}
-                            color="primary"
-                            iconColor={theme.COLORS.WHITE}
+                            icon="pencil" loading={loading} iconFamily="entypo"
+                            iconSize={theme.SIZES.ICON} color="primary" iconColor={theme.COLORS.WHITE}
                             onPress={() => sign(idx)}>Подписать</Button>
                         case 'AUTH_SIGNED':
                           return <Button round size="large" style={styles.list_block_item_button}
-                            icon="sharealt"
-                            iconFamily="antdesign"
-                            iconSize={theme.SIZES.ICON}
-                            color="primary"
-                            iconColor={theme.COLORS.WHITE}
+                            icon="sharealt" iconFamily="antdesign" iconSize={theme.SIZES.ICON}
+                            color="primary" iconColor={theme.COLORS.WHITE}
                             onPress={() => Clipboard.setString(`${sessionToken}`)}>Скопировать ключ</Button>
                       }
                     })()

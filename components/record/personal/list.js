@@ -15,8 +15,9 @@ import { styles } from '../../styles/main'
 
 
 export const PersonalList = connect(
-  ({ record: { records }, wallet: { identity }, errors }, ownProps) => ({
+  ({ record: { records, loading }, wallet: { identity }, errors }, ownProps) => ({
     identity,
+    loading,
     records,
     errors,
     ...ownProps
@@ -32,7 +33,10 @@ export const PersonalList = connect(
     },
     ...ownProps
   }),
-)(withGalio(({ navigation, list, update, records, identity, errors, theme, styles }) => {
+)(withGalio(({ 
+  navigation, list, update, records, 
+  identity, errors, loading, theme, styles 
+}) => {
   const context = useContext(Context)
   useFocusEffect(useCallback(() => { list() }, []))
 
@@ -65,23 +69,14 @@ export const PersonalList = connect(
                 }
                 {
                   ['RECORD_OPEN'].includes(record.status) && identity.id === record.provider
-                    ? <Button
-                      onlyIcon
-                      icon="check"
-                      iconFamily="antdesign"
-                      iconSize={theme.SIZES.SMALL_ICON}
-                      color="primary"
-                      iconColor={theme.COLORS.WHITE}
+                    ? <Button onlyIcon icon="check" iconFamily="antdesign"
+                      iconSize={theme.SIZES.SMALL_ICON} color="primary" iconColor={theme.COLORS.WHITE}
                       onPress={() => update(context, record.id, 'RECORD_UPDATE_STORE', recordInputs[idx].data)}
                     />
                     : null
                 }
-                <Button
-                  onlyIcon
-                  icon="sharealt"
-                  iconFamily="antdesign"
-                  iconSize={theme.SIZES.SMALL_ICON}
-                  color="primary"
+                <Button onlyIcon icon="sharealt"
+                  iconFamily="antdesign" iconSize={theme.SIZES.SMALL_ICON} color="primary"
                   iconColor={theme.COLORS.WHITE}
                   onPress={async () => {
                     try {
@@ -130,7 +125,7 @@ export const PersonalList = connect(
                 {
                   ['RECORD_OPEN'].includes(record.status)
                     ? <Button round size="large" style={styles.list_block_item_button}
-                      icon="pencil"
+                      icon="pencil" loading={loading} 
                       iconFamily="entypo"
                       iconSize={theme.SIZES.ICON}
                       color="primary"
@@ -142,7 +137,7 @@ export const PersonalList = connect(
                   ['RECORD_OPEN', 'RECORD_SIGNED'].includes(record.status)
                     && identity.id === record.provider
                     ? <Button round size="large" style={styles.list_block_item_button}
-                      icon="seal-variant"
+                      icon="seal-variant" loading={loading} 
                       iconFamily="material-community"
                       iconSize={theme.SIZES.ICON}
                       color="primary"
@@ -153,7 +148,7 @@ export const PersonalList = connect(
                 {
                   ['RECORD_OPEN', 'RECORD_SIGNED'].includes(record.status)
                     ? <Button round size="large" style={styles.list_block_item_button}
-                      icon="dislike2"
+                      icon="dislike2" loading={loading} 
                       iconFamily="antdesign"
                       iconSize={theme.SIZES.ICON}
                       color="primary"
@@ -165,7 +160,7 @@ export const PersonalList = connect(
                   ['RECORD_SIGNED', 'RECORD_SEALED', 'RECORD_WITHDRAWN', 'RECORD_REJECTED'].includes(record.status)
                     && identity.id === record.provider
                     ? <Button round size="large" style={styles.list_block_item_button}
-                      icon="reload"
+                      icon="reload" loading={loading} 
                       iconFamily="ionicon"
                       iconSize={theme.SIZES.ICON}
                       color="primary"

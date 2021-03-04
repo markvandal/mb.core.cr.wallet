@@ -147,29 +147,54 @@ const slice = createSlice({
   initialState: {
     list: [],
     newAuth: null,
+    loading: false,
   },
 
   reducers: {
   },
 
   extraReducers: {
+    [list.pending]: (state) => {
+      return { ...state, loading: true }
+    },
+    [list.rejected]: (state) => {
+      return { ...state, loading: false }
+    },
     [list.fulfilled]: (state, action) => {
-      return { ...state, list: action.payload }
+      return { ...state, list: action.payload, loading: false }
+    },
+    [load.pending]: (state) => {
+      return { ...state, loading: true }
+    },
+    [load.rejected]: (state) => {
+      return { ...state, loading: false }
     },
     [load.fulfilled]: (state, action) => {
       const newState = [...state.list]
       newState[action.meta.arg] = action.payload
 
-      return { ...state, list: newState }
+      return { ...state, list: newState, loading: false }
+    },
+    [request.pending]: (state) => {
+      return { ...state, loading: true }
+    },
+    [request.rejected]: (state) => {
+      return { ...state, loading: false }
     },
     [request.fulfilled]: (state, action) => {
-      return { ...state, ...action.payload }
+      return { ...state, ...action.payload, loading: false }
+    },
+    [sign.pending]: (state) => {
+      return { ...state, loading: true }
+    },
+    [sign.rejected]: (state) => {
+      return { ...state, loading: false }
     },
     [sign.fulfilled]: (state, action) => {
       const newState = [...state.list]
       newState[action.meta.arg] = action.payload
 
-      return { ...state, list: newState }
+      return { ...state, list: newState, loading: false }
     }
   }
 })

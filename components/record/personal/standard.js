@@ -9,12 +9,14 @@ import { Context } from '../../../context'
 import { recordActions } from '../../../store'
 import { list } from '../helper'
 import { styles } from '../../styles/main'
+import { loadAccount } from '../../../utils';
 
 
 export const StandardList = connect(
-  ({ record: { records }, wallet: { identity }, errors }, ownProps) => ({
+  ({ record: { records, loading }, wallet: { identity }, errors }, ownProps) => ({
     errors,
     identity,
+    loading,
     records,
     ...ownProps
   }),
@@ -63,7 +65,10 @@ export const StandardList = connect(
     },
     ...ownProps
   }),
-)(withGalio(({ navigation, list, createPassport, signPassport, records, identity, errors, styles }) => {
+)(withGalio(({
+  navigation, list, createPassport, signPassport,
+  records, identity, loading, errors, styles
+}) => {
   const context = useContext(Context)
   useFocusEffect(useCallback(() => { list() }, []))
 
@@ -137,14 +142,14 @@ export const StandardList = connect(
       !defaultRecordKeys.find(key => defaultRecords[key])
         || defaultRecordKeys.find(key => defaultRecords[key]?.status === 'RECORD_OPEN')
         || defaultRecordKeys.find(key => !defaultRecords[key])
-        ? <Button round size="large" style={styles.content_button}
+        ? <Button round size="large" style={styles.content_button} loading={loading}
           onPress={() => createPassport(context, notSetRecordInputs, defaultRecords)}>Сохранить</Button>
         : null
     }
     {
       defaultRecordKeys.find(key => defaultRecords[key])
         && defaultRecordKeys.find(key => defaultRecords[key]?.status === 'RECORD_OPEN')
-        ? <Button round size="large" style={styles.content_button}
+        ? <Button round size="large" style={styles.content_button} loading={loading}
           onPress={() => signPassport(context, defaultRecords)}>Подписать</Button>
         : null
     }
