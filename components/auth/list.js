@@ -3,7 +3,8 @@ import { useFocusEffect } from '@react-navigation/native';
 import { connect } from 'react-redux'
 import Clipboard from 'expo-clipboard'
 
-import { withGalio, Block, Button, Text, Card } from 'galio-framework'
+import { withGalio, Block, Button, Text } from 'galio-framework'
+import { Error } from '../error'
 
 import { Context } from '../../context'
 import { authActions } from '../../store'
@@ -12,8 +13,8 @@ import { styles } from '../styles/main';
 
 
 export const List = connect(
-  ({ auth: { list }, wallet: { identity } }, ownProps) =>
-    ({ auth: list, identity, ...ownProps }),
+  ({ auth: { list }, wallet: { identity }, errors }, ownProps) =>
+    ({ auth: list, identity, errors, ...ownProps }),
   (dispatch, ownProps) => ({
     list: async () => {
       const res = await dispatch(authActions.list())
@@ -26,7 +27,7 @@ export const List = connect(
     sign: idx => dispatch(authActions.sign(idx)),
     ...ownProps,
   }),
-)(withGalio(({ navigation, auth, identity, list, sign, theme, styles }) => {
+)(withGalio(({ navigation, auth, identity, list, sign, errors, theme, styles }) => {
   const context = useContext(Context)
   useFocusEffect(useCallback(() => { list() }, []))
 
@@ -70,29 +71,33 @@ export const List = connect(
                   <Text style={styles.app_info}>{sessionToken}</Text>
                 </Block>
 
+                <Block style={styles.list_block_item_content}>
+                  <Error hideBlock={idx !== errors.error?.meta?.arg} />
+                </Block>
+
                 <Block flex style={styles.list_block_item_actions}>
-                {
-                  (() => {
-                    switch (auth.status) {
-                      case 'AUTH_OPEN':
-                        return <Button round size="large" style={styles.list_block_item_button}
-                          icon="pencil"
-                          iconFamily="entypo"
-                          iconSize={20}
-                          color="primary"
-                          iconColor={theme.COLORS.WHITE}
-                          onPress={() => sign(idx)}>Подписать</Button>
-                      case 'AUTH_SIGNED':
-                        return <Button round size="large" style={styles.list_block_item_button}
-                          icon="sharealt"
-                          iconFamily="antdesign"
-                          iconSize={20}
-                          color="primary"
-                          iconColor={theme.COLORS.WHITE}
-                          onPress={() => Clipboard.setString(`${sessionToken}`)}>Скопировать ключ</Button>
-                    }
-                  })()
-                }
+                  {
+                    (() => {
+                      switch (auth.status) {
+                        case 'AUTH_OPEN':
+                          return <Button round size="large" style={styles.list_block_item_button}
+                            icon="pencil"
+                            iconFamily="entypo"
+                            iconSize={theme.SIZES.ICON}
+                            color="primary"
+                            iconColor={theme.COLORS.WHITE}
+                            onPress={() => sign(idx)}>Подписать</Button>
+                        case 'AUTH_SIGNED':
+                          return <Button round size="large" style={styles.list_block_item_button}
+                            icon="sharealt"
+                            iconFamily="antdesign"
+                            iconSize={theme.SIZES.ICON}
+                            color="primary"
+                            iconColor={theme.COLORS.WHITE}
+                            onPress={() => Clipboard.setString(`${sessionToken}`)}>Скопировать ключ</Button>
+                      }
+                    })()
+                  }
                 </Block>
               </Block>
             })()

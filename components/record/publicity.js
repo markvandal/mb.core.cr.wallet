@@ -16,8 +16,7 @@ export const Publicity = withGalio(
           Object.entries(context.getEnum('crsign.PublicityType').valuesById).filter(
             ([_, value]) => value != 'ANONYMOUS'
           ).map(
-            ([key, value]) => <Button
-              key={key} round size="large" style={styles.list_block_item_button}
+            ([key, value]) => <Button key={key} round size="large" style={styles.list_block_item_button}
               color={(current === value ? theme.COLORS.PRIMARY : theme.COLORS.TINTED)}
               textStyle={{ color: current === value ? theme.COLORS.WHITE : theme.COLORS.PRIMARY }}
               onPress={() => context.selectFunction(value, navigation)}

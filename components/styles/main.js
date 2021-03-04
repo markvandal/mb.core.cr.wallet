@@ -113,10 +113,13 @@ export const styles = theme => {
       width: 'auto',
     },
     error_block: {
-      margin: theme.SIZES.BASE,
       padding: theme.SIZES.BASE,
+      marginTop: theme.SIZES.BASE,
+      marginBottom: theme.SIZES.BASE * 2,
       backgroundColor: theme.COLORS.LIGHT_DANGER,
       borderColor: theme.COLORS.ERROR,
+      width: theme.SIZES.ERROR_WIDTH,
+      justifyContent: 'space-between',
     },
     error_block_close: {
       backgroundColor: 'rgba(254, 40, 100, 0.1)',
@@ -129,7 +132,9 @@ export const styles = theme => {
     },
     error_block_text: {
       ...fragment_font_default,
-      color: theme.COLORS.WHITE,
+      color: theme.COLORS.ERROR,
+      paddingTop: theme.SIZES.BASE * 2.5,
+      paddingBottom: theme.SIZES.BASE * 2,
     }
   })
 }

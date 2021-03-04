@@ -1,19 +1,20 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
-import { withGalio, Block, Button, Text, Card, Input } from 'galio-framework'
+import { withGalio, Block, Button, Text, Input } from 'galio-framework'
 import { authActions } from '../../store'
+import { Error } from '../error'
 
 import { styles } from '../styles/main';
 
 
 export const Request = connect(
-  ({ auth: { newAuth } }, ownProps) => ({ auth: newAuth, ...ownProps }),
+  ({ auth: { newAuth }, errors }, ownProps) => ({ auth: newAuth, errors, ...ownProps }),
   (dispatch, ownProps) => ({
     request: (identity) => dispatch(authActions.request(identity)),
     ...ownProps
   })
-)(withGalio(({ auth, request, theme, styles }) => {
+)(withGalio(({ auth, request, styles }) => {
   let identity = null
 
   return <Block flex center space="around">
@@ -23,6 +24,9 @@ export const Request = connect(
         <Input placeholder="Введите номер паспорта"
           style={styles.content_input}
           onRef={_ => identity = _} />
+      </Block>
+      <Block style={styles.list_block_item_content}>
+        <Error />
       </Block>
       <Button round size="large" style={styles.list_block_item_button}
         onPress={() => request(identity.value)}>Выслать</Button>

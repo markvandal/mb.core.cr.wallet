@@ -1,9 +1,9 @@
-import React, { useContext, useCallback, useEffect } from 'react'
+import React, { useContext, useCallback } from 'react'
 import { useFocusEffect } from '@react-navigation/native';
 import { connect } from 'react-redux'
 
-import { withGalio, Block, Button, Text, Card, Input } from 'galio-framework'
-import { alertError } from '../../error'
+import { withGalio, Block, Button, Text, Input } from 'galio-framework'
+import { alertError, Error } from '../../error'
 
 import { Context } from '../../../context'
 import { recordActions, walletActions } from '../../../store'
@@ -11,8 +11,9 @@ import { styles } from '../../styles/main'
 
 
 export const PublicList = connect(
-  ({ record: { records }, wallet: { targetIdentity, identity } }, ownProps) => ({
+  ({ record: { records }, wallet: { targetIdentity, identity }, errors }, ownProps) => ({
     records,
+    errors,
     targetIdentity,
     identity,
     ...ownProps
@@ -34,16 +35,10 @@ export const PublicList = connect(
       if (data !== undefined) {
         update.data = data
       }
-      const res = await dispatch(recordActions.update(update))
-      if (res.error) {
-        alertError(res.error.message)
-      }
+      await dispatch(recordActions.update(update))
     },
     validate: async (record, value) => {
-      const res = await dispatch(recordActions.validate({ record, value }))
-      if (res.error) {
-        alertError(res.error.message)
-      }
+      await dispatch(recordActions.validate({ record, value }))
     },
     create: (navigation, identity) => navigation.navigate('record.create', { identity }),
     ...ownProps
@@ -51,7 +46,7 @@ export const PublicList = connect(
 )(withGalio(({
   route: { params: { identityId } }, navigation,
   open, create, validate, update,
-  identity, targetIdentity, records,
+  identity, targetIdentity, records, errors,
   theme, styles
 }) => {
   const context = useContext(Context)
@@ -135,6 +130,11 @@ export const PublicList = connect(
                 <Text style={styles.list_block_item_label_value}>Провайдер:</Text>
                 <Text style={styles.list_block_item_label_value}>{record.provider}</Text>
               </Block>
+
+              <Block style={styles.list_block_item_content}>
+                <Error hideBlock={errors.error?.meta?.arg?.id !== record.id}/>
+              </Block>
+
               <Block flex style={styles.list_block_item_actions}>
                 {
                   ['RECORD_OPEN'].includes(record.status) && identity.id === record.provider

@@ -2,7 +2,8 @@ import React, { useContext } from 'react'
 import { connect } from 'react-redux'
 import { Context } from '../../context'
 
-import { withGalio, Block, Button, Input } from 'galio-framework'
+import { withGalio, Block, Button, Input, Text } from 'galio-framework'
+import { Error } from '../error'
 import { walletActions } from '../../store'
 import { styles } from '../styles/main'
 
@@ -11,8 +12,10 @@ export const WalletAuth = connect(
   (_, ownProps) => ({ ...ownProps }),
   (dispatch, ownProps) => ({
     connect: async (mnemonic, nav) => {
-      await dispatch(walletActions.openWithMnemoic(mnemonic))
-      nav.navigate('main')
+      const res = await dispatch(walletActions.openWithMnemoic(mnemonic))
+      if (!res.error) {
+        nav.navigate('main')
+      }
     },
     ...ownProps
   })
@@ -21,6 +24,7 @@ export const WalletAuth = connect(
   let mnemonic = null
 
   return <Block middle flex>
+    <Text style={styles.list_block_title}>Аутентификация</Text>
     <Input color={theme.COLORS.THEME}
       icon="profile"
       password
@@ -38,6 +42,9 @@ export const WalletAuth = connect(
           onPress={() => mnemonic.value = context.config.DEBUG_AUTH}>Fill default</Button>
         : null
     }
+    <Block style={styles.list_block_item_content}>
+      <Error />
+    </Block>
     <Button round size="large" style={styles.content_button}
       onPress={() => connect(mnemonic.value, navigation)}>Представиться</Button>
   </Block>

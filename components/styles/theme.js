@@ -12,9 +12,11 @@ export const customTheme = {
     GRAY: '#9EA8BD',
     TINTED: '#F7F7FA',
     ERROR: '#FE2472',
+    LIGHT_DANGER: '#FDECEA',
   },
   SIZES: {
     BUTTON_WIDTH: window.width - 30,
+    ERROR_WIDTH: window.width - 30,
     INPUT_WIDTH: window.width - 38,
     BORDER_RADIUS: 3,
     BASE: 5,

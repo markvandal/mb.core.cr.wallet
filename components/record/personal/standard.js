@@ -127,8 +127,7 @@ export const StandardList = connect(
                 </Block>
             }
             <Error hideBlock={
-              (errors.error?.meta?.arg?.id !== record.id && errors.error?.meta?.arg?.key !== key)
-              || !errors.error
+              errors.error?.meta?.arg?.id !== record.id && errors.error?.meta?.arg?.key !== key
             } />
           </Block>
         })

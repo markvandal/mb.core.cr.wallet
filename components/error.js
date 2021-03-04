@@ -8,31 +8,23 @@ import { styles } from './styles/main'
 
 
 export const Error = connect(
-  ({ errors }) => ({
-    errors
-  }),
-  (dispatch, ownProps) => ({
-    close: () => dispatch(errorsActions.reset())
+  ({ errors }, ownProps) => ({ errors, ...ownProps }),
+  (dispatch) => ({
+    close: _ => dispatch(errorsActions.reset())
   })
 )(withGalio(
   ({ errors, close, theme, styles, hideBlock }) => {
-    return hideBlock ? null : <Block card flex row style={styles.error_block}>
-      {
-        errors.error
-          ? <Fragment>
-            <Text style={styles.error_block_text}>{errors.error.error.message}</Text>
-            <Button
-              onlyIcon
-              icon="close"
-              iconFamily="antdesign"
-              iconSize={theme.SIZES.ICON}
-              iconColor={theme.COLORS.WHITE}
-              onPress={close}
-              style={styles.error_block_close}
-            />
-          </Fragment>
-          : null
-      }
+    return hideBlock || !errors.error ? null : <Block card flex row style={styles.error_block}>
+      <Text style={styles.error_block_text}>{errors.error.error.message}</Text>
+      <Button
+        onlyIcon
+        icon="close"
+        iconFamily="antdesign"
+        iconSize={theme.SIZES.ICON}
+        iconColor={theme.COLORS.ERROR}
+        onPress={close}
+        style={styles.error_block_close}
+      />
     </Block>
   }, styles))
 

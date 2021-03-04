@@ -97,7 +97,9 @@ export const PersonalList = connect(
                   }}
                 />
               </Block>
-              <Error hideBlock={errors.error?.meta?.arg?.id !== record.id}/>
+              <Block style={styles.list_block_item_content}>
+                <Error hideBlock={errors.error?.meta?.arg?.id !== record.id}/>
+              </Block>
               <Block row middle style={styles.list_block_item_header}>
                 <Text style={styles.list_block_item_label_value}>Статус верификации:</Text>
                 <Text style={styles.list_block_item_label_value}>{record.verified ? 'TRUE' : 'FALSE'}</Text>

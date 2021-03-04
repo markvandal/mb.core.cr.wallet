@@ -3,7 +3,7 @@ import React, { useContext } from 'react'
 import { connect } from 'react-redux'
 
 import { withGalio, Block, Button, Text, Input } from 'galio-framework'
-import { alertError } from '../error'
+import { Error } from '../error'
 
 import { recordActions } from '../../store'
 import { Context } from '../../context'
@@ -11,16 +11,15 @@ import { styles } from '../styles/main'
 
 
 export const Create = connect(
-  ({ record: { newRecord: createUI } }, ownProps) => ({
+  ({ record: { newRecord: createUI }, errors }, ownProps) => ({
     createUI,
+    errors,
     ...ownProps
   }),
   (dispatch, ownProps) => ({
     create: async (navigation, record) => {
       const res = await dispatch(recordActions.create(record))
-      if (res.error) {
-        alertError(res.error.message)
-      } else {
+      if (!res.error) {
         navigation.goBack()
       }
     },
@@ -61,6 +60,9 @@ export const Create = connect(
           }
           navigation.navigate('record.publicity', { current: createUI.publicity })
         }}>{`Публичность: ${createUI.publicity}`}</Button>
+      <Block style={styles.list_block_item_content}>
+        <Error />
+      </Block>
       <Button round size="large" style={styles.list_block_item_button}
         onPress={_ => create(navigation, {
           identity,
