@@ -9,7 +9,7 @@ import { styles } from '../styles/main'
 
 
 export const WalletAuth = connect(
-  (_, ownProps) => ({ ...ownProps }),
+  ({ wallet: { loading } }, ownProps) => ({ loading, ...ownProps }),
   (dispatch, ownProps) => ({
     connect: async (mnemonic, nav) => {
       const res = await dispatch(walletActions.openWithMnemoic(mnemonic))
@@ -19,7 +19,7 @@ export const WalletAuth = connect(
     },
     ...ownProps
   })
-)(withGalio(({ navigation, connect, theme, styles }) => {
+)(withGalio(({ navigation, connect, loading, theme, styles }) => {
   const context = useContext(Context)
   let mnemonic = null
 
@@ -38,7 +38,7 @@ export const WalletAuth = connect(
     <Block style={styles.list_block_item_content}>
       <Error />
     </Block>
-    <Button round size="large" style={styles.content_button}
+    <Button round size="large" style={styles.content_button} loading={loading}
       onPress={() => connect(mnemonic.value, navigation)}>Представиться</Button>
   </Block>
 }, styles))

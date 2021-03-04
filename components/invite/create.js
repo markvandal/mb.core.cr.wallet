@@ -12,8 +12,8 @@ import { styles } from '../styles/main'
 
 
 export const Create = connect(
-  ({ invite: { currentInvite, newInvite } }, ownProps) =>
-    ({ ...ownProps, invite: currentInvite, createUI: newInvite }),
+  ({ invite: { currentInvite, newInvite, loading } }, ownProps) =>
+    ({ ...ownProps, loading, invite: currentInvite, createUI: newInvite }),
   (dispatch, ownProps) => ({
     switchLevel: level => dispatch(inviteActions.switchLevel(level)),
     switchType: type => dispatch(inviteActions.switchType(type)),
@@ -34,13 +34,8 @@ export const Create = connect(
           <Text style={styles.list_block_title}>Приглашение создано</Text>
           <Block row middle style={styles.list_block_item_content}>
             <Text style={styles.app_text}>{`${invite.inviteId} ${invite.mnemonic}`}</Text>
-            <Button
-              onlyIcon
-              icon="sharealt"
-              iconFamily="antdesign"
-              iconSize={theme.SIZES.ICON}
-              color="primary"
-              iconColor={theme.COLORS.WHITE}
+            <Button onlyIcon icon="sharealt" iconFamily="antdesign" iconSize={theme.SIZES.ICON}
+              color="primary" iconColor={theme.COLORS.WHITE}
               onPress={async () => {
                 try {
                   await Share.share(
@@ -78,7 +73,7 @@ export const Create = connect(
           <Block style={styles.list_block_item_content}>
             <Error />
           </Block>
-          <Button round size="large" style={styles.list_block_item_button}
+          <Button round size="large" style={styles.list_block_item_button} loading={loading}
             onPress={() => create(context, createUI.type, createUI.level)}>Создать</Button>
         </Block>
     }
