@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { StatusBar } from 'expo-status-bar'
 
 import { Provider } from 'react-redux'
+import * as Analytics from 'expo-firebase-analytics'
 
 import { GalioProvider } from 'galio-framework'
-
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 
@@ -37,6 +37,8 @@ const { Navigator, Screen } = createStackNavigator()
 
 const App = () => {
   const [fontsLoaded] = useFonts({ regular: Roboto_400Regular, bold: Roboto_700Bold })
+  const navigationRef = useRef()
+  const routeNameRef = useRef()
 
   if (!fontsLoaded) {
     return <AppLoading />
@@ -44,13 +46,27 @@ const App = () => {
 
   return <Provider store={store}>
     <GalioProvider theme={customTheme}>
-      <NavigationContainer theme={{
+      <NavigationContainer ref={navigationRef} theme={{
         ...DefaultTheme,
         colors: {
           ...DefaultTheme.colors,
           background: customTheme.COLORS.WHITE,
         }
-      }}>
+      }}
+        onReady={() =>
+          (routeNameRef.current = navigationRef.current.getCurrentRoute().name)
+        }
+        onStateChange={async () => {
+          const previousRouteName = routeNameRef.current;
+          const currentRouteName = navigationRef.current.getCurrentRoute().name;
+
+          if (previousRouteName !== currentRouteName) {
+            await Analytics.setCurrentScreen(currentRouteName)
+            Analytics.logEvent(`navigate.${currentRouteName}`)
+          }
+
+          routeNameRef.current = currentRouteName;
+        }}>
         <Navigator initialRouteName="main"
           screenOptions={_ => ({
             title: `Meta-Belarus ID${store.getState().wallet?.identity?.id

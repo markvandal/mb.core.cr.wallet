@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-
+import * as Analytics from 'expo-firebase-analytics'
 import { connect } from 'react-redux'
 
 import { withGalio, Block, Button, Text, Input } from 'galio-framework'
@@ -18,8 +18,10 @@ export const Create = connect(
   }),
   (dispatch, ownProps) => ({
     create: async (navigation, record) => {
+      Analytics.logEvent('record.create.try')
       const res = await dispatch(recordActions.create(record))
       if (!res.error) {
+        Analytics.logEvent('record.create.success')
         navigation.goBack()
       }
     },

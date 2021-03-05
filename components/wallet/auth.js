@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import { connect } from 'react-redux'
 import { Context } from '../../context'
+import * as Analytics from 'expo-firebase-analytics'
 
 import { withGalio, Block, Button, Input, Text } from 'galio-framework'
 import { Error } from '../error'
@@ -12,8 +13,10 @@ export const WalletAuth = connect(
   ({ wallet: { loading } }, ownProps) => ({ loading, ...ownProps }),
   (dispatch, ownProps) => ({
     connect: async (mnemonic, nav) => {
+      Analytics.logEvent('wallet.auth.try')
       const res = await dispatch(walletActions.openWithMnemoic(mnemonic))
       if (!res.error) {
+        Analytics.logEvent('wallet.auth.success')
         nav.navigate('main')
       }
     },

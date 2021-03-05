@@ -1,9 +1,10 @@
 import React, { useContext, useCallback } from 'react'
 import { useFocusEffect } from '@react-navigation/native';
 import { connect } from 'react-redux'
+import * as Analytics from 'expo-firebase-analytics'
 
 import { withGalio, Block, Button, Text, Input } from 'galio-framework'
-import { alertError, Error } from '../../error'
+import { Error } from '../../error'
 
 import { Context } from '../../../context'
 import { recordActions, walletActions } from '../../../store'
@@ -32,13 +33,18 @@ export const PublicList = connect(
       )
     },
     update: async (context, id, action, data = undefined) => {
+      Analytics.logEvent('record.public.update.try')
       const update = { id, action: context.value(`RecordUpdate.${action}`, 'crsign') }
       if (data !== undefined) {
         update.data = data
       }
-      await dispatch(recordActions.update(update))
+      const res = await dispatch(recordActions.update(update))
+      if (!res.error) {
+        Analytics.logEvent('record.public.update.success')
+      }
     },
     validate: async (record, value) => {
+      Analytics.logEvent('record.public.validate.try')
       await dispatch(recordActions.validate({ record, value }))
     },
     create: (navigation, identity) => navigation.navigate('record.create', { identity }),

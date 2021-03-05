@@ -1,7 +1,8 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import { Share } from 'react-native'
 import Clipboard from 'expo-clipboard'
+import * as Analytics from 'expo-firebase-analytics'
 
 import { withGalio, Block, Button, Text, Input } from 'galio-framework'
 import { Error } from '../error'
@@ -15,12 +16,14 @@ export const Accept = connect(
     ({ newAccount, loading, ...ownProps }),
   (dispatch, ownProps) => ({
     accept: async (navigation, sequence) => {
+      Analytics.logEvent('invite.accept.try')
       const res = await dispatch(inviteActions.accept(sequence))
       if (!res.error) {
         const mnemonic = res.payload?.newAccount?.mnemonic
         if (mnemonic) {
           const res = await dispatch(walletActions.openWithMnemoic(mnemonic))
           if (!res.error) {
+            Analytics.logEvent('invite.accept.success')
             navigation.setParams({})
           }
         }
@@ -70,6 +73,10 @@ export const Accept = connect(
           <Block style={styles.list_block_item}>
             <Input placeholder="Код приглашения"
               style={styles.content_input} onRef={_ => sequence = _} />
+          </Block>
+
+          <Block style={styles.list_block_item_content}>
+            <Error />
           </Block>
           <Button round size="large" style={styles.list_block_item_button} loading={loading}
             onPress={() => accept(navigation, sequence.value)}>Создать паспорт</Button>

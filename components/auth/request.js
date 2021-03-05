@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import * as Analytics from 'expo-firebase-analytics'
 
 import { withGalio, Block, Button, Text, Input } from 'galio-framework'
 import { authActions } from '../../store'
@@ -16,7 +17,13 @@ export const Request = connect(
     ...ownProps
   }),
   (dispatch, ownProps) => ({
-    request: (identity) => dispatch(authActions.request(identity)),
+    request: async (identity) => {
+      Analytics.logEvent('auth.request.try')
+      const res = dispatch(authActions.request(identity))
+      if (!res.error) {
+        Analytics.logEvent('auth.request.success')
+      }
+    },
     ...ownProps
   })
 )(withGalio(({ auth, request, loading, styles }) => {

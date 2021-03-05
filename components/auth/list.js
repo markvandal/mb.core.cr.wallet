@@ -2,6 +2,7 @@ import React, { useContext, useCallback, useEffect } from 'react'
 import { useFocusEffect } from '@react-navigation/native';
 import { connect } from 'react-redux'
 import Clipboard from 'expo-clipboard'
+import * as Analytics from 'expo-firebase-analytics'
 
 import { withGalio, Block, Button, Text } from 'galio-framework'
 import { Error } from '../error'
@@ -29,7 +30,13 @@ export const List = connect(
         }
       }
     },
-    sign: idx => dispatch(authActions.sign(idx)),
+    sign: async idx => {
+      Analytics.logEvent('auth.sign.try')
+      const res = await dispatch(authActions.sign(idx))
+      if (!res.error) {
+        Analytics.logEvent('auth.sign.success')
+      }
+    },
     ...ownProps,
   }),
 )(withGalio(({

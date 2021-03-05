@@ -26,7 +26,15 @@
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "config": {
+        "firebase": {
+          "appId": "1:672393487032:web:b33b80de3e3fd64d95ca4d",
+          "measurementId": "G-DMPYBH06KF",
+          "projectId": "meta-belarus-id",
+          "apiKey": "AIzaSyBxW-fkJWz-0XxBTCtgml2lvUYtub4jC3E"
+        }
+      }
     }
   }
 }

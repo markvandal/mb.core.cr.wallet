@@ -1,6 +1,7 @@
 import React, { useContext, useCallback, useEffect } from 'react'
 import { useFocusEffect } from '@react-navigation/native';
 import { connect } from 'react-redux'
+import * as Analytics from 'expo-firebase-analytics'
 
 import { withGalio, Block, Button, Text, Input } from 'galio-framework'
 import { Error } from '../../error'
@@ -9,7 +10,6 @@ import { Context } from '../../../context'
 import { recordActions } from '../../../store'
 import { list } from '../helper'
 import { styles } from '../../styles/main'
-import { loadAccount } from '../../../utils';
 
 
 export const StandardList = connect(
@@ -23,6 +23,7 @@ export const StandardList = connect(
   (dispatch, ownProps) => ({
     list: list(dispatch),
     createPassport: async (context, inputs, records) => {
+      Analytics.logEvent('record.standard.passport.create')
       const keys = context.config.listDefaultRecords()
       for (const key of keys) {
         const record = records[key]
@@ -47,6 +48,7 @@ export const StandardList = connect(
     },
     signPassport: async (context, records) => {
       const keys = context.config.listDefaultRecords()
+      Analytics.logEvent('record.standard.passport.sign')
       for (const key of keys) {
         const record = records[key]
         if (record && record.id && record.status === 'RECORD_OPEN') {

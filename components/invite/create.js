@@ -2,6 +2,7 @@ import React, { useContext } from 'react'
 import { connect } from 'react-redux'
 import { Share } from 'react-native'
 import Clipboard from 'expo-clipboard'
+import * as Analytics from 'expo-firebase-analytics'
 
 import { withGalio, Block, Button, Text } from 'galio-framework'
 import { Error } from '../error'
@@ -17,11 +18,16 @@ export const Create = connect(
   (dispatch, ownProps) => ({
     switchLevel: level => dispatch(inviteActions.switchLevel(level)),
     switchType: type => dispatch(inviteActions.switchType(type)),
-    create: (context, type, level) =>
-      dispatch(inviteActions.create({
+    create: (context, type, level) => {
+      Analytics.logEvent('invite.create.try')
+      const res = dispatch(inviteActions.create({
         type: context.value(`IdentityType.${type}`),
         level: context.value(`IdentityLevel.${level}`),
-      })),
+      }))
+      if (!res.error) {
+        Analytics.logEvent('invite.create.success')
+      }
+    },
     ...ownProps,
   }),
 )(withGalio(({
