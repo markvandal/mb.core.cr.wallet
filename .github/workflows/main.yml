@@ -1,0 +1,40 @@
+on:
+  workflow_dispatch:
+  push:
+    branches: 
+      - ops
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: 'design'
+    - name: create env for build
+      run: | 
+        mv .env.copy .env
+        sed -i 's/localhost:26657/${{ secrets.HOST }}:26657/g' .env
+        sed -i 's/localhost:1317/${{ secrets.HOST }}:1317/g' .env
+    - name: Use Node.js 15
+      uses: actions/setup-node@v1
+      with:
+        node-version: '15'
+    - name: install dependences
+      run: npm install --global expo-cli
+    - run: npm install
+    - run: expo build:web
+    - name: Install SSH key
+      uses: shimataro/ssh-key-action@v2
+      with:
+        key: ${{ secrets.SSH_KEY }}
+        known_hosts: ${{ secrets.HOST }}
+        config: |
+          Host stagehost
+          HostName ${{ secrets.HOST }}
+          User ${{ secrets.USER }}
+          IdentityFile ~/.ssh/id_rsa
+    - name: set known hosts
+      run: ssh-keyscan -H ${{ secrets.HOST }} >> ~/.ssh/known_hosts
+    - name: sync over ssh
+      run: rsync -a --recursive web-build/* stagehost:/var/www/html
