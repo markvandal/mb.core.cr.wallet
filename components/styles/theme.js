@@ -1,7 +1,8 @@
 
-import { Dimensions } from 'react-native'
-
+import { Dimensions, Platform } from 'react-native'
 const window = Dimensions.get('window')
+
+const width = Platform.OS === 'web' ? 350 : window.width
 
 export const customTheme = {
   COLORS: {
@@ -15,9 +16,10 @@ export const customTheme = {
     LIGHT_DANGER: '#FDECEA',
   },
   SIZES: {
-    BUTTON_WIDTH: window.width - 30,
-    ERROR_WIDTH: window.width - 30,
-    INPUT_WIDTH: window.width - 38,
+    BUTTON_WIDTH: width - 30,
+    ERROR_WIDTH: width - 30,
+    INPUT_WIDTH: width - 38,
+    NAVBAR_WIDTH: width,
     BORDER_RADIUS: 3,
     BASE: 5,
     SIZE: 16,

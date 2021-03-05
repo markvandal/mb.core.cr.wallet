@@ -6,7 +6,8 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "postinstall": "./fix.sh"
+    "postinstall": "./fix.sh",
+    "build:web": "expo build:web --no-pwa"
   },
   "dependencies": {
     "@cosmjs/launchpad": "0.24.0-alpha.17",
@@ -40,7 +41,8 @@
   "devDependencies": {
     "@babel/core": "~7.9.0",
     "@expo/webpack-config": "^0.12.53",
-    "babel-plugin-inline-dotenv": "^1.6.0"
+    "babel-plugin-inline-dotenv": "^1.6.0",
+    "babel-preset-expo": "^8.3.0"
   },
   "private": true
 }

@@ -25,6 +25,7 @@ export const styles = theme => {
     },
     header: {
       height: 144,
+      width: theme.SIZES.NAVBAR_WIDTH,
     },
     header_block: {
       height: 96,
