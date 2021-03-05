@@ -1,9 +1,7 @@
 on:
-  workflow_dispatch:
   push:
     branches: 
-      - ops
-  
+      - disign
 jobs:
   build:
     runs-on: ubuntu-latest
