@@ -14,8 +14,10 @@ jobs:
     - name: create env for build
       run: | 
         mv .env.copy .env
-        sed -i 's/localhost:26657/${{ secrets.HOST }}:26657/g' .env
-        sed -i 's/localhost:1317/${{ secrets.HOST }}:1317/g' .env
+        sed -i 's/http:\/\/localhost:26657/https:\/\/${{ secrets.HOST }}:26657/g' .env
+        sed -i 's/http:\/\/localhost:1317/https:\/\/${{ secrets.HOST }}:1317/g' .env
+        sed -i 's/ws:\/\/localhost/wss:\/\/${{ secrets.HOST }}/g' .env
+    - run: cat .env    
     - name: Use Node.js 15
       uses: actions/setup-node@v1
       with:
@@ -25,7 +27,7 @@ jobs:
     - run: npm install
     - run: expo build:web
     - uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: "${{ secrets.GITHUB_TOKEN }}"
-          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}"
-          target: 'meta-belarus-id-github'
+      with:
+        repoToken: "${{ secrets.GITHUB_TOKEN }}"
+        firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}"
+        target: 'meta-belarus-id-github'
