@@ -1,8 +1,7 @@
 on:
-  workflow_dispatch:
   push:
     branches: 
-      - design
+      - main
   
 jobs:
   build:
@@ -10,14 +9,13 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        ref: 'design'
+        ref: 'main'
     - name: create env for build
       run: | 
-        mv .env.copy .env
+        cp .env.copy .env
         sed -i 's/http:\/\/localhost:26657/https:\/\/${{ secrets.HOST }}:26657/g' .env
         sed -i 's/http:\/\/localhost:1317/https:\/\/${{ secrets.HOST }}:1317/g' .env
-        sed -i 's/ws:\/\/localhost/wss:\/\/${{ secrets.HOST }}/g' .env
-    - run: cat .env    
+        sed -i 's/ws:\/\/localhost:1317/wss:\/\/${{ secrets.HOST }}:26657/g' .env
     - name: Use Node.js 15
       uses: actions/setup-node@v1
       with:
@@ -27,7 +25,8 @@ jobs:
     - run: npm install
     - run: expo build:web
     - uses: FirebaseExtended/action-hosting-deploy@v0
-      with:
-        repoToken: "${{ secrets.GITHUB_TOKEN }}"
-        firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}"
-        target: 'meta-belarus-id-github'
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}"
+          projectId: meta-belarus-id
+          target: meta-belarus-id-github
