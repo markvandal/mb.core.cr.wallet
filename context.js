@@ -65,11 +65,6 @@ export const context = {
         types: ['CITIZEN', 'FOREIGNER', 'DIASPORA_MEMBER'],
       },
       {
-        key: 'mb.citizen.self.secondname',
-        label: 'Отчество',
-        types: ['CITIZEN', 'FOREIGNER', 'DIASPORA_MEMBER'],
-      },
-      {
         key: 'mb.citizen.self.lastname',
         label: 'Фамилия',
         types: ['CITIZEN', 'FOREIGNER', 'DIASPORA_MEMBER'],
@@ -86,11 +81,6 @@ export const context = {
         defaults: {
           CITIZEN: 'Republic of Belarus',
         }
-      },
-      {
-        key: 'mb.citizen.self.nationality',
-        label: 'Национальность',
-        types: ['CITIZEN', 'FOREIGNER', 'DIASPORA_MEMBER'],
       },
       {
         key: 'mb.citizen.self.birthplace',
