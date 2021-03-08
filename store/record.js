@@ -236,6 +236,7 @@ const slice = createSlice({
     records: [],
     createdRecord: null,
     loadedRecord: null,
+    loading: false,
     newRecord: {
       publicity: 'PRIVATE',
       type: null,
@@ -252,22 +253,52 @@ const slice = createSlice({
   },
 
   extraReducers: {
+    [create.pending]: (state) => {
+      return { ...state, loading: true }
+    },
+    [create.rejected]: (state) => {
+      return { ...state, loading: false }
+    },
     [create.fulfilled]: (state, { payload }) => {
-      return { ...state, ...payload }
+      return { ...state, ...payload, loading: false }
+    },
+    [load.pending]: (state) => {
+      return { ...state, loading: true }
+    },
+    [load.rejected]: (state) => {
+      return { ...state, loading: false }
     },
     [load.fulfilled]: (state, { payload }) => {
       const record = payload.loadedRecord
 
       return _addRecord(state, record)
     },
+    [update.pending]: (state) => {
+      return { ...state, loading: true }
+    },
+    [update.rejected]: (state) => {
+      return { ...state, loading: false }
+    },
     [update.fulfilled]: (state, { payload: record }) => {
       return _addRecord(state, record)
+    },
+    [validate.pending]: (state) => {
+      return { ...state, loading: true }
+    },
+    [validate.rejected]: (state) => {
+      return { ...state, loading: false }
     },
     [validate.fulfilled]: (state, { payload: record }) => {
       return _addRecord(state, record)
     },
+    [loadAll.pending]: (state) => {
+      return { ...state, loading: true }
+    },
+    [loadAll.rejected]: (state) => {
+      return { ...state, loading: false }
+    },
     [loadAll.fulfilled]: (state, { payload: { records } }) => {
-      return { ...state, records }
+      return { ...state, records, loading: false }
     },
   }
 })
@@ -285,6 +316,7 @@ const _addRecord = (state, record) => {
     ...state,
     records,
     loadedRecord: record,
+    loading: false,
   }
 }
 

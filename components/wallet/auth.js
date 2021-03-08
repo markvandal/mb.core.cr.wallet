@@ -1,37 +1,47 @@
 import React, { useContext } from 'react'
 import { connect } from 'react-redux'
 import { Context } from '../../context'
+import * as Analytics from 'expo-firebase-analytics'
 
-import { withGalio, Block, Button, Input } from 'galio-framework'
-import { walletActions, inviteActions } from '../../store'
+import { withGalio, Block, Button, Input, Text } from 'galio-framework'
+import { Error } from '../error'
+import { walletActions } from '../../store'
+import { styles } from '../styles/main'
 
 
 export const WalletAuth = connect(
-  (_, ownProps) => ({ ...ownProps }),
+  ({ wallet: { loading } }, ownProps) => ({ loading, ...ownProps }),
   (dispatch, ownProps) => ({
     connect: async (mnemonic, nav) => {
-      await dispatch(walletActions.openWithMnemoic(mnemonic))
-      nav.navigate('main')
+      Analytics.logEvent('wallet.auth.try')
+      const res = await dispatch(walletActions.openWithMnemoic(mnemonic))
+      if (!res.error) {
+        Analytics.logEvent('wallet.auth.success')
+        nav.navigate('main')
+      }
     },
     ...ownProps
   })
-)(withGalio(({ navigation, connect, theme }) => {
+)(withGalio(({ navigation, connect, loading, theme, styles }) => {
   const context = useContext(Context)
   let mnemonic = null
 
-  return <Block>
-    <Input color={theme.COLORS.THEME}
-      icon="heart"
-      family="antdesign"
-      iconSize={22}
-      iconColor="red"
-      style={{ borderColor: theme.COLORS.THEME }}
-      onRef={_ => mnemonic = _} />
+  return <Block middle flex>
+    <Text style={styles.list_block_title}>Аутентификация</Text>
+    <Input color={theme.COLORS.THEME} icon="profile" password
+      viewPass family="antdesign" iconSize={theme.SIZES.ICON}
+      iconColor={theme.COLORS.THEME} style={styles.auth_input}
+      multiline numberOfLines={5} onRef={_ => mnemonic = _} />
     {
       context.config.DEBUG_AUTH
-        ? <Button round uppercase onPress={() => mnemonic.value = context.config.DEBUG_AUTH}>Fill default</Button>
+        ? <Button round size="large" style={styles.content_button}
+          onPress={() => mnemonic.value = context.config.DEBUG_AUTH}>Fill default</Button>
         : null
     }
-    <Button round uppercase onPress={() => connect(mnemonic.value, navigation)}>Sign In</Button>
+    <Block style={styles.list_block_item_content}>
+      <Error />
+    </Block>
+    <Button round size="large" style={styles.content_button} loading={loading}
+      onPress={() => connect(mnemonic.value, navigation)}>Представиться</Button>
   </Block>
-}))
+}, styles))

@@ -84,8 +84,6 @@ const load = createAsyncThunk(
 const request = createAsyncThunk(
   'auth/request',
   async (identity, { extra: context, getState }) => {
-    const _produceError = error => ({ newAuth: { error } })
-
     try {
       const key = v4()
 
@@ -94,7 +92,7 @@ const request = createAsyncThunk(
       const accAddress = body.Addr?.address
 
       if (!accAddress) {
-        return _produceError(`No address under specified id ${identity}`)
+        throw new Error(`No address under specified id ${identity}`)
       }
 
       const account = (await axios.get(
@@ -102,12 +100,12 @@ const request = createAsyncThunk(
       )).data.result?.value
 
       if (!account) {
-        return _produceError(`No account information under the address ${accAddress}`)
+        throw new Error(`No account information under the address ${accAddress}`)
       }
 
       const encKey = encrypt(account.public_key?.value, key)
       if (!encKey) {
-        return _produceError(`Can't get encrypted key with pubkey: ${account.public_key?.value}`)
+        throw new Error(`Can't get encrypted key with pubkey: ${account.public_key?.value}`)
       }
 
       const tx = await createTx(
@@ -137,7 +135,7 @@ const request = createAsyncThunk(
     } catch (e) {
       console.log(e)
 
-      return _produceError(`${e}`)
+      throw e
     }
   }
 )
@@ -149,29 +147,54 @@ const slice = createSlice({
   initialState: {
     list: [],
     newAuth: null,
+    loading: false,
   },
 
   reducers: {
   },
 
   extraReducers: {
+    [list.pending]: (state) => {
+      return { ...state, loading: true }
+    },
+    [list.rejected]: (state) => {
+      return { ...state, loading: false }
+    },
     [list.fulfilled]: (state, action) => {
-      return { ...state, list: action.payload }
+      return { ...state, list: action.payload, loading: false }
+    },
+    [load.pending]: (state) => {
+      return { ...state, loading: true }
+    },
+    [load.rejected]: (state) => {
+      return { ...state, loading: false }
     },
     [load.fulfilled]: (state, action) => {
       const newState = [...state.list]
       newState[action.meta.arg] = action.payload
 
-      return { ...state, list: newState }
+      return { ...state, list: newState, loading: false }
+    },
+    [request.pending]: (state) => {
+      return { ...state, loading: true }
+    },
+    [request.rejected]: (state) => {
+      return { ...state, loading: false }
     },
     [request.fulfilled]: (state, action) => {
-      return { ...state, ...action.payload }
+      return { ...state, ...action.payload, loading: false }
+    },
+    [sign.pending]: (state) => {
+      return { ...state, loading: true }
+    },
+    [sign.rejected]: (state) => {
+      return { ...state, loading: false }
     },
     [sign.fulfilled]: (state, action) => {
       const newState = [...state.list]
       newState[action.meta.arg] = action.payload
 
-      return { ...state, list: newState }
+      return { ...state, list: newState, loading: false }
     }
   }
 })

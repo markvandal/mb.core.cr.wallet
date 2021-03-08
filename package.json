@@ -6,12 +6,14 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "postinstall": "./fix.sh"
+    "postinstall": "./fix.sh",
+    "build:web": "expo build:web --no-pwa"
   },
   "dependencies": {
     "@cosmjs/launchpad": "0.24.0-alpha.17",
     "@cosmjs/proto-signing": "0.24.0-alpha.17",
     "@cosmjs/stargate": "0.24.0-alpha.17",
+    "@expo-google-fonts/roboto": "^0.1.0",
     "@react-navigation/native": "^5.9.2",
     "@react-navigation/stack": "^5.14.1",
     "@reduxjs/toolkit": "^1.5.0",
@@ -21,10 +23,14 @@
     "ecdh": "^0.1.1",
     "eciesjs": "^0.3.9",
     "expo": "~40.0.0",
+    "expo-app-loading": "^1.0.1",
     "expo-clipboard": "~1.0.1",
     "expo-crypto": "~8.4.0",
+    "expo-firebase-analytics": "~2.6.0",
+    "expo-font": "~8.4.0",
     "expo-sharing": "~8.5.0",
     "expo-status-bar": "~1.0.3",
+    "firebase": "7.9.0",
     "galio-framework": "^0.7.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
@@ -37,7 +43,8 @@
   "devDependencies": {
     "@babel/core": "~7.9.0",
     "@expo/webpack-config": "^0.12.53",
-    "babel-plugin-inline-dotenv": "^1.6.0"
+    "babel-plugin-inline-dotenv": "^1.6.0",
+    "babel-preset-expo": "^8.3.0"
   },
   "private": true
 }

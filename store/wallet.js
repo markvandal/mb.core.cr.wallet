@@ -82,6 +82,7 @@ const slice = createSlice({
     mnemonic: null,
     identity: null,
     targetIdentity: null,
+    loading: false,
   },
 
   reducers: {
@@ -91,11 +92,23 @@ const slice = createSlice({
   },
 
   extraReducers: {
+    [openWithMnemoic.pending]: (state) => {
+      return { ...state, loading: true }
+    },
+    [openWithMnemoic.rejected]: (state) => {
+      return { ...state, loading: false }
+    },
     [openWithMnemoic.fulfilled]: (state, action) => {
-      return { ...state, ...action.payload }
+      return { ...state, ...action.payload, loading: false }
+    },
+    [open.pending]: (state) => {
+      return { ...state, loading: true }
+    },
+    [open.rejected]: (state) => {
+      return { ...state, loading: false }
     },
     [open.fulfilled]: (state, { payload }) => {
-      return { ...state, ...payload }
+      return { ...state, ...payload, loading: false }
     }
   }
 })
