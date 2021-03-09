@@ -1,4 +1,5 @@
 on:
+  workflow_dispatch:
   push:
     branches: 
       - main
@@ -26,11 +27,11 @@ jobs:
     - run: npm install
     - run: expo build:web
     - uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUN }}'
-          projectId: meta-belarus-id
-          channelId: live
-          target: meta-belarus-id-test
-        env:
-          FIREBASE_CLI_PREVIEWS: hostingchannels
+      with:
+        repoToken: '${{ secrets.GITHUB_TOKEN }}'
+        firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
+        projectId: meta-belarus-id
+        channelId: live
+        target: meta-belarus-id-test
+      env:
+        FIREBASE_CLI_PREVIEWS: hostingchannels
