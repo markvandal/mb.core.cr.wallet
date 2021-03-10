@@ -16,7 +16,7 @@ jobs:
         cp .env.copy .env
         sed -i 's/http:\/\/localhost:26657/https:\/\/${{ secrets.HOST }}:26657/g' .env
         sed -i 's/http:\/\/localhost:1317/https:\/\/${{ secrets.HOST }}:1317/g' .env
-        sed -i 's/ws:\/\/localhost:1317/wss:\/\/${{ secrets.HOST }}:26657/g' .env
+        sed -i 's/ws:\/\/localhost:26657/wss:\/\/${{ secrets.HOST }}:26657/g' .env
     - run: cat .env
     - name: Use Node.js 15
       uses: actions/setup-node@v1
