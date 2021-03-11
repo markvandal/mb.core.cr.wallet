@@ -14,9 +14,9 @@ jobs:
     - name: create env for build
       run: | 
         cp .env.copy .env
-        sed -i 's/http:\/\/localhost:26657/http:\/\/${{ secrets.HOST }}:26657/g' .env
-        sed -i 's/http:\/\/localhost:1317/http:\/\/${{ secrets.HOST }}:1317/g' .env
-        sed -i 's/ws:\/\/localhost:26657/ws:\/\/${{ secrets.HOST }}:26657/g' .env
+        sed -i 's/https:\/\/localhost:26657/http:\/\/${{ secrets.HOST }}:26657/g' .env
+        sed -i 's/https:\/\/localhost:1317/http:\/\/${{ secrets.HOST }}:1317/g' .env
+        sed -i 's/wss:\/\/localhost:26657/ws:\/\/${{ secrets.HOST }}:26657/g' .env
     - run: cat .env
     - name: Use Node.js 15
       uses: actions/setup-node@v1
