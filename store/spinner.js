@@ -1,0 +1,22 @@
+import { createSlice } from '@reduxjs/toolkit'
+
+const slice = createSlice({
+  name: 'spinner',
+
+  initialState: {
+    loaded: true,
+  },
+
+  reducers: {
+    startLoading: (state) => ({
+        ...state, loading: true
+      }),
+    endLoading: (state) => ({
+        ...state, loading: false
+      })
+  }
+})
+
+export const spinnerActions = { ...slice.actions }
+
+export const spinner = slice.reducer

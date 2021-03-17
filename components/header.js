@@ -8,7 +8,6 @@ import logo from '../assets/design/meta/logo.png'
 
 import { styles } from './styles/main'
 
-
 export const Header = withGalio(({ navigation, scene, theme, styles }) => {
   const { options } = scene.descriptor
 

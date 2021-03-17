@@ -136,6 +136,14 @@ export const styles = theme => {
       color: theme.COLORS.ERROR,
       paddingTop: theme.SIZES.BASE * 2.5,
       paddingBottom: theme.SIZES.BASE * 2,
+    },
+    spinner: {
+      zIndex: 1,
+      margin: 'auto',
+      marginTop: 100,
+      position: 'fixed',
+      top: '30%',
+      right: '50%',
     }
   })
 }
