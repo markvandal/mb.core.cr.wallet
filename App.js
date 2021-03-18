@@ -31,7 +31,7 @@ import { Create as RecordCreate } from './components/record/create'
 import { Request as AuthRequest } from './components/auth/request'
 import { Publicity as RecordPublicity } from './components/record/publicity'
 import { Type as RecordType } from './components/record/type'
-
+import { Loading } from './components/spinner'
 
 const { Navigator, Screen } = createStackNavigator()
 
@@ -46,6 +46,7 @@ const App = () => {
 
   return <Provider store={store}>
     <GalioProvider theme={customTheme}>
+      <Loading />
       <NavigationContainer ref={navigationRef} theme={{
         ...DefaultTheme,
         colors: {

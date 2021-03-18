@@ -8,6 +8,7 @@ export { authActions } from './auth'
 export { recordActions } from './record' 
 export { testsActions } from './tests' 
 export { errorsActions } from './error' 
+export { spinnerActions } from './spinner'
 
 import { context } from '../context'
 
@@ -17,11 +18,12 @@ import { auth } from './auth'
 import { record } from './record'
 import { tests } from './tests'
 import { errors, errorsActions } from './error'
+import { spinner } from './spinner'
 
 
 export const store = configureStore({ 
   reducer: combineReducers({
-    wallet, invite, auth, tests, record, errors
+    wallet, invite, auth, tests, record, errors, spinner
   }),
   middleware: [ 
     thunk.withExtraArgument(context),
