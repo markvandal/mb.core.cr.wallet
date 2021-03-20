@@ -3,17 +3,16 @@ import { connect } from 'react-redux'
 
 import { withGalio } from 'galio-framework'
 import { styles } from './styles/main'
-import { View } from 'react-native'
-import Spinner from 'react-native-loading-spinner-overlay';
+import { View, ActivityIndicator } from 'react-native'
 
 
 export const Loading = connect(
   ({ spinner }, ownProps) => ({ spinner, ...ownProps })
 )(withGalio(
-  ({ spinner, styles }) => {
-    return <View style={styles.spinner}>
-      {
-        spinner.loading ? <Spinner visible={true} color={'gray'} animation={"fade"} /> : null
-      }
-    </View>
+  ({ spinner, styles}) => {
+    return spinner.loading ? <View style={styles.spinner}>
+      <View style={{opacity: '1 !important'}}>
+      <ActivityIndicator size={'large'} color={'white'} /> 
+      </View>
+    </View> : null
   }, styles))

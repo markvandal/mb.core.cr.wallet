@@ -10,15 +10,18 @@ import { Error } from '../error'
 import { inviteActions } from '../../store'
 import { Context } from '../../context'
 import { styles } from '../styles/main'
-
+import { spinnerActions } from '../../store'
 
 export const Create = connect(
   ({ invite: { currentInvite, newInvite, loading } }, ownProps) =>
     ({ ...ownProps, loading, invite: currentInvite, createUI: newInvite }),
   (dispatch, ownProps) => ({
+    startLoading: () => dispatch(spinnerActions.startLoading()),
+    endLoading: () => dispatch(spinnerActions.endLoading()),
     switchLevel: level => dispatch(inviteActions.switchLevel(level)),
     switchType: type => dispatch(inviteActions.switchType(type)),
     create: (context, type, level) => {
+      dispatch(spinnerActions.startLoading())
       Analytics.logEvent('invite.create.try')
       const res = dispatch(inviteActions.create({
         type: context.value(`IdentityType.${type}`),
@@ -27,15 +30,16 @@ export const Create = connect(
       if (!res.error) {
         Analytics.logEvent('invite.create.success')
       }
+      
     },
     ...ownProps,
   }),
 )(withGalio(({
   navigation, invite, createUI, create, loading,
-  switchLevel, switchType, theme, styles
+  switchLevel, switchType, startLoading, endLoading, theme, styles
 }) => {
   const context = useContext(Context)
-
+  invite ? endLoading() : null
   return <Block middle flex>
     {
       invite
@@ -83,7 +87,10 @@ export const Create = connect(
             <Error />
           </Block>
           <Button round size="large" style={styles.list_block_item_button} loading={loading}
-            onPress={() => create(context, createUI.type, createUI.level)}>Создать</Button>
+            onPress={() => {
+              // startLoading()
+              create(context, createUI.type, createUI.level)
+            }}>Создать</Button>
         </Block>
     }
   </Block>
