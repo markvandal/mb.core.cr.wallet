@@ -8,9 +8,12 @@ const slice = createSlice({
   },
 
   reducers: {
-    startLoading: (state) => ({
-      ...state, loading: true
-    }),
+    startLoading: (state) => {
+      console.log("load")
+      return ({
+        ...state, loading: true
+      })
+    },
     endLoading: (state) => ({
       ...state, loading: false
     })

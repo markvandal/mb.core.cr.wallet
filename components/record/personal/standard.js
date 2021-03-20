@@ -10,7 +10,6 @@ import { Context } from '../../../context'
 import { recordActions } from '../../../store'
 import { list } from '../helper'
 import { styles } from '../../styles/main'
-import { spinnerActions } from '../../../store'
 
 
 export const StandardList = connect(
@@ -24,7 +23,6 @@ export const StandardList = connect(
   (dispatch, ownProps) => ({
     list: list(dispatch),
     createPassport: async (context, inputs, records) => {
-      dispatch(spinnerActions.startLoading())
       Analytics.logEvent('record.standard.passport.create')
       const keys = context.config.listDefaultRecords()
       for (const key of keys) {
@@ -45,14 +43,10 @@ export const StandardList = connect(
             break
           }
         }
-        
-
       }
       await list(dispatch)()
-      dispatch(spinnerActions.endLoading())
     },
     signPassport: async (context, records) => {
-      dispatch(spinnerActions.startLoading())
       const keys = context.config.listDefaultRecords()
       Analytics.logEvent('record.standard.passport.sign')
       for (const key of keys) {
@@ -70,7 +64,6 @@ export const StandardList = connect(
         }
       }
       await list(dispatch)()
-      dispatch(spinnerActions.endLoading())
     },
     ...ownProps
   }),
@@ -152,9 +145,7 @@ export const StandardList = connect(
         || defaultRecordKeys.find(key => defaultRecords[key]?.status === 'RECORD_OPEN')
         || defaultRecordKeys.find(key => !defaultRecords[key])
         ? <Button round size="large" style={styles.content_button} loading={loading}
-          onPress={() => {
-            createPassport(context, notSetRecordInputs, defaultRecords)
-          }}>Сохранить</Button>
+          onPress={() => createPassport(context, notSetRecordInputs, defaultRecords)}>Сохранить</Button>
         : null
     }
     {

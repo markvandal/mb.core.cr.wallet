@@ -139,15 +139,11 @@ export const styles = theme => {
     },
     spinner: {
       zIndex: 1,
-      position: 'absolute',
-      left: 0,
-      right: 0,
-      top: 0,
-      bottom: 0,
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: "rgb(95, 95, 91)",
-      opacity: 0.5
+      margin: 'auto',
+      marginTop: 100,
+      position: 'fixed',
+      top: '30%',
+      right: '50%',
     }
   })
 }

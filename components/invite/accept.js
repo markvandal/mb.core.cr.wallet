@@ -40,7 +40,7 @@ export const Accept = connect(
         ? <Block style={styles.list_block_main}>
           <Text style={styles.list_block_title}>Приглашение Принято</Text>
           <Block row middle style={styles.list_block_item_content}>
-            <Text>IdentityId: {newAccount.identityId}</Text>
+            <Text>IdentityId: { newAccount.identityId}</Text>
           </Block>
           <Block row middle style={styles.list_block_item_content}>
             <Text style={styles.app_text}>Mnemonic (password): {newAccount.mnemonic}</Text>
