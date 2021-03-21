@@ -7,7 +7,7 @@ import { withGalio, Block, Button, Text, Input } from 'galio-framework'
 import { Error } from '../../error'
 
 import { Context } from '../../../context'
-import { recordActions } from '../../../store'
+import { recordActions, spinnerActions } from '../../../store'
 import { list } from '../helper'
 import { styles } from '../../styles/main'
 
@@ -22,6 +22,8 @@ export const StandardList = connect(
   }),
   (dispatch, ownProps) => ({
     list: list(dispatch),
+    startLoading: () => dispatch(spinnerActions.startLoading()),
+    endLoading: () => dispatch(spinnerActions.endLoading()),
     createPassport: async (context, inputs, records) => {
       Analytics.logEvent('record.standard.passport.create')
       const keys = context.config.listDefaultRecords()
@@ -68,11 +70,14 @@ export const StandardList = connect(
     ...ownProps
   }),
 )(withGalio(({
-  navigation, list, createPassport, signPassport,
-  records, identity, loading, errors, styles
+  navigation, list, createPassport, signPassport, startLoading, 
+  endLoading, loading, records, identity, errors, styles
 }) => {
   const context = useContext(Context)
   useFocusEffect(useCallback(() => { list() }, []))
+
+  if (loading) startLoading()
+  else endLoading()
 
   const defaultRecordKeys = context.config.listDefaultRecords().filter(
     (_, idx) => context.config.defaultRecords[idx].types.includes(identity.identityType)
@@ -144,14 +149,16 @@ export const StandardList = connect(
       !defaultRecordKeys.find(key => defaultRecords[key])
         || defaultRecordKeys.find(key => defaultRecords[key]?.status === 'RECORD_OPEN')
         || defaultRecordKeys.find(key => !defaultRecords[key])
-        ? <Button round size="large" style={styles.content_button} loading={loading}
-          onPress={() => createPassport(context, notSetRecordInputs, defaultRecords)}>Сохранить</Button>
+        ? <Button round size="large" style={styles.content_button}
+          onPress={() => {
+            createPassport(context, notSetRecordInputs, defaultRecords)
+          }}>Сохранить</Button>
         : null
     }
     {
       defaultRecordKeys.find(key => defaultRecords[key])
         && defaultRecordKeys.find(key => defaultRecords[key]?.status === 'RECORD_OPEN')
-        ? <Button round size="large" style={styles.content_button} loading={loading}
+        ? <Button round size="large" style={styles.content_button}
           onPress={() => signPassport(context, defaultRecords)}>Подписать</Button>
         : null
     }

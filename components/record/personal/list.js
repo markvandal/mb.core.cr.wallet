@@ -10,7 +10,7 @@ import { withGalio, Block, Button, Text, Input } from 'galio-framework'
 import { Error } from '../../error'
 
 import { Context } from '../../../context'
-import { recordActions } from '../../../store'
+import { recordActions, spinnerActions } from '../../../store'
 import { list } from '../helper'
 import { styles } from '../../styles/main'
 
@@ -25,6 +25,8 @@ export const PersonalList = connect(
   }),
   (dispatch, ownProps) => ({
     list: list(dispatch),
+    startLoading: () => dispatch(spinnerActions.startLoading()),
+    endLoading: () => dispatch(spinnerActions.endLoading()),
     update: async (context, id, action, data = undefined) => {
       Analytics.logEvent('record.personal.update.try')
       const update = { id, action: context.value(`RecordUpdate.${action}`, 'crsign') }
@@ -38,9 +40,9 @@ export const PersonalList = connect(
     },
     ...ownProps
   }),
-)(withGalio(({ 
-  navigation, list, update, records, 
-  identity, errors, loading, theme, styles 
+)(withGalio(({
+  navigation, list, update, records,
+  identity, errors, loading, startLoading, endLoading, theme, styles
 }) => {
   const context = useContext(Context)
   useFocusEffect(useCallback(() => { list() }, []))
@@ -48,6 +50,9 @@ export const PersonalList = connect(
   const recordInputs = records.map(record => ({
     data: typeof record === 'object' ? record.data : null
   }))
+
+  if (loading) startLoading()
+  else endLoading()
 
   return <Block flex center>
     <Button round size="large" style={styles.content_button}
@@ -98,7 +103,7 @@ export const PersonalList = connect(
                 />
               </Block>
               <Block style={styles.list_block_item_content}>
-                <Error hideBlock={errors.error?.meta?.arg?.id !== record.id}/>
+                <Error hideBlock={errors.error?.meta?.arg?.id !== record.id} />
               </Block>
               <Block row middle style={styles.list_block_item_header}>
                 <Text style={styles.list_block_item_label_value}>Статус верификации:</Text>
@@ -130,7 +135,7 @@ export const PersonalList = connect(
                 {
                   ['RECORD_OPEN'].includes(record.status)
                     ? <Button round size="large" style={styles.list_block_item_button}
-                      icon="pencil" loading={loading} 
+                      icon="pencil"
                       iconFamily="entypo"
                       iconSize={theme.SIZES.ICON}
                       color="primary"
@@ -142,7 +147,7 @@ export const PersonalList = connect(
                   ['RECORD_OPEN', 'RECORD_SIGNED'].includes(record.status)
                     && identity.id === record.provider
                     ? <Button round size="large" style={styles.list_block_item_button}
-                      icon="seal-variant" loading={loading} 
+                      icon="seal-variant"
                       iconFamily="material-community"
                       iconSize={theme.SIZES.ICON}
                       color="primary"
@@ -153,7 +158,7 @@ export const PersonalList = connect(
                 {
                   ['RECORD_OPEN', 'RECORD_SIGNED'].includes(record.status)
                     ? <Button round size="large" style={styles.list_block_item_button}
-                      icon="dislike2" loading={loading} 
+                      icon="dislike2"
                       iconFamily="antdesign"
                       iconSize={theme.SIZES.ICON}
                       color="primary"
@@ -165,7 +170,7 @@ export const PersonalList = connect(
                   ['RECORD_SIGNED', 'RECORD_SEALED', 'RECORD_WITHDRAWN', 'RECORD_REJECTED'].includes(record.status)
                     && identity.id === record.provider
                     ? <Button round size="large" style={styles.list_block_item_button}
-                      icon="reload" loading={loading} 
+                      icon="reload"
                       iconFamily="ionicon"
                       iconSize={theme.SIZES.ICON}
                       color="primary"

@@ -32,7 +32,7 @@ import { Request as AuthRequest } from './components/auth/request'
 import { Publicity as RecordPublicity } from './components/record/publicity'
 import { Type as RecordType } from './components/record/type'
 import { Loading } from './components/spinner'
-
+import {spinner} from './store/spinner'
 const { Navigator, Screen } = createStackNavigator()
 
 const App = () => {
@@ -45,11 +45,9 @@ const App = () => {
   }
 
   return <Provider store={store}>
-
+    <Loading />
     <GalioProvider theme={customTheme}>
-
-      <Loading />
-
+      
       <NavigationContainer ref={navigationRef} theme={{
         ...DefaultTheme,
         colors: {
@@ -71,7 +69,6 @@ const App = () => {
 
           routeNameRef.current = currentRouteName;
         }}>
-
         <Navigator initialRouteName="main"
           screenOptions={_ => ({
             title: `Meta-Belarus ID${store.getState().wallet?.identity?.id
@@ -81,8 +78,6 @@ const App = () => {
             header: props => <Header {...props} />
           })}
         >
-
-
           <Screen name="main" component={Main} />
           <Screen name="auth" component={WalletAuth} />
           <Screen name="tests" component={TestMain} />
@@ -101,7 +96,6 @@ const App = () => {
           <Screen name="record.type" component={RecordType} />
         </Navigator>
       </NavigationContainer>
-
       <StatusBar style="auto" />
     </GalioProvider>
   </Provider>

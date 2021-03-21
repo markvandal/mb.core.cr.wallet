@@ -7,7 +7,7 @@ import * as Analytics from 'expo-firebase-analytics'
 import { withGalio, Block, Button, Text } from 'galio-framework'
 import { Error } from '../error'
 
-import { inviteActions } from '../../store'
+import { inviteActions, spinnerActions } from '../../store'
 import { Context } from '../../context'
 import { styles } from '../styles/main'
 
@@ -16,6 +16,8 @@ export const Create = connect(
   ({ invite: { currentInvite, newInvite, loading } }, ownProps) =>
     ({ ...ownProps, loading, invite: currentInvite, createUI: newInvite }),
   (dispatch, ownProps) => ({
+    startLoading: () => dispatch(spinnerActions.startLoading()),
+    endLoading: () => dispatch(spinnerActions.endLoading()),
     switchLevel: level => dispatch(inviteActions.switchLevel(level)),
     switchType: type => dispatch(inviteActions.switchType(type)),
     create: (context, type, level) => {
@@ -27,14 +29,18 @@ export const Create = connect(
       if (!res.error) {
         Analytics.logEvent('invite.create.success')
       }
+
     },
     ...ownProps,
   }),
 )(withGalio(({
   navigation, invite, createUI, create, loading,
-  switchLevel, switchType, theme, styles
+  switchLevel, switchType, startLoading, endLoading, theme, styles
 }) => {
   const context = useContext(Context)
+
+  if (loading) startLoading()
+  else endLoading()
 
   return <Block middle flex>
     {
@@ -82,11 +88,11 @@ export const Create = connect(
           <Block style={styles.list_block_item_content}>
             <Error />
           </Block>
-          <Button round size="large" style={styles.list_block_item_button} loading={loading}
-            onPress={() => create(context, createUI.type, createUI.level)}>Создать</Button>
+          <Button round size="large" style={styles.list_block_item_button}
+            onPress={() => {
+              create(context, createUI.type, createUI.level)
+            }}>Создать</Button>
         </Block>
     }
   </Block>
 }, styles))
-
-

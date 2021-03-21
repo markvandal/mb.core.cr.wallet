@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import * as Analytics from 'expo-firebase-analytics'
 
 import { withGalio, Block, Button, Text, Input } from 'galio-framework'
-import { authActions } from '../../store'
+import { authActions, spinnerActions } from '../../store'
 import { Error } from '../error'
 
 import { styles } from '../styles/main';
@@ -17,6 +17,8 @@ export const Request = connect(
     ...ownProps
   }),
   (dispatch, ownProps) => ({
+    startLoading: () => dispatch(spinnerActions.startLoading()),
+    endLoading: () => dispatch(spinnerActions.endLoading()),
     request: async (identity) => {
       Analytics.logEvent('auth.request.try')
       const res = dispatch(authActions.request(identity))
@@ -26,8 +28,11 @@ export const Request = connect(
     },
     ...ownProps
   })
-)(withGalio(({ auth, request, loading, styles }) => {
+)(withGalio(({ auth, request, loading, startLoading, endLoading, styles }) => {
   let identity = null
+
+  if (loading) startLoading()
+  else endLoading()
 
   return <Block flex center space="around">
     <Block style={styles.list_block_main}>
@@ -41,7 +46,7 @@ export const Request = connect(
         <Error />
       </Block>
       <Button round size="large" style={styles.list_block_item_button}
-        loading={loading} onPress={() => request(identity.value)}>Выслать</Button>
+        onPress={() => request(identity.value)}>Выслать</Button>
       {
         auth
           ?
