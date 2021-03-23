@@ -5,13 +5,15 @@ import * as Analytics from 'expo-firebase-analytics'
 
 import { withGalio, Block, Button, Input, Text } from 'galio-framework'
 import { Error } from '../error'
-import { walletActions } from '../../store'
+import { walletActions, spinnerActions } from '../../store'
 import { styles } from '../styles/main'
 
 
 export const WalletAuth = connect(
   ({ wallet: { loading } }, ownProps) => ({ loading, ...ownProps }),
   (dispatch, ownProps) => ({
+    startLoading: () => dispatch(spinnerActions.startLoading()),
+    endLoading: () => dispatch(spinnerActions.endLoading()),
     connect: async (mnemonic, nav) => {
       Analytics.logEvent('wallet.auth.try')
       const res = await dispatch(walletActions.openWithMnemoic(mnemonic))
@@ -22,9 +24,12 @@ export const WalletAuth = connect(
     },
     ...ownProps
   })
-)(withGalio(({ navigation, connect, loading, theme, styles }) => {
+)(withGalio(({ navigation, connect, loading, startLoading, endLoading, theme, styles }) => {
   const context = useContext(Context)
   let mnemonic = null
+
+  if (loading) startLoading()
+  else endLoading()
 
   return <Block middle flex>
     <Text style={styles.list_block_title}>Аутентификация</Text>
@@ -41,7 +46,7 @@ export const WalletAuth = connect(
     <Block style={styles.list_block_item_content}>
       <Error />
     </Block>
-    <Button round size="large" style={styles.content_button} loading={loading}
+    <Button round size="large" style={styles.content_button}
       onPress={() => connect(mnemonic.value, navigation)}>Представиться</Button>
   </Block>
 }, styles))
