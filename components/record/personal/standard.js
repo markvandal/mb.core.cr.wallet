@@ -150,9 +150,7 @@ export const StandardList = connect(
         || defaultRecordKeys.find(key => defaultRecords[key]?.status === 'RECORD_OPEN')
         || defaultRecordKeys.find(key => !defaultRecords[key])
         ? <Button round size="large" style={styles.content_button}
-          onPress={() => {
-            createPassport(context, notSetRecordInputs, defaultRecords)
-          }}>Сохранить</Button>
+          onPress={() => createPassport(context, notSetRecordInputs, defaultRecords)}>Сохранить</Button>
         : null
     }
     {
