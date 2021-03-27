@@ -76,8 +76,10 @@ export const StandardList = connect(
   const context = useContext(Context)
   useFocusEffect(useCallback(() => { list() }, []))
 
-  if (loading) startLoading()
-  else endLoading()
+  useEffect(() => {
+    if (loading) startLoading()
+    else endLoading()
+  })
 
   const defaultRecordKeys = context.config.listDefaultRecords().filter(
     (_, idx) => context.config.defaultRecords[idx].types.includes(identity.identityType)

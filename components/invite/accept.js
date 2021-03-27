@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Share } from 'react-native'
 import Clipboard from 'expo-clipboard'
@@ -36,8 +36,10 @@ export const Accept = connect(
 )(withGalio(({ navigation, newAccount, accept, loading, startLoading, endLoading, styles, theme }) => {
   let sequence = ''
 
-  if (loading) startLoading()
-  else endLoading()  
+  useEffect(() => {
+    if (loading) startLoading()
+    else endLoading()
+  }) 
 
   return <Block middle flex>
     {

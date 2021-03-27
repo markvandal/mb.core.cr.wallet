@@ -48,8 +48,10 @@ export const List = connect(
   const context = useContext(Context)
   useFocusEffect(useCallback(() => { list() }, []))
 
-  if (loading) startLoading()
-  else endLoading()
+  useEffect(() => {
+    if (loading) startLoading()
+    else endLoading()
+  })
 
   return <Block middle center>
     {
