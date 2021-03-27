@@ -1,7 +1,7 @@
 {
   "hosting": [
     {
-      "site": "meta-belraus-id-test",
+      "site": "meta-belarus-id-test",
       "public": "web-build",
       "ignore": [
         "firebase.json",
