@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import * as Analytics from 'expo-firebase-analytics'
 
@@ -31,8 +31,10 @@ export const Request = connect(
 )(withGalio(({ auth, request, loading, startLoading, endLoading, styles }) => {
   let identity = null
 
-  if (loading) startLoading()
-  else endLoading()
+  useEffect(() => {
+    if (loading) startLoading()
+    else endLoading()
+  })
 
   return <Block flex center space="around">
     <Block style={styles.list_block_main}>

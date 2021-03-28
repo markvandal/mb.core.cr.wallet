@@ -148,7 +148,8 @@ export const styles = theme => {
       height: document.height,
       justifyContent: 'center',
       backgroundColor: "rgb(95, 95, 91)",
-      opacity: 0.5
+      opacity: 0.8,
+      color: 'white'
     }
   })
 }

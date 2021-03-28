@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Context } from '../../context'
 import * as Analytics from 'expo-firebase-analytics'
@@ -28,8 +28,10 @@ export const WalletAuth = connect(
   const context = useContext(Context)
   let mnemonic = null
 
-  if (loading) startLoading()
-  else endLoading()
+  useEffect(() => {
+    if (loading) startLoading()
+    else endLoading()
+  })
 
   return <Block middle flex>
     <Text style={styles.list_block_title}>Аутентификация</Text>

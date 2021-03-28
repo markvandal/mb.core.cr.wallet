@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useEffect } from 'react'
 import { useFocusEffect } from '@react-navigation/native';
 import { connect } from 'react-redux'
 import * as Analytics from 'expo-firebase-analytics'
@@ -51,8 +51,10 @@ export const PersonalList = connect(
     data: typeof record === 'object' ? record.data : null
   }))
 
-  if (loading) startLoading()
-  else endLoading()
+  useEffect(() => {
+    if (loading) startLoading()
+    else endLoading()
+  })
 
   return <Block flex center>
     <Button round size="large" style={styles.content_button}
