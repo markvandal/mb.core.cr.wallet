@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Share } from 'react-native'
 import Clipboard from 'expo-clipboard'
@@ -39,8 +39,10 @@ export const Create = connect(
 }) => {
   const context = useContext(Context)
 
-  if (loading) startLoading()
-  else endLoading()
+  useEffect(() => {
+    if (loading) startLoading()
+    else endLoading()
+  })
 
   return <Block middle flex>
     {

@@ -116,9 +116,9 @@ export const Main = connect(
         </Block>
         : <Block center>
           <Button round size="large" style={styles.content_button}
-            onPress={() => navigation.navigate('auth')}>Представиться</Button>
+            onPress={() => navigation.navigate('auth')}>Войти</Button>
           <Button round size="large" style={styles.content_button}
-            onPress={() => navigation.navigate('invite.accept')}>Принять приглашение</Button>
+            onPress={() => navigation.navigate('invite.accept')}>Зарегистрироваться</Button>
         </Block>
     }
   </Block>
