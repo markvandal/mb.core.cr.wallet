@@ -32,7 +32,7 @@ export const StandardList = connect(
         if (record && record.id) {
           if (record.status === 'RECORD_OPEN') {
             const res = await dispatch(recordActions.update({
-              id: record.id, data: inputs[key],
+              id: record.id, data: inputs[key], key,
               action: context.value(`RecordUpdate.RECORD_UPDATE_STORE`, 'crsign'),
             }))
             if (res.error) {

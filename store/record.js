@@ -90,7 +90,7 @@ const update = createAsyncThunk(
   'record/update',
   /**
    * 
-   * @param {id, action, data?, liveTime?} record 
+   * @param {id, action, data?, key?, liveTime?} record 
    */
   async (record, { extra: context, getState }) => {
     try {
@@ -103,6 +103,21 @@ const update = createAsyncThunk(
       const updateExtension = {}
 
       if (record.data && currentIdentity === _record.provider) {
+        if (record.key === 'mb.citizen.self.firstname' || record.key === 'mb.citizen.self.lastname' || record.key === 'mb.citizen.self.citizenship' || record.key === 'mb.citizen.self.birthplace') {
+          if(/[!@#$%^&*(),.?":{}|<>]/g.test(record.data) || /\d+/g.test(record.data)) {
+            throw new Error(`Field must contain only letters`)
+          }
+        }
+        if (record.key === 'mb.citizen.self.personalnumber') {
+          if (!/^[0-9\)\(+-]+$/g.test(record.data)) {
+            throw new Error(`Field contains an invalid form, example: +375(00)1234567`)
+          }
+        } 
+        if (record.key === 'mb.citizen.self.birthdate') {
+          if (!/^(0?[1-9]|[12][0-9]|3[01])[\/\-\.](0?[1-9]|1[012])[\/\-\.]\d{4}$/g.test(record.data)) {
+            throw new Error(`Field contains an invalid form, example: 01.01.2000`)
+          }
+        }
         if (_record.publicity === 'PRIVATE') {
           let pubkey = context.wallet.pubkey
           if (_record.identity != getState().wallet.identity.id) {
@@ -112,7 +127,7 @@ const update = createAsyncThunk(
 
           updateExtension.data = encrypt(pubkey, record.data)
         } else {
-          updateExtension.data = recrod.data
+          updateExtension.data = record.data
         }
 
         updateExtension.signature = await sign(context.wallet, record.data)
