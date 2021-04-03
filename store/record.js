@@ -112,7 +112,7 @@ const update = createAsyncThunk(
 
           updateExtension.data = encrypt(pubkey, record.data)
         } else {
-          updateExtension.data = recrod.data
+          updateExtension.data = record.data
         }
 
         updateExtension.signature = await sign(context.wallet, record.data)
