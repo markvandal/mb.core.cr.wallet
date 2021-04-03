@@ -8,7 +8,7 @@ import { withGalio, Block, Button, Text } from 'galio-framework'
 import { Error } from '../error'
 
 import { Context } from '../../context'
-import { authActions } from '../../store'
+import { authActions, spinnerActions } from '../../store'
 import { decrypt } from '../../utils/ledger/crypt'
 import { styles } from '../styles/main';
 
@@ -22,6 +22,8 @@ export const List = connect(
     ...ownProps
   }),
   (dispatch, ownProps) => ({
+    startLoading: () => dispatch(spinnerActions.startLoading()),
+    endLoading: () => dispatch(spinnerActions.endLoading()),
     list: async () => {
       const res = await dispatch(authActions.list())
       for (let idx = 0; idx < res.payload?.length; ++idx) {
@@ -40,11 +42,16 @@ export const List = connect(
     ...ownProps,
   }),
 )(withGalio(({
-  navigation, auth, identity, loading,
-  list, sign, errors, theme, styles
+  navigation, auth, identity, loading, startLoading, 
+  endLoading, list, sign, errors, theme, styles
 }) => {
   const context = useContext(Context)
   useFocusEffect(useCallback(() => { list() }, []))
+
+  useEffect(() => {
+    if (loading) startLoading()
+    else endLoading()
+  })
 
   return <Block middle center>
     {
@@ -96,7 +103,7 @@ export const List = connect(
                       switch (auth.status) {
                         case 'AUTH_OPEN':
                           return <Button round size="large" style={styles.list_block_item_button}
-                            icon="pencil" loading={loading} iconFamily="entypo"
+                            icon="pencil" iconFamily="entypo"
                             iconSize={theme.SIZES.ICON} color="primary" iconColor={theme.COLORS.WHITE}
                             onPress={() => sign(idx)}>Подписать</Button>
                         case 'AUTH_SIGNED':

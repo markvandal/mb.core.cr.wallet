@@ -136,6 +136,20 @@ export const styles = theme => {
       color: theme.COLORS.ERROR,
       paddingTop: theme.SIZES.BASE * 2.5,
       paddingBottom: theme.SIZES.BASE * 2,
+    },
+    spinner: {
+      zIndex: 1,
+      position: 'fixed',
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0,
+      alignItems: 'center',
+      height: document.height,
+      justifyContent: 'center',
+      backgroundColor: "rgb(95, 95, 91)",
+      opacity: 0.8,
+      color: 'white'
     }
   })
 }

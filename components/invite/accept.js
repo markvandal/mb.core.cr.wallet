@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Share } from 'react-native'
 import Clipboard from 'expo-clipboard'
@@ -8,13 +8,15 @@ import { withGalio, Block, Button, Text, Input } from 'galio-framework'
 import { Error } from '../error'
 import { styles } from '../styles/main'
 
-import { inviteActions, walletActions } from '../../store'
+import { inviteActions, walletActions, spinnerActions } from '../../store'
 
 
 export const Accept = connect(
   ({ invite: { newAccount, loading } }, ownProps) =>
     ({ newAccount, loading, ...ownProps }),
   (dispatch, ownProps) => ({
+    startLoading: () => dispatch(spinnerActions.startLoading()),
+    endLoading: () => dispatch(spinnerActions.endLoading()),
     accept: async (navigation, sequence) => {
       Analytics.logEvent('invite.accept.try')
       const res = await dispatch(inviteActions.accept(sequence))
@@ -31,8 +33,13 @@ export const Accept = connect(
     },
     ...ownProps,
   }),
-)(withGalio(({ navigation, newAccount, accept, loading, styles, theme }) => {
+)(withGalio(({ navigation, newAccount, accept, loading, startLoading, endLoading, styles, theme }) => {
   let sequence = ''
+
+  useEffect(() => {
+    if (loading) startLoading()
+    else endLoading()
+  }) 
 
   return <Block middle flex>
     {
@@ -78,7 +85,7 @@ export const Accept = connect(
           <Block style={styles.list_block_item_content}>
             <Error />
           </Block>
-          <Button round size="large" style={styles.list_block_item_button} loading={loading}
+          <Button round size="large" style={styles.list_block_item_button}
             onPress={() => accept(navigation, sequence.value)}>Создать паспорт</Button>
         </Block>
     }

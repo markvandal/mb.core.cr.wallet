@@ -78,7 +78,11 @@ const _patchRecord = async (context, currentIdentity, record) => {
       const account = await loadAccountById(context, record.provider)
       pubkey = account.public_key.value
     }
-    record.verified = await verify(pubkey, record.signature, record.data)
+    try {
+      record.verified = await verify(pubkey, record.signature, record.data)
+    } catch (e) {
+      console.log(e)
+    }
   }
 }
 
@@ -108,7 +112,7 @@ const update = createAsyncThunk(
 
           updateExtension.data = encrypt(pubkey, record.data)
         } else {
-          updateExtension.data = recrod.data
+          updateExtension.data = record.data
         }
 
         updateExtension.signature = await sign(context.wallet, record.data)

@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useContext, useCallback, useEffect } from 'react'
 import { useFocusEffect } from '@react-navigation/native';
 import { connect } from 'react-redux'
 import * as Analytics from 'expo-firebase-analytics'
@@ -7,7 +7,7 @@ import { withGalio, Block, Button, Text, Input } from 'galio-framework'
 import { Error } from '../../error'
 
 import { Context } from '../../../context'
-import { recordActions, walletActions } from '../../../store'
+import { recordActions, walletActions, spinnerActions } from '../../../store'
 import { styles } from '../../styles/main'
 
 
@@ -21,6 +21,8 @@ export const PublicList = connect(
     ...ownProps
   }),
   (dispatch, ownProps) => ({
+    startLoading: () => dispatch(spinnerActions.startLoading()),
+    endLoading: () => dispatch(spinnerActions.endLoading()),
     open: async (identityId) => {
       await dispatch(walletActions.open(identityId))
       const res = await dispatch(recordActions.loadAll(identityId))
@@ -52,9 +54,9 @@ export const PublicList = connect(
   }),
 )(withGalio(({
   route: { params: { identityId } }, navigation,
-  open, create, validate, update,
-  identity, targetIdentity, records, errors,
-  loading, theme, styles
+  open, create, validate, update, startLoading, 
+  endLoading, identity, targetIdentity, records, 
+  errors, loading, theme, styles
 }) => {
   const context = useContext(Context)
   useFocusEffect(useCallback(() => { open(identityId) }, []))
@@ -62,6 +64,11 @@ export const PublicList = connect(
   const recordInputs = records.map(_ => ({
     data: ''
   }))
+
+  useEffect(() => {
+    if (loading) startLoading()
+    else endLoading()
+  })
 
   return <Block flex center>
     <Text style={styles.list_block_title}>Паспорт</Text>
