@@ -29,10 +29,13 @@ export const StandardList = connect(
       const keys = context.config.listDefaultRecords()
       for (const key of keys) {
         const record = records[key]
+        const validation = context.config.getValidation(key)
         if (record && record.id) {
           if (record.status === 'RECORD_OPEN') {
             const res = await dispatch(recordActions.update({
               id: record.id, data: inputs[key], key,
+              fieldFormat: validation.fieldFormat,
+              validationErrorText: validation.validationErrorText,
               action: context.value(`RecordUpdate.RECORD_UPDATE_STORE`, 'crsign'),
             }))
             if (res.error) {
@@ -70,7 +73,7 @@ export const StandardList = connect(
     ...ownProps
   }),
 )(withGalio(({
-  navigation, list, createPassport, signPassport, startLoading, 
+  navigation, list, createPassport, signPassport, startLoading,
   endLoading, loading, records, identity, errors, styles
 }) => {
   const context = useContext(Context)

@@ -62,21 +62,29 @@ export const context = {
       {
         key: 'mb.citizen.self.firstname',
         label: 'Имя',
+        fieldFormat: /^[ a-zA-Z]+$/,
+        validationErrorText: 'Field must contain only letters',
         types: ['CITIZEN', 'FOREIGNER', 'DIASPORA_MEMBER'],
       },
       {
         key: 'mb.citizen.self.lastname',
         label: 'Фамилия',
+        fieldFormat: /^[ a-zA-Z]+$/,
+        validationErrorText: 'Field must contain only letters',
         types: ['CITIZEN', 'FOREIGNER', 'DIASPORA_MEMBER'],
       },
       {
         key: 'mb.citizen.self.personalnumber',
         label: 'Личный номер',
+        fieldFormat: /[a-zA-Z]{2}[0-9]{7}/,
+        validationErrorText: 'Field contains an invalid form',
         types: ['CITIZEN', 'FOREIGNER', 'DIASPORA_MEMBER'],
       },
       {
         key: 'mb.citizen.self.citizenship',
         label: 'Гражданство',
+        fieldFormat: /^[ a-zA-Z]+$/,
+        validationErrorText: 'Field must contain only letters',
         types: ['CITIZEN', 'FOREIGNER', 'DIASPORA_MEMBER'],
         defaults: {
           CITIZEN: 'Republic of Belarus',
@@ -85,11 +93,15 @@ export const context = {
       {
         key: 'mb.citizen.self.birthplace',
         label: 'Место рождения',
+        fieldFormat: /^[ a-zA-Z]+$/,
+        validationErrorText: 'Field must contain only letters',
         types: ['CITIZEN', 'FOREIGNER', 'DIASPORA_MEMBER'],
       },
       {
         key: 'mb.citizen.self.birthdate',
         label: 'Дата рождения',
+        fieldFormat: /^(0?[1-9]|[12][0-9]|3[01])[\/\-\.](0?[1-9]|1[012])[\/\-\.]\d{4}$/,
+        validationErrorText: 'Field contains an invalid form',
         types: ['CITIZEN', 'FOREIGNER', 'DIASPORA_MEMBER'],
       },
       // {
@@ -130,6 +142,13 @@ export const context = {
 
     getRecordSettingByKey(key) {
       return this.defaultRecords.find((setting) => setting.key === key)
+    },
+
+    getValidation(key) {
+      return {
+        fieldFormat: this.defaultRecords.find((setting) => setting.key === key).fieldFormat,
+        validationErrorText: this.defaultRecords.find((setting) => setting.key === key).validationErrorText
+      }
     },
 
     isDefaultRecord(key) {
