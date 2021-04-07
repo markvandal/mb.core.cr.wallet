@@ -18,4 +18,4 @@ web-build/
 
 # Configs
 .env
-.env.copy*
+.env
