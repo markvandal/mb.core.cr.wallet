@@ -26,7 +26,10 @@ export const decrypt = (wallet, data) => {
 }
 
 export const sign = async (wallet, data) => {
-  const signature = await Secp256k1.createSignature(sha256(Uint8Array.from(data)), wallet.privkey)
+  const signature = await Secp256k1.createSignature(
+    sha256(Uint8Array.from(Buffer.from(data))), 
+    wallet.privkey
+  )
   const sign = encodeSecp256k1Signature(
     wallet.pubkey, 
     new Uint8Array([...signature.r(32), ...signature.s(32)])
@@ -40,7 +43,7 @@ export const verify = async (pubkey, signature, data) => {
   const _signature = fromHex(signature)
   return await Secp256k1.verifySignature(
     new Secp256k1Signature(_signature.slice(0,32), _signature.slice(32)),
-    sha256(Uint8Array.from(data)),
+    sha256(Uint8Array.from(Buffer.from(data))),
     pubkey,
   )
 }
