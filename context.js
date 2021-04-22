@@ -62,28 +62,28 @@ export const context = {
       {
         key: 'mb.citizen.self.firstname',
         label: 'Имя',
-        fieldFormat: /^[ a-zA-Z]+$/,
+        fieldFormat: /^[ a-zA-Zа-яА-Я]+$/,
         validationErrorText: 'Field must contain only letters',
         types: ['CITIZEN', 'FOREIGNER', 'DIASPORA_MEMBER'],
       },
       {
         key: 'mb.citizen.self.lastname',
         label: 'Фамилия',
-        fieldFormat: /^[ a-zA-Z]+$/,
+        fieldFormat: /^[ a-zA-Zа-яА-Я]+$/,
         validationErrorText: 'Field must contain only letters',
         types: ['CITIZEN', 'FOREIGNER', 'DIASPORA_MEMBER'],
       },
       {
         key: 'mb.citizen.self.personalnumber',
         label: 'Личный номер',
-        fieldFormat: /[a-zA-Z]{2}[0-9]{7}/,
+        fieldFormat: /\b[0-9A-Z]{8,20}\b/,
         validationErrorText: 'Field contains an invalid form',
         types: ['CITIZEN', 'FOREIGNER', 'DIASPORA_MEMBER'],
       },
       {
         key: 'mb.citizen.self.citizenship',
         label: 'Гражданство',
-        fieldFormat: /^[ a-zA-Z]+$/,
+        fieldFormat: /^[ a-zA-Zа-яА-Я]+$/,
         validationErrorText: 'Field must contain only letters',
         types: ['CITIZEN', 'FOREIGNER', 'DIASPORA_MEMBER'],
         defaults: {
@@ -93,7 +93,7 @@ export const context = {
       {
         key: 'mb.citizen.self.birthplace',
         label: 'Место рождения',
-        fieldFormat: /^[ a-zA-Z]+$/,
+        fieldFormat: /^[ a-zA-Zа-яА-Я]+$/,
         validationErrorText: 'Field must contain only letters',
         types: ['CITIZEN', 'FOREIGNER', 'DIASPORA_MEMBER'],
       },
