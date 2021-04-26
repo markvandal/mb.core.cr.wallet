@@ -80,7 +80,7 @@ export const Main = connect(
             onPress={() => navigation.navigate('record.personal.standard')}>Посмотреть свой паспорт</Button>
           <Button round size="large" style={styles.content_button}
             onPress={() => navigation.navigate('auth.list')}>Просмотреть службы</Button>
-          <Button ound size="large" style={styles.content_button}
+          <Button round size="large" style={styles.content_button}
             onPress={() => navigation.navigate('record.public.open')}>Посмотреть чей-то паспорт</Button>
           <Button round size="large" style={styles.content_button}
             onPress={() => navigation.navigate('invite.create')}>Создать приглашение</Button>
