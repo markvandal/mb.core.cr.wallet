@@ -2,7 +2,7 @@
 on:
   push:
     branches: 
-      - build 
+      - main 
   
 jobs:
   build:
@@ -10,7 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        ref: 'build'
+        ref: 'main'
     - name: create env for build
       run: | 
         cp .env.copy .env
