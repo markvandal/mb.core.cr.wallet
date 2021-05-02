@@ -29,10 +29,13 @@ export const StandardList = connect(
       const keys = context.config.listDefaultRecords()
       for (const key of keys) {
         const record = records[key]
+        const validation = context.config.getValidation(key)
         if (record && record.id) {
           if (record.status === 'RECORD_OPEN') {
             const res = await dispatch(recordActions.update({
-              id: record.id, data: inputs[key],
+              id: record.id, data: inputs[key], key,
+              fieldFormat: validation.fieldFormat,
+              validationErrorText: validation.validationErrorText,
               action: context.value(`RecordUpdate.RECORD_UPDATE_STORE`, 'crsign'),
             }))
             if (res.error) {
@@ -40,7 +43,11 @@ export const StandardList = connect(
             }
           }
         } else if (inputs[key]) {
-          const res = await dispatch(recordActions.create({ key, data: inputs[key] }))
+          const res = await dispatch(recordActions.create({
+            key, data: inputs[key],
+            fieldFormat: validation.fieldFormat,
+            validationErrorText: validation.validationErrorText,
+          }))
           if (res.error) {
             break
           }
@@ -53,6 +60,7 @@ export const StandardList = connect(
       Analytics.logEvent('record.standard.passport.sign')
       for (const key of keys) {
         const record = records[key]
+        const validation = context.config.getValidation(key)
         if (record && record.id && record.status === 'RECORD_OPEN') {
           const setting = context.config.getRecordSettingByKey(key)
           const action = context.value(`RecordUpdate.${setting.restrictions?.includes('REOCRD_UPDATE_SEAL')
@@ -70,7 +78,7 @@ export const StandardList = connect(
     ...ownProps
   }),
 )(withGalio(({
-  navigation, list, createPassport, signPassport, startLoading, 
+  navigation, list, createPassport, signPassport, startLoading,
   endLoading, loading, records, identity, errors, styles
 }) => {
   const context = useContext(Context)
@@ -114,7 +122,6 @@ export const StandardList = connect(
         defaultRecordKeys.map(key => {
           const record = defaultRecords[key] || { notSet: true }
           const setting = context.config.getRecordSettingByKey(key)
-
           const props = setting.defaults && setting.defaults[identity.identityType]
             ? { value: setting.defaults[identity.identityType] }
             : { defaultValue: notSetRecordInputs[key] }
@@ -141,7 +148,9 @@ export const StandardList = connect(
                 </Block>
             }
             <Error hideBlock={
-              errors.error?.meta?.arg?.id !== record.id && errors.error?.meta?.arg?.key !== key
+              (!errors.error?.meta?.arg?.id && !errors.error?.meta?.arg?.key)
+              || (errors.error?.meta?.arg?.id && errors.error?.meta?.arg?.id !== record.id)
+              || (errors.error?.meta?.arg?.key && errors.error?.meta?.arg?.key !== key)
             } />
           </Block>
         })

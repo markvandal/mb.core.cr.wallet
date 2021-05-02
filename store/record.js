@@ -90,16 +90,24 @@ const update = createAsyncThunk(
   'record/update',
   /**
    * 
-   * @param {id, action, data?, liveTime?} record 
+   * @param {id, action, data?, key?, fieldFormat?, validationErrorText?, liveTime?} record 
    */
   async (record, { extra: context, getState }) => {
     try {
+      if (record.fieldFormat) {
+        if (!record.fieldFormat.test(record.data)) {
+          throw new Error(record.validationErrorText)
+        }
+      }
+
       const currentIdentity = getState().wallet.identity.id
       const url = context.config.getApiUrl(`metabelarus/mbcorecr/crsign/records/${record.id}`)
-      const _record = (await axios.get(url)).data?.Record
+      const _record = (await axios.get(url)).data?.Record      
+
       if (!_record) {
         throw new Error(`No record with id ${record.id}`)
       }
+
       const updateExtension = {}
 
       if (record.data && currentIdentity === _record.provider) {
@@ -159,13 +167,18 @@ const update = createAsyncThunk(
 const create = createAsyncThunk(
   'record/create',
   /**
-   * @param { data, key, publicity?, type?, liveTime?, identity? } record 
-   * @param { extra: context } param1 
+   * 
+   * @param { data, key, publicity?, type?, liveTime?, identity?, fieldFormat?, validationErrorText? } record 
    */
   async (record, { extra: context, getState }) => {
     try {
       let data = record.data
       const providerAddon = {}
+      if (record.fieldFormat) {
+        if (!record.fieldFormat.test(record.data)) {
+          throw new Error(record.validationErrorText)
+        }
+      }
       const signature = await sign(context.wallet, record.data)
       const publicityPrivateVal = context.value('PublicityType.PRIVATE', 'crsign')
       const publicity = record.publicity || publicityPrivateVal
