@@ -10,7 +10,6 @@ import { Context } from '../../../context'
 import { recordActions, spinnerActions } from '../../../store'
 import { list } from '../helper'
 import { styles } from '../../styles/main'
-import { record } from '../../../store/record';
 
 
 export const StandardList = connect(
@@ -32,7 +31,7 @@ export const StandardList = connect(
         const record = records[key]
         const validation = context.config.getValidation(key)
         if (record && record.id) {
-          if (record.status === 'RECORD_OPEN') { 
+          if (record.status === 'RECORD_OPEN') {
             const res = await dispatch(recordActions.update({
               id: record.id, data: inputs[key], key,
               fieldFormat: validation.fieldFormat,
@@ -44,7 +43,7 @@ export const StandardList = connect(
             }
           }
         } else if (inputs[key]) {
-          const res = await dispatch(recordActions.create({ 
+          const res = await dispatch(recordActions.create({
             key, data: inputs[key],
             fieldFormat: validation.fieldFormat,
             validationErrorText: validation.validationErrorText,
@@ -68,9 +67,7 @@ export const StandardList = connect(
             ? 'REOCRD_UPDATE_SIGN'
             : 'REOCRD_UPDATE_SEAL'
             }`, 'crsign')
-          const res = await dispatch(recordActions.update({ id: record.id, action,
-            fieldFormat: validation.fieldFormat,
-            validationErrorText: validation.validationErrorText, }))
+          const res = await dispatch(recordActions.update({ id: record.id, action }))
           if (res.error) {
             break
           }
@@ -112,7 +109,7 @@ export const StandardList = connect(
     if (defaultRecords[key]) {
       return { ...inputs, [key]: defaultRecords[key].data }
     }
-    
+
     return inputs
   }, {})
 
@@ -151,7 +148,9 @@ export const StandardList = connect(
                 </Block>
             }
             <Error hideBlock={
-              errors.error?.meta?.arg?.id !== record.id || errors.error?.meta?.arg?.key !== key
+              (!errors.error?.meta?.arg?.id && !errors.error?.meta?.arg?.key)
+              || (errors.error?.meta?.arg?.id && errors.error?.meta?.arg?.id !== record.id)
+              || (errors.error?.meta?.arg?.key && errors.error?.meta?.arg?.key !== key)
             } />
           </Block>
         })

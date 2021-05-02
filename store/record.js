@@ -94,8 +94,10 @@ const update = createAsyncThunk(
    */
   async (record, { extra: context, getState }) => {
     try {
-      if (!record.fieldFormat.test(record.data)) {
-        throw new Error(record.validationErrorText)
+      if (record.fieldFormat) {
+        if (!record.fieldFormat.test(record.data)) {
+          throw new Error(record.validationErrorText)
+        }
       }
 
       const currentIdentity = getState().wallet.identity.id
