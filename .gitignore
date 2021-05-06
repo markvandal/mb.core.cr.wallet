@@ -19,3 +19,6 @@ web-build/
 # Configs
 .env
 .env.copy*
+
+# intellij configs
+.idea/

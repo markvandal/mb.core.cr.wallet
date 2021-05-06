@@ -1,4 +1,3 @@
-
 import { StyleSheet } from 'react-native'
 
 export const fragment_font_default = {
@@ -24,8 +23,12 @@ export const styles = theme => {
       height: 48,
     },
     header: {
-      height: 144,
+      height: 110,//144
       width: theme.SIZES.NAVBAR_WIDTH,
+    },
+    header_settings: {
+      marginVertical: 5,
+      marginHorizontal: 15
     },
     header_block: {
       height: 96,
@@ -107,8 +110,7 @@ export const styles = theme => {
       alignSelf: 'center',
       textAlign: 'center',
     },
-    list_block_item_actions: {
-    },
+    list_block_item_actions: {},
     list_block_item_button: {
       ...fragment_font_default,
       width: 'auto',
