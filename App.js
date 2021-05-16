@@ -48,13 +48,15 @@ const App = () => {
     <Loading />
     <GalioProvider theme={customTheme}>
       
-      <NavigationContainer ref={navigationRef} theme={{
-        ...DefaultTheme,
-        colors: {
-          ...DefaultTheme.colors,
-          background: customTheme.COLORS.WHITE,
-        }
-      }}
+      <NavigationContainer ref={navigationRef} 
+        theme={{
+          ...DefaultTheme,
+          colors: {
+            ...DefaultTheme.colors,
+            background: customTheme.COLORS.WHITE,
+          }
+        }}
+        linking={{}}
         onReady={() =>
           (routeNameRef.current = navigationRef.current.getCurrentRoute().name)
         }
