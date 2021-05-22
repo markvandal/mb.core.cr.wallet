@@ -1,4 +1,12 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+
+
+const produce = createAsyncThunk(
+  'errors/produce',
+  async (error) => {
+    throw error
+  }
+)
 
 const slice = createSlice({
   name: 'errors',
@@ -18,6 +26,6 @@ const slice = createSlice({
 })
 
 
-export const errorsActions = { ...slice.actions }
+export const errorsActions = { ...slice.actions, produce }
 
 export const errors = slice.reducer
